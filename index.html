@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoGuide | Pro Learning & AI</title>
+    <title>DentoGuide | Professional Student Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -15,191 +15,195 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; }
 
-        /* --- LAYOUT --- */
+        /* --- THE FIX: LOGIN GATE --- */
+        #login-gate { 
+            position: fixed; 
+            inset: 0; 
+            background: #0f172a; 
+            z-index: 9999; 
+            display: flex; /* High priority */
+            align-items: center; 
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+
+        /* This ensures the gate actually disappears */
+        #login-gate.hidden { 
+            opacity: 0 !important; 
+            visibility: hidden !important; 
+            pointer-events: none !important;
+        }
+
+        .auth-box {
+            background: white; padding: 40px; border-radius: 24px; text-align: center; width: 380px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- DASHBOARD LAYOUT --- */
         .dashboard { display: grid; grid-template-columns: 280px 1fr 340px; height: 100vh; }
 
-        /* Sidebar Nav */
-        aside.nav-sidebar { background: var(--white); border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; overflow-y: auto; padding: 20px; }
+        aside.nav-sidebar { background: var(--white); border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 20px; }
         .logo { font-weight: 800; font-size: 1.4rem; color: var(--brand); margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
         
         .phase-label { font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px; }
-        .nav-link { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 500; color: var(--text-light); transition: 0.2s; display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+        .nav-link { padding: 12px 14px; border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 500; color: var(--text-light); transition: 0.2s; display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
         .nav-link:hover { background: var(--brand-light); color: var(--brand); }
         .nav-link.active { background: var(--brand-light); color: var(--brand); font-weight: 700; }
 
-        /* Main Content */
-        main.viewer { padding: 30px; overflow-y: auto; position: relative; }
+        main.viewer { padding: 30px; overflow-y: auto; }
         .content-wrap { max-width: 900px; margin: 0 auto; }
         .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 25px; border: 1px solid #f1f5f9; }
 
-        /* 3D & Infographic Styles */
-        .media-container { height: 400px; background: #eee; border-radius: 15px; margin: 20px 0; overflow: hidden; position: relative; }
-        .infographic { width: 100%; height: 100%; object-fit: cover; cursor: pointer; transition: 0.3s; }
-        .infographic:hover { opacity: 0.9; }
+        /* Media */
+        .media-container { height: 450px; background: #000; border-radius: 15px; margin: 20px 0; overflow: hidden; }
 
-        /* --- AI CHATBOT UI --- */
+        /* --- AI CHAT --- */
         .ai-panel { background: white; border-left: 1px solid #e2e8f0; display: flex; flex-direction: column; }
-        .ai-header { padding: 20px; border-bottom: 1px solid #f1f5f9; background: var(--brand-light); }
-        .chat-box { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; font-size: 0.85rem; }
-        .msg { padding: 10px 14px; border-radius: 12px; max-width: 85%; line-height: 1.4; }
-        .msg.bot { background: #f1f5f9; align-self: flex-start; color: var(--text); border-bottom-left-radius: 2px; }
-        .msg.user { background: var(--brand); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-box { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem; }
+        .msg { padding: 10px; border-radius: 10px; max-width: 85%; }
+        .msg.bot { background: #f1f5f9; align-self: flex-start; }
+        .msg.user { background: var(--brand); color: white; align-self: flex-end; }
         
-        .chat-input-area { padding: 15px; border-top: 1px solid #f1f5f9; display: flex; gap: 8px; }
+        .chat-input { padding: 15px; border-top: 1px solid #f1f5f9; display: flex; gap: 8px; }
         #ai-input { flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; }
-        .send-btn { background: var(--brand); color: white; border: none; width: 40px; border-radius: 8px; cursor: pointer; }
 
-        /* --- PERSONAL NOTES --- */
-        .notes-area { height: 150px; border-top: 1px solid #eee; padding-top: 15px; }
-        #sticky-note { width: 100%; height: 100%; border: none; background: #fffcf0; padding: 10px; font-size: 0.85rem; outline: none; resize: none; border-radius: 8px; }
-
-        .hidden { display: none; }
-        #login-gate { position: fixed; inset: 0; background: #0f172a; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        textarea#sticky-note { width: 100%; height: 150px; border: none; background: #fffdf5; padding: 15px; font-size: 0.85rem; border-top: 1px solid #eee; outline: none; }
     </style>
 </head>
 <body>
 
+<!-- THE LOGIN GATE -->
 <div id="login-gate">
-    <div style="background:white; padding:40px; border-radius:24px; text-align:center; width:350px;">
+    <div class="auth-box">
         <h2 style="color:var(--brand); margin-bottom:10px;">DentoGuide</h2>
-        <p style="color:var(--text-light); font-size:0.8rem; margin-bottom:20px;">AI-Powered Dental Education</p>
-        <input type="text" id="student-user" placeholder="Enter Full Name" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:10px; margin-bottom:15px;">
-        <button onclick="doLogin()" style="width:100%; background:var(--brand); color:white; border:none; padding:14px; border-radius:10px; font-weight:800; cursor:pointer;">Launch Portal</button>
+        <p style="color:var(--text-light); margin-bottom:20px; font-size:0.9rem;">The Complete Dental Student Framework</p>
+        <input type="text" id="student-user" placeholder="Enter Full Name" style="width:100%; padding:14px; border:1px solid #e2e8f0; border-radius:12px; margin-bottom:15px; outline:none;">
+        <button onclick="doLogin()" style="width:100%; background:var(--brand); color:white; border:none; padding:15px; border-radius:12px; font-weight:800; cursor:pointer;">Initialize Portal</button>
     </div>
 </div>
 
 <div class="dashboard">
-    <!-- NAVIGATION SIDEBAR -->
     <aside class="nav-sidebar">
-        <div class="logo"><i class="fa-solid fa-tooth"></i> DentoGuide</div>
+        <div class="logo"><i class="fa-solid fa-compass-drafting"></i> DentoGuide</div>
         
-        <div class="phase-label">1. Core Foundations</div>
+        <div class="phase-label">1. Foundations</div>
         <div class="nav-link active" onclick="load('Anatomy')"><i class="fa-solid fa-dna"></i> Anatomy (H&N)</div>
-        <div class="nav-link" onclick="load('Physiology')"><i class="fa-solid fa-heart"></i> Physiology</div>
-        <div class="nav-link" onclick="load('Microbiology')"><i class="fa-solid fa-virus"></i> Microbiology</div>
+        <div class="nav-link" onclick="load('Physiology')"><i class="fa-solid fa-heart-pulse"></i> Physiology</div>
 
         <div class="phase-label">2. Dental Sciences</div>
-        <div class="nav-link" onclick="load('DentalAnatomy')"><i class="fa-solid fa-teeth"></i> Morphology</div>
-        <div class="nav-link" onclick="load('Materials')"><i class="fa-solid fa-flask"></i> Materials</div>
+        <div class="nav-link" onclick="load('Materials')"><i class="fa-solid fa-flask"></i> Dental Materials</div>
 
-        <div class="phase-label">3. Clinical Prep</div>
-        <div class="nav-link" onclick="load('Operative')"><i class="fa-solid fa-drill"></i> Operative</div>
-        <div class="nav-link" onclick="load('Prosthodontics')"><i class="fa-solid fa-user-gear"></i> Prosthodontics</div>
+        <div class="phase-label">3. Clinical Subjects</div>
+        <div class="nav-link" onclick="load('Operative')"><i class="fa-solid fa-tooth"></i> Operative</div>
 
-        <div class="phase-label">4. Case Thinking</div>
-        <div class="nav-link" onclick="load('CaseStudy')"><i class="fa-solid fa-clipboard-question"></i> Diagnostic Flow</div>
+        <div class="phase-label">4. Clinical Thinking</div>
+        <div class="nav-link" onclick="load('Diagnostic')"><i class="fa-solid fa-clipboard-check"></i> Diagnostic Flow</div>
     </aside>
 
-    <!-- CONTENT VIEWER -->
     <main class="viewer">
         <div class="content-wrap" id="render-target">
-            <!-- Dynamic Content -->
+            <!-- Content will be injected here -->
+            <div class="card">
+                <h1>Welcome to DentoGuide</h1>
+                <p>Please select a module from the left to begin your clinical journey.</p>
+            </div>
         </div>
     </main>
 
-    <!-- AI & NOTES PANEL -->
     <aside class="ai-panel">
-        <div class="ai-header">
-            <div style="font-weight: 800; color: var(--brand); font-size: 0.9rem;">DentoAI Assistant</div>
-            <div style="font-size: 0.7rem; color: var(--text-light);">Ask me about dental terminology</div>
-        </div>
-        
+        <div style="padding:20px; border-bottom:1px solid #eee; font-weight:800; font-size:0.8rem; color:var(--brand);">DENTOAI ASSISTANT</div>
         <div class="chat-box" id="chat-box">
-            <div class="msg bot">Hello! I am DentoAI. How can I help with your dental studies today?</div>
+            <div class="msg bot">Welcome, Doctor! Ask me anything about the modules you are studying.</div>
         </div>
-
-        <div class="chat-input-area">
-            <input type="text" id="ai-input" placeholder="Ask DentoAI...">
-            <button class="send-btn" onclick="askAI()"><i class="fa-solid fa-paper-plane"></i></button>
+        <div class="chat-input">
+            <input type="text" id="ai-input" placeholder="Ask AI...">
+            <button onclick="askAI()" style="background:var(--brand); border:none; color:white; width:40px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
-
-        <div class="notes-area" style="padding: 15px;">
-            <div style="font-weight: 800; font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">My Study Notes</div>
-            <textarea id="sticky-note" placeholder="Personal mnemonics..."></textarea>
-        </div>
+        <div style="padding:15px; font-weight:800; font-size:0.7rem; color:#94a3b8;">MY STUDY NOTES</div>
+        <textarea id="sticky-note" placeholder="Write your own mnemonics here..."></textarea>
     </aside>
 </div>
 
 <script>
-    let userName = "";
-    let currentMod = "Anatomy";
-    let store = { notes: {}, progress: [] };
-
-    // CORE DATABASE
     const modules = {
         Anatomy: {
             title: "Head & Neck Anatomy",
-            type: "3D",
-            content: `<h3>Pre-Clinical Mastery</h3><p>Focus on the <strong>Trigeminal Nerve</strong> branches and Muscles of Mastication.</p>`,
-            media: `<iframe title="Teeth (dentistry)" style="width:100%; height:100%;" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/788f24b21e84457297e6822262744d03/embed"> </iframe>`
+            badge: "PHASE 1: FOUNDATION",
+            media: `<iframe src="https://sketchfab.com/models/788f24b21e84457297e6822262744d03/embed" style="width:100%; height:100%; border:none;" allow="autoplay; fullscreen; xr-spatial-tracking"></iframe>`,
+            text: `<h3>Key Study Areas</h3><ul><li><strong>Trigeminal Nerve:</strong> Exit points and branches.</li><li><strong>Muscles of Mastication:</strong> Masseter, Temporalis, Pterygoids.</li></ul>`
         },
         Materials: {
             title: "Dental Materials",
-            type: "Infographic",
-            content: `<h3>High-Yield Materials</h3><p>Compare Alginate vs. Elastomeric impressions. Focus on W:P ratio for Gypsum.</p>`,
-            media: `<img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&q=80&w=800" class="infographic" title="Dental Stone Infographic">`
+            badge: "PHASE 2: DENTAL SCIENCE",
+            media: `<img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&q=80&w=800" style="width:100%; height:100%; object-fit:cover;">`,
+            text: `<h3>Impression Materials</h3><p>Compare Gypsum products (Plaster vs. Stone) and Alginate setting reactions.</p>`
         },
         Operative: {
             title: "Operative Dentistry",
-            type: "Standard",
-            content: `<h3>The Framework</h3><ul><li><strong>Definition:</strong> Restoration of form.</li><li><strong>Indications:</strong> Caries, fracture.</li><li><strong>Steps:</strong> Access -> Prep -> Matrix -> Fill.</li></ul>`,
-            media: `<div style="padding:40px; text-align:center; color:#94a3b8;"><i class="fa-solid fa-clapperboard fa-3x"></i><br>Animation: Class II Cavity Prep Coming Soon</div>`
+            badge: "PHASE 3: CLINICAL",
+            media: `<div style="height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:3rem;"><i class="fa-solid fa-play"></i></div>`,
+            text: `<h3>Standard Framework</h3><ol><li>Definition</li><li>Indications</li><li>Steps (Access, Prep, Fill)</li><li>Complications</li></ol>`
+        },
+        Diagnostic: {
+            title: "Diagnostic Workflow",
+            badge: "PHASE 4: CLINICAL THINKING",
+            media: `<div style="padding:50px; color:white; font-size:1.2rem;">Framework Infographic: Chief Complaint -> History -> Exam -> Diagnosis</div>`,
+            text: `<h3>Thinking Like a Dentist</h3><p>Always start with the patient's own words. Transition to clinical tests (Percussion, Palpation, Thermal).</p>`
         }
     };
 
     function doLogin() {
-        userName = document.getElementById('student-user').value;
-        if(!userName) return alert("Enter your name");
+        const userInput = document.getElementById('student-user').value;
+        if(!userInput) {
+            alert("Please enter your name to proceed.");
+            return;
+        }
+
+        // Hide the Login Screen correctly
         document.getElementById('login-gate').classList.add('hidden');
-        load('Anatomy');
+        
+        // Update User Interface
+        console.log("Logged in as:", userInput);
+        load('Anatomy'); // Load the first lesson immediately
     }
 
     function load(id) {
-        currentMod = id;
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.innerText.includes(id) || l.onclick.toString().includes(id)));
-        
-        const mod = modules[id] || { title: id, content: "Content coming soon...", media: "" };
-        
+        const mod = modules[id];
+        if(!mod) return;
+
+        // Update active class on links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.toggle('active', link.innerText.includes(id));
+        });
+
         document.getElementById('render-target').innerHTML = `
             <div class="card">
-                <span style="font-size:0.7rem; font-weight:800; color:var(--brand);">${mod.type || 'MODULE'}</span>
-                <h1>${mod.title}</h1>
+                <span style="font-size:0.7rem; font-weight:800; color:var(--brand);">${mod.badge}</span>
+                <h1 style="margin-top:10px;">${mod.title}</h1>
                 <div class="media-container">${mod.media}</div>
-                ${mod.content}
+                <div style="margin-top:20px; line-height:1.6;">${mod.text}</div>
             </div>
         `;
-        document.getElementById('sticky-note').value = store.notes[id] || "";
     }
 
-    // AI LOGIC (Simulated ChatGPT)
     function askAI() {
         const input = document.getElementById('ai-input');
         const box = document.getElementById('chat-box');
         if(!input.value) return;
 
-        // User message
         box.innerHTML += `<div class="msg user">${input.value}</div>`;
-        
-        // Simulating "Thinking"
-        const userText = input.value.toLowerCase();
+        const query = input.value.toLowerCase();
         input.value = "";
-        
+
         setTimeout(() => {
-            let response = "I'm still learning that! But I know about Anatomy, G.V. Black classifications, and Dental Materials. Try asking about those!";
+            let res = "That is a great question. You should look into the Clinical Subjects tab for more details on that specific procedure.";
+            if(query.includes("anatomy")) res = "In Head & Neck Anatomy, focus on the Trigeminal Nerve (CN V) and the Facial Nerve (CN VII).";
+            if(query.includes("material")) res = "For Dental Materials, remember that Alginate is an Irreversible Hydrocolloid and sensitive to water temperature.";
             
-            if(userText.includes("anatomy")) response = "Anatomy is foundational! Focus on the Trigeminal Nerve (CN V) and the muscles of mastication like the Masseter.";
-            if(userText.includes("gv black")) response = "G.V. Black's Class I covers pits and fissures, while Class II involves proximal surfaces of posterior teeth.";
-            if(userText.includes("alginate")) response = "Alginate is an irreversible hydrocolloid. It shrinks due to syneresis if not poured quickly!";
-
-            box.innerHTML += `<div class="msg bot">${response}</div>`;
+            box.innerHTML += `<div class="msg bot">${res}</div>`;
             box.scrollTop = box.scrollHeight;
-        }, 1000);
+        }, 800);
     }
-
-    // Auto-save notes
-    document.getElementById('sticky-note').addEventListener('input', (e) => {
-        store.notes[currentMod] = e.target.value;
-    });
 </script>
 
 </body>

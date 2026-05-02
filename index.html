@@ -3,246 +3,369 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoMastery | Interactive Roadmap</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>DentoGuide | Professional Dental Student Portal</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #0f4c81;
-            --secondary: #16a085;
-            --bg: #f0f4f8;
-            --white: #ffffff;
-            --gray: #95a5a6;
+            --brand-primary: #2563eb; /* Modern Blue */
+            --brand-secondary: #10b981; /* Fresh Teal */
+            --brand-accent: #f59e0b; /* Attention Amber */
+            --surface-bg: #f8fafc;
+            --surface-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --sidebar-width: 280px;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--surface-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
+        /* --- MODERN HEADER --- */
         header {
-            width: 100%;
-            background: var(--primary);
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        /* --- THE CLICKABLE ROADMAP --- */
-        .roadmap-container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 90%;
-            max-width: 900px;
-            background: var(--white);
-            padding: 30px;
-            border-radius: 50px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            position: relative;
-            margin-bottom: 40px;
         }
 
-        /* The Connecting Line */
-        .roadmap-container::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 10%;
-            right: 10%;
-            height: 4px;
-            background: #e0e0e0;
-            z-index: 1;
-            transform: translateY(-50%);
-        }
-
-        .step {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            cursor: pointer;
-            flex: 1;
-            transition: all 0.3s ease;
-        }
-
-        .step-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--white);
-            border: 4px solid #e0e0e0;
-            border-radius: 50%;
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--brand-primary);
+            letter-spacing: -1px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            color: var(--gray);
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
+            gap: 8px;
         }
 
-        .step-label {
-            font-weight: bold;
+        /* --- ROADMAP NAVIGATION --- */
+        .roadmap {
+            display: flex;
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 50px;
+            gap: 4px;
+        }
+
+        .roadmap-item {
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: none;
+            background: transparent;
             font-size: 0.85rem;
-            color: var(--gray);
-            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        /* Active State Styles */
-        .step.active .step-icon {
-            border-color: var(--secondary);
-            color: var(--secondary);
-            transform: scale(1.2);
-            box-shadow: 0 0 15px rgba(22, 160, 133, 0.3);
-        }
-
-        .step.active .step-label {
-            color: var(--primary);
-            font-size: 0.95rem;
-        }
-
-        /* Hover Effect */
-        .step:hover .step-icon {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        /* --- CONTENT SECTIONS --- */
-        .content-area {
-            width: 90%;
-            max-width: 900px;
-            min-height: 300px;
-        }
-
-        .tab-content {
-            display: none;
+        .roadmap-item.active {
             background: var(--white);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            animation: slideUp 0.4s ease-out;
+            background: white;
+            color: var(--brand-primary);
+            box-shadow: var(--shadow);
         }
 
-        .tab-content.active {
+        /* --- MAIN LAYOUT --- */
+        .app-container {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            max-width: 1400px;
+            margin: 2rem auto;
+            gap: 2rem;
+            padding: 0 20px;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            background: var(--surface-card);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            height: fit-content;
+            box-shadow: var(--shadow);
+            border: 1px solid #f1f5f9;
+        }
+
+        .sidebar-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-link {
             display: block;
+            width: 100%;
+            text-align: left;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 4px;
+            transition: 0.2s;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .nav-link:hover { background: #f1f5f9; color: var(--brand-primary); }
+        .nav-link.active-link { background: #eff6ff; color: var(--brand-primary); font-weight: 600; }
+
+        /* --- CONTENT AREA --- */
+        .content-card {
+            background: var(--surface-card);
+            border-radius: var(--radius);
+            padding: 3rem;
+            box-shadow: var(--shadow);
+            border: 1px solid #f1f5f9;
+            min-height: 600px;
         }
 
-        h2 { color: var(--primary); margin-top: 0; }
-        ul { line-height: 1.8; color: #555; }
-        .btn {
+        h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+        h2 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--brand-primary); }
+
+        .badge {
             display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: var(--secondary);
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: #dcfce7;
+            color: #166534;
+            margin-bottom: 1rem;
+        }
+
+        /* --- CLINICAL COMPONENTS --- */
+        .framework-box {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+        .framework-header {
+            background: #f8fafc;
+            padding: 12px 20px;
+            font-weight: 700;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .framework-body { padding: 20px; }
+
+        .high-yield-alert {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            padding: 1rem;
+            border-radius: 8px;
+            color: #92400e;
+            display: flex;
+            gap: 12px;
+            margin: 1.5rem 0;
+        }
+
+        /* --- MOBILE MENU --- */
+        @media (max-width: 768px) {
+            .app-container { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .roadmap { overflow-x: auto; max-width: 100%; white-space: nowrap; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Dental Student Learning Path</h1>
-        <p>Click a stage to explore the curriculum</p>
-    </header>
+<header>
+    <div class="logo"><i class="fa-solid fa-compass-drafting"></i> DentoGuide</div>
+    <nav class="roadmap">
+        <button class="roadmap-item active" onclick="setPhase('phase1')">Foundations</button>
+        <button class="roadmap-item" onclick="setPhase('phase2')">Sciences</button>
+        <button class="roadmap-item" onclick="setPhase('phase3')">Clinical</button>
+        <button class="roadmap-item" onclick="setPhase('phase4')">Thinking</button>
+    </nav>
+    <div style="color: var(--text-muted); font-size: 0.9rem;"><i class="fa-regular fa-circle-user"></i> Student Portal</div>
+</header>
 
-    <!-- Roadmap -->
-    <div class="roadmap-container">
-        <div class="step active" onclick="openStage(event, 'foundations')">
-            <div class="step-icon"><i class="fas fa-book"></i></div>
-            <div class="step-label">Foundations</div>
-        </div>
-        
-        <div class="step" onclick="openStage(event, 'sciences')">
-            <div class="step-icon"><i class="fas fa-microscope"></i></div>
-            <div class="step-label">Dental Sciences</div>
-        </div>
+<div class="app-container">
+    <aside class="sidebar" id="sidebar">
+        <!-- Sub-menu items injected here -->
+    </aside>
 
-        <div class="step" onclick="openStage(event, 'clinical')">
-            <div class="step-icon"><i class="fas fa-user-md"></i></div>
-            <div class="step-label">Clinical Prep</div>
-        </div>
+    <main class="content-card" id="main-content">
+        <!-- Main content injected here -->
+    </main>
+</div>
 
-        <div class="step" onclick="openStage(event, 'board')">
-            <div class="step-icon"><i class="fas fa-graduation-cap"></i></div>
-            <div class="step-label">Board Mastery</div>
-        </div>
-    </div>
+<script>
+    const database = {
+        phase1: {
+            label: "Pre-Clinical Mastery",
+            menu: ["Anatomy", "Physiology", "Biochemistry", "Histology", "Microbiology", "Pathology"],
+            content: {
+                Anatomy: `
+                    <span class="badge">Anatomy</span>
+                    <h1>Head & Neck Anatomy</h1>
+                    <p class="text-muted">Mastering the spatial relationships of the skull and facial nerves.</p>
+                    
+                    <div class="high-yield-alert">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <div><strong>High-Yield:</strong> The Inferior Alveolar Nerve (branch of V3) is the primary target for mandibular anesthesia. Know its path through the mandibular foramen!</div>
+                    </div>
 
-    <!-- Content Sections -->
-    <div class="content-area">
-        
-        <div id="foundations" class="tab-content active">
-            <h2>🧠 Phase 1: Core Foundations</h2>
-            <p>Before touching a patient, you must master the biological building blocks.</p>
-            <ul>
-                <li><strong>Gross Anatomy:</strong> Head, neck, and neuroanatomy.</li>
-                <li><strong>Biochemistry:</strong> Metabolic pathways and nutrition.</li>
-                <li><strong>Microbiology:</strong> Identification of oral pathogens.</li>
-            </ul>
-            <a href="#" class="btn">Start Flashcards</a>
-        </div>
-
-        <div id="sciences" class="tab-content">
-            <h2>🦷 Phase 2: Dental Sciences</h2>
-            <p>Connecting medical knowledge specifically to the oral cavity.</p>
-            <ul>
-                <li><strong>Tooth Morphology:</strong> Carving and identifying 32 teeth.</li>
-                <li><strong>Oral Pathology:</strong> Identifying lesions and cysts.</li>
-                <li><strong>Dental Materials:</strong> Chemistry of gypsum, alginate, and composite.</li>
-            </ul>
-        </div>
-
-        <div id="clinical" class="tab-content">
-            <h2>🛠️ Phase 3: Clinical Prep</h2>
-            <p>Moving from the lab bench to the simulation clinic.</p>
-            <ul>
-                <li><strong>Operative Dentistry:</strong> Drills, burs, and cavity prep.</li>
-                <li><strong>Endodontics:</strong> Root canal basics on plastic teeth.</li>
-                <li><strong>Radiology:</strong> Positioning sensors and reading X-rays.</li>
-            </ul>
-        </div>
-
-        <div id="board" class="tab-content">
-            <h2>📊 Phase 4: Board Mastery</h2>
-            <p>Final preparation for licensure and clinical exams.</p>
-            <ul>
-                <li><strong>High-Yield Review:</strong> Case-based questions.</li>
-                <li><strong>Timed Mock Exams:</strong> Simulated board environment.</li>
-                <li><strong>Ethics & Jurisprudence:</strong> Laws of dental practice.</li>
-            </ul>
-        </div>
-
-    </div>
-
-    <script>
-        function openStage(evt, stageName) {
-            // 1. Hide all tab content
-            var content = document.getElementsByClassName("tab-content");
-            for (var i = 0; i < content.length; i++) {
-                content[i].classList.remove("active");
+                    <h2>The Trigeminal Nerve (CN V)</h2>
+                    <div class="framework-box">
+                        <div class="framework-header">Divisions and Foramina</div>
+                        <div class="framework-body">
+                            <ul>
+                                <li><strong>V1: Ophthalmic</strong> - Superior Orbital Fissure</li>
+                                <li><strong>V2: Maxillary</strong> - Foramen Rotundum</li>
+                                <li><strong>V3: Mandibular</strong> - Foramen Ovale</li>
+                            </ul>
+                        </div>
+                    </div>
+                `,
+                Physiology: `<h1>Physiology</h1><p>Exploring cellular function and systemic homeostasis.</p>`
             }
-
-            // 2. Remove "active" class from all steps
-            var steps = document.getElementsByClassName("step");
-            for (var i = 0; i < steps.length; i++) {
-                steps[i].classList.remove("active");
+        },
+        phase2: {
+            label: "Dental Sciences",
+            menu: ["Tooth Morphology", "Oral Histology", "Oral Pathology", "Dental Materials", "Pharmacology"],
+            content: {
+                "Dental Materials": `
+                    <span class="badge">Materials Science</span>
+                    <h1>Dental Materials</h1>
+                    <p>The science of restorative biocompatibility.</p>
+                    
+                    <div class="framework-box">
+                        <div class="framework-header">Gypsum Products (Comparison Table)</div>
+                        <div class="framework-body">
+                            <table style="width:100%; border-collapse: collapse;">
+                                <tr style="text-align:left; border-bottom: 2px solid #eee;">
+                                    <th style="padding:10px">Type</th>
+                                    <th>Name</th>
+                                    <th>W:P Ratio</th>
+                                </tr>
+                                <tr><td style="padding:10px">Type II</td><td>Model Plaster</td><td>0.50</td></tr>
+                                <tr><td style="padding:10px">Type III</td><td>Dental Stone</td><td>0.30</td></tr>
+                                <tr><td style="padding:10px">Type IV</td><td>Die Stone</td><td>0.23</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                `
             }
+        },
+        phase3: {
+            label: "Clinical Subjects",
+            menu: ["Operative", "Endodontics", "Periodontics", "Prosthodontics", "Oral Surgery"],
+            content: {
+                "Operative": `
+                    <span class="badge">Operative</span>
+                    <h1>Operative Dentistry</h1>
+                    
+                    <div class="framework-box">
+                        <div class="framework-header">Framework: Class II Composite Prep</div>
+                        <div class="framework-body">
+                            <h3>1. Indications</h3><p>Proximal caries on premolars and molars.</p><br>
+                            <h3>2. Steps</h3>
+                            <ol style="margin-left:20px">
+                                <li>Initial occlusal penetration.</li>
+                                <li>Extension to proximal margins (thinning the enamel shell).</li>
+                                <li>Gingival floor preparation.</li>
+                                <li>Matrix & Wedge placement.</li>
+                            </ol><br>
+                            <h3>3. Complications</h3><p>Pulp exposure, poor proximal contact, gingival overhang.</p>
+                        </div>
+                    </div>
+                `
+            }
+        },
+        phase4: {
+            label: "Clinical Thinking",
+            menu: ["Diagnostic Steps", "Chief Complaint", "Treatment Planning"],
+            content: {
+                "Diagnostic Steps": `
+                    <span class="badge">Thinking Framework</span>
+                    <h1>Diagnostic Workflow</h1>
+                    <p>Training your mind to process clinical data systematically.</p>
 
-            // 3. Show the current tab and add an "active" class to the clicked step
-            document.getElementById(stageName).classList.add("active");
-            evt.currentTarget.classList.add("active");
+                    <div style="border-left: 4px solid var(--brand-primary); padding-left: 20px; margin-top: 2rem;">
+                        <h3>1. Chief Complaint</h3>
+                        <p class="text-muted">Record in patient's own words ("My tooth throbs at night").</p>
+                        
+                        <h3 style="margin-top:20px">2. History of Present Illness</h3>
+                        <p class="text-muted">P.A.I.N (Place, Amount, Intensity, Nature).</p>
+
+                        <h3 style="margin-top:20px">3. Clinical Examination</h3>
+                        <p class="text-muted">Visual inspection, Percussion, Palpation, Periodontal probing.</p>
+                    </div>
+                `
+            }
         }
-    </script>
+    };
 
+    let currentPhase = 'phase1';
+
+    function setPhase(phaseId) {
+        currentPhase = phaseId;
+        
+        // Update Roadmap Buttons
+        document.querySelectorAll('.roadmap-item').forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.innerText.toLowerCase().includes(phaseId.replace('phase', ''))) { /* Simplified logic */ }
+        });
+        event.currentTarget.classList.add('active');
+
+        // Update Sidebar
+        const sidebar = document.getElementById('sidebar');
+        const phaseData = database[phaseId];
+        sidebar.innerHTML = `<div class="sidebar-title">${phaseData.label}</div>`;
+        
+        phaseData.menu.forEach(item => {
+            const btn = document.createElement('button');
+            btn.className = 'nav-link';
+            btn.innerText = item;
+            btn.onclick = () => setContent(item);
+            sidebar.appendChild(btn);
+        });
+
+        // Set first item as active
+        setContent(phaseData.menu[0]);
+    }
+
+    function setContent(itemName) {
+        // Update Sidebar Active State
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.toggle('active-link', link.innerText === itemName);
+        });
+
+        const mainContent = document.getElementById('main-content');
+        const htmlContent = database[currentPhase].content[itemName] || `<h1>${itemName}</h1><p>Detailed modules for ${itemName} are being uploaded to the DentoGuide database.</p>`;
+        
+        mainContent.innerHTML = htmlContent;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Initialize
+    window.onload = () => setPhase('phase1');
+
+</script>
 </body>
 </html>

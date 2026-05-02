@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoGuide | The Complete Student Framework</title>
+    <title>DentoGuide | Complete Clinical Mastery</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -16,61 +16,64 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; }
 
-        /* --- LOGIN GATE --- */
-        #login-gate { position: fixed; inset: 0; background: #0f172a; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        #login-gate.hidden { opacity: 0; visibility: hidden; pointer-events: none; transition: 0.5s; }
-        .auth-box { background: white; padding: 40px; border-radius: 24px; text-align: center; width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        /* --- LOGIN --- */
+        #login-gate { position: fixed; inset: 0; background: #0f172a; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: 0.5s; }
+        #login-gate.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .auth-box { background: white; padding: 40px; border-radius: 24px; text-align: center; width: 400px; }
 
-        /* --- MAIN LAYOUT --- */
+        /* --- LAYOUT --- */
         .dashboard { display: grid; grid-template-columns: 280px 1fr 340px; height: 100vh; }
 
-        /* Navigation Sidebar */
+        /* Sidebar Navigation */
         aside.nav-sidebar { background: white; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 15px; overflow-y: auto; }
         .logo { font-weight: 800; font-size: 1.4rem; color: var(--brand); margin-bottom: 20px; padding: 10px; border-bottom: 2px solid var(--brand-light); }
         .phase-label { font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 15px 0 5px; padding-left: 10px; }
         .nav-link { padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: var(--text-light); transition: 0.2s; display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
-        .nav-link:hover { background: var(--brand-light); color: var(--brand); }
-        .nav-link.active { background: var(--brand-light); color: var(--brand); font-weight: 700; }
+        .nav-link:hover, .nav-link.active { background: var(--brand-light); color: var(--brand); font-weight: 700; }
 
         /* Main Content View */
-        main.viewer { padding: 30px; overflow-y: auto; background: var(--bg); }
+        main.viewer { padding: 30px; overflow-y: auto; background: var(--bg); position: relative; }
         .content-wrap { max-width: 900px; margin: 0 auto; }
-        .card { background: white; padding: 35px; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 25px; border: 1px solid #f1f5f9; position: relative; }
+        .card { background: white; padding: 35px; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 25px; border: 1px solid #f1f5f9; }
 
-        /* Standard Clinical Framework Styles */
-        .framework-section { background: #f8fafc; border-radius: 12px; padding: 20px; margin-top: 20px; border-left: 4px solid var(--brand); }
-        .framework-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .framework-box { background: white; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .framework-box h5 { font-size: 0.7rem; color: var(--text-light); text-transform: uppercase; margin-bottom: 5px; }
+        /* Pictographs & Visuals */
+        .visual-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .pictograph { background: #f1f5f9; border-radius: 12px; height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #94a3b8; border: 2px dashed #cbd5e1; position: relative; overflow: hidden; }
+        .pictograph img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* UI Elements */
-        .high-yield { background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: 8px; font-size: 0.9rem; color: #92400e; margin: 15px 0; }
-        .mnemonic { color: var(--brand); font-weight: 700; font-style: italic; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; }
-        table th, table td { padding: 10px; border: 1px solid #e2e8f0; text-align: left; }
-        table th { background: #f1f5f9; }
+        /* Mastery Lab: Flashcards */
+        .flashcard-inner { position: relative; width: 100%; height: 200px; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+        .flashcard-inner.flipped { transform: rotateY(180deg); }
+        .flash-front, .flash-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 20px; border-radius: 15px; border: 2px solid var(--brand-light); font-weight: 700; }
+        .flash-front { background: #fffbeb; color: var(--brand); }
+        .flash-back { background: var(--brand); color: white; transform: rotateY(180deg); }
 
-        /* Quiz UI */
-        .quiz-option { padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-top: 8px; cursor: pointer; transition: 0.2s; }
+        /* Mastery Lab: Quiz */
+        .quiz-option { padding: 15px; border: 1px solid #e2e8f0; border-radius: 10px; margin-top: 10px; cursor: pointer; transition: 0.2s; }
         .quiz-option:hover { background: var(--brand-light); }
-        .rationale { display: none; margin-top: 15px; padding: 15px; background: #dcfce7; color: #166534; border-radius: 8px; font-size: 0.85rem; }
+        .quiz-option.correct { background: #dcfce7; border-color: var(--success); color: #166534; }
+        .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
+        .rationale { margin-top: 15px; padding: 15px; background: #eff6ff; border-radius: 10px; font-size: 0.85rem; border-left: 4px solid var(--brand); display: none; }
 
-        /* Right Panel: AI & Notes */
+        /* Blurting Tool */
+        #blurting-area { width: 100%; height: 150px; padding: 15px; border-radius: 10px; border: 1px solid #ddd; margin-top: 10px; outline: none; }
+
+        /* Right Sidebar */
         .ai-panel { background: white; border-left: 1px solid #e2e8f0; display: flex; flex-direction: column; }
-        .chat-window { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; font-size: 0.8rem; }
-        .msg { padding: 10px; border-radius: 10px; max-width: 85%; line-height: 1.4; }
+        #chat-window { flex: 1; overflow-y: auto; padding: 15px; font-size: 0.8rem; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px; border-radius: 10px; max-width: 85%; }
         .msg.bot { background: #f1f5f9; align-self: flex-start; }
         .msg.user { background: var(--brand); color: white; align-self: flex-end; }
-        textarea#notes { height: 200px; border: none; border-top: 1px solid #eee; padding: 15px; font-size: 0.85rem; outline: none; background: #fffdf5; resize: none; }
+        textarea#notes { height: 150px; border: none; border-top: 1px solid #eee; padding: 15px; font-size: 0.85rem; background: #fffdf5; outline: none; }
     </style>
 </head>
 <body>
 
 <div id="login-gate">
     <div class="auth-box">
-        <h1 style="color:var(--brand); margin-bottom:10px;">DentoGuide</h1>
-        <p style="color:var(--text-light); margin-bottom:20px;">The Complete Clinical Framework</p>
-        <input type="text" id="username" placeholder="Enter Full Name" style="width:100%; padding:14px; border:1px solid #e2e8f0; border-radius:12px; margin-bottom:15px; outline:none;">
+        <h1 style="color:var(--brand); margin-bottom:5px;">DentoGuide</h1>
+        <p style="color:var(--text-light); margin-bottom:20px; font-size:0.9rem;">Complete Medical & Dental Curriculum</p>
+        <input type="text" id="user-name" placeholder="Enter Full Name" style="width:100%; padding:14px; border:1px solid #ddd; border-radius:12px; margin-bottom:15px; outline:none;">
         <button onclick="login()" style="width:100%; background:var(--brand); color:white; border:none; padding:15px; border-radius:12px; font-weight:800; cursor:pointer;">Initialize Portal</button>
     </div>
 </div>
@@ -79,25 +82,37 @@
     <aside class="nav-sidebar">
         <div class="logo"><i class="fa-solid fa-compass-drafting"></i> DentoGuide</div>
         
-        <div class="phase-label">1. Core Foundations</div>
-        <div class="nav-link active" onclick="render('Anatomy')">Anatomy (H&N)</div>
+        <div class="phase-label">Phase 1: Foundations</div>
+        <div class="nav-link" onclick="render('Anatomy')">Anatomy (H&N)</div>
         <div class="nav-link" onclick="render('Physiology')">Physiology</div>
-        <div class="nav-link" onclick="render('Pathology')">General Pathology</div>
+        <div class="nav-link" onclick="render('Biochemistry')">Biochemistry</div>
+        <div class="nav-link" onclick="render('Histology')">Histology</div>
+        <div class="nav-link" onclick="render('Micro')">Micro & Immuno</div>
+        <div class="nav-link" onclick="render('Pathology')">Pathology</div>
 
-        <div class="phase-label">2. Dental Sciences</div>
-        <div class="nav-link" onclick="render('ToothMorph')">Dental Anatomy</div>
+        <div class="phase-label">Phase 2: Dental Sciences</div>
+        <div class="nav-link" onclick="render('Morphology')">Dental Anatomy</div>
+        <div class="nav-link" onclick="render('OralHisto')">Oral Histology</div>
+        <div class="nav-link" onclick="render('OralPath')">Oral Pathology</div>
         <div class="nav-link" onclick="render('Materials')">Dental Materials</div>
+        <div class="nav-link" onclick="render('Pharm')">Pharmacology</div>
 
-        <div class="phase-label">3. Clinical Subjects</div>
-        <div class="nav-link" onclick="render('Operative')">Operative Dentistry</div>
-        <div class="nav-link" onclick="render('Endo')">Endodontics</div>
+        <div class="phase-label">Phase 3: Clinical Subjects</div>
+        <div class="nav-link" onclick="render('Operative')">Operative</div>
         <div class="nav-link" onclick="render('Prostho')">Prosthodontics</div>
+        <div class="nav-link" onclick="render('Endo')">Endodontics</div>
+        <div class="nav-link" onclick="render('Perio')">Periodontics</div>
+        <div class="nav-link" onclick="render('Surgery')">Oral Surgery</div>
+        <div class="nav-link" onclick="render('Ortho')">Orthodontics</div>
+        <div class="nav-link" onclick="render('Pedo')">Pediatric Dentistry</div>
 
-        <div class="phase-label">4. Clinical Thinking</div>
+        <div class="phase-label">Phase 4: Clinical Thinking</div>
         <div class="nav-link" onclick="render('Thinking')">Diagnostic Flow</div>
 
-        <div class="phase-label">5. Active Recall</div>
-        <div class="nav-link" onclick="render('Recall')"><i class="fa-solid fa-brain"></i> Mastery Lab</div>
+        <div class="phase-label">Phase 5: Mastery Lab</div>
+        <div class="nav-link" onclick="render('Quiz')">MCQ Hub</div>
+        <div class="nav-link" onclick="render('Flashcards')">Flashcard Lab</div>
+        <div class="nav-link" onclick="render('Blurting')">Blurting Tool</div>
     </aside>
 
     <main class="viewer">
@@ -105,140 +120,147 @@
     </main>
 
     <aside class="ai-panel">
-        <div style="padding:15px; border-bottom:1px solid #eee; font-weight:800; font-size:0.75rem; color:var(--brand);">DENTOAI CHATBOT</div>
-        <div id="chat-window" class="chat-window">
-            <div class="msg bot">Welcome, Doctor! Ask me about rationales, clinical steps, or mnemonics.</div>
+        <div style="padding:15px; border-bottom:1px solid #eee; font-weight:800; font-size:0.75rem; color:var(--brand);">DENTOAI ASSISTANT</div>
+        <div id="chat-window">
+            <div class="msg bot">Hello! Ask me about rationales or dental mnemonics.</div>
         </div>
         <div style="padding:10px; display:flex; gap:5px; border-top:1px solid #eee;">
             <input type="text" id="ai-input" placeholder="Ask AI..." style="flex:1; padding:10px; border:1px solid #ddd; border-radius:8px; outline:none; font-size:0.8rem;">
             <button onclick="askAI()" style="background:var(--brand); border:none; color:white; width:40px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
-        <div style="padding:10px; font-weight:800; font-size:0.65rem; color:#94a3b8;">STUDY NOTES FOR MODULE</div>
-        <textarea id="notes" placeholder="Auto-saves your notes for this module..."></textarea>
+        <textarea id="notes" placeholder="Notes for this module..."></textarea>
     </aside>
 </div>
 
 <script>
-    let currentUser = "";
-    let currentModule = "Anatomy";
+    let student = "";
+    let quizIdx = 0;
 
-    const contentDB = {
+    const database = {
         Anatomy: {
-            phase: "1. Core Foundations",
-            title: "Head & Neck Anatomy",
+            title: "Anatomy (Head & Neck)",
             body: `<h3>Pre-Clinical Mastery</h3>
-                   <div class="high-yield"><strong>High-Yield:</strong> The Trigeminal Nerve (CN V) is the most critical for local anesthesia. V2 = Rotundum, V3 = Ovale.</div>
-                   <p class="mnemonic">Mnemonic: "Standing Room Only" (Superior Orbital Fissure, Rotundum, Ovale)</p>`
+                   <p>Foundational knowledge for local anesthesia and surgical approaches.</p>
+                   <div class="visual-gallery">
+                        <div class="pictograph"><img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400" alt="Skull"></div>
+                        <div class="pictograph">Pictograph: CN V Pathway</div>
+                   </div>
+                   <div class="card" style="background: #fffbeb;">
+                        <h4>💡 Mnemonic: Trigeminal Nerve (CN V)</h4>
+                        <p><b>S</b>tanding <b>R</b>oom <b>O</b>nly (SOF, Rotundum, Ovale)</p>
+                   </div>`
         },
         Materials: {
-            phase: "2. Dental Sciences",
             title: "Dental Materials",
-            body: `<h3>Comparison Table: Gypsum</h3>
+            body: `<h3>Comparison Tables</h3>
                    <table>
-                    <tr><th>Type</th><th>Expansion</th><th>W:P Ratio</th></tr>
-                    <tr><td>Plaster (II)</td><td>High</td><td>0.50</td></tr>
-                    <tr><td>Stone (III)</td><td>Med</td><td>0.30</td></tr>
-                    <tr><td>Die Stone (IV)</td><td>Low</td><td>0.23</td></tr>
+                        <tr><th>Property</th><th>Alginate</th><th>PVS</th></tr>
+                        <tr><td>Accuracy</td><td>Moderate</td><td>Excellent</td></tr>
+                        <tr><td>Stability</td><td>Poor (Syneresis)</td><td>Very High</td></tr>
                    </table>`
         },
         Operative: {
-            phase: "3. Clinical Subjects",
             title: "Operative Dentistry",
-            body: `<div class="framework-section">
-                    <h4>Clinical Framework: Class II Amalgam Prep</h4>
-                    <div class="framework-grid">
-                        <div class="framework-box"><h5>Definition</h5>Restoration of proximal surfaces of posterior teeth.</div>
-                        <div class="framework-box"><h5>Indications</h5>Interproximal caries, marginal ridge breakdown.</div>
-                        <div class="framework-box"><h5>Steps</h5>1. Access 2. Occlusal Prep 3. Proximal Box 4. Matrix.</div>
-                        <div class="framework-box"><h5>Viva Ques</h5>Why the 'Dovetail'? To prevent proximal displacement.</div>
-                    </div>
+            body: `<h3>Clinical Framework</h3>
+                   <div class="card">
+                        <p><b>1. Definition:</b> Restoration of hard tissues to form/function.</p>
+                        <p><b>2. Indications:</b> Caries, Trauma, Aesthetic needs.</p>
+                        <p><b>3. Steps:</b> Access → Preparation → Isolation → Restoration.</p>
+                        <p><b>4. Viva:</b> Why is the cavosurface angle important?</p>
                    </div>`
         },
         Thinking: {
-            phase: "4. Clinical Thinking",
-            title: "Diagnostic Framework",
-            body: `<h3>The 5-Step Diagnostic Thinking</h3>
-                   <div class="framework-section" style="border-color:var(--success);">
-                    <ol style="margin-left:20px; line-height:2;">
-                        <li><strong>Chief Complaint:</strong> Patient's own words.</li>
-                        <li><strong>History:</strong> Pain triggers, duration.</li>
-                        <li><strong>Examination:</strong> Visual, percussion, radiographs.</li>
-                        <li><strong>Diagnosis:</strong> Pulling clinical data together.</li>
-                        <li><strong>Tx Plan:</strong> The roadmap for care.</li>
-                    </ol>
+            title: "Clinical Thinking Framework",
+            body: `<h3>Thinking Like a Dentist</h3>
+                   <ol style="line-height:2.5; margin-left:20px;">
+                        <li><b>Chief Complaint:</b> The patient's story.</li>
+                        <li><b>History:</b> Pain nature, triggers, and duration.</li>
+                        <li><b>Examination:</b> Clinical (percussion) + Radiographic.</li>
+                        <li><b>Diagnosis:</b> The final clinical decision.</li>
+                        <li><b>Tx Plan:</b> Phased roadmap for care.</li>
+                   </ol>`
+        },
+        Quiz: {
+            title: "MCQ Mastery Hub",
+            body: `<div id="quiz-area"></div>`
+        },
+        Flashcards: {
+            title: "Flashcard Lab",
+            body: `<div class="flashcard-inner" id="fc" onclick="this.classList.toggle('flipped')">
+                        <div class="flash-front">Question: Critical pH for enamel demineralization?</div>
+                        <div class="flash-back">Answer: 5.5</div>
                    </div>`
         },
-        Recall: {
-            phase: "5. Active Recall",
-            title: "Mastery Quiz Lab",
-            body: `<h3>Recall Test: General Dentistry</h3>
-                   <div class="framework-box">
-                    <p><strong>Question:</strong> Which bacteria initiates dental caries?</p>
-                    <div class="quiz-option" onclick="revealRationale(this, true)">A. Streptococcus Mutans</div>
-                    <div class="quiz-option" onclick="revealRationale(this, false)">B. Porphyromonas Gingivalis</div>
-                    <div id="quiz-rationale" class="rationale">
-                        <strong>Rationale:</strong> S. Mutans is the primary initiator because it produces acid from sucrose. P. Gingivalis is associated with periodontal disease, not caries initiation.
-                    </div>
-                   </div>`
+        Blurting: {
+            title: "Blurting Method Tool",
+            body: `<p>Write down everything you remember about <b>Local Anesthesia</b>, then compare.</p>
+                   <textarea id="blurting-area"></textarea>
+                   <button class="nav-link" style="margin-top:10px; width:100%; justify-content:center; background:var(--brand); color:white;" onclick="alert('Model Answer: V3 Nerve, IAN Block landmarks: Coronoid notch, Pterygomandibular raphe...')">Check Model Answer</button>`
         }
     };
 
+    const mcqs = [
+        { q: "Which nerve passes through Foramen Ovale?", o: ["V1", "V2", "V3", "VII"], c: 2, r: "V3 (Mandibular) exits through Foramen Ovale. V2 is Rotundum." },
+        { q: "Initial bacteria in plaque biofilm?", o: ["S. mutans", "S. sanguis", "P. gingivalis", "A. actinomycetemcomitans"], c: 1, r: "S. sanguis and S. mitis are primary colonizers." }
+    ];
+
     function login() {
-        const name = document.getElementById('username').value;
-        if(!name) return alert("Enter your name");
-        currentUser = name;
+        student = document.getElementById('user-name').value;
+        if(!student) return alert("Enter Name");
         document.getElementById('login-gate').classList.add('hidden');
         render('Anatomy');
     }
 
-    function render(modId) {
-        currentModule = modId;
-        const data = contentDB[modId] || { phase: "Module", title: modId, body: "<p>Deep-dive content is being updated.</p>" };
-        
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.toggle('active', link.innerText.includes(modId) || link.onclick.toString().includes(modId));
-        });
-
+    function render(mod) {
+        const data = database[mod] || { title: mod, body: "<p>Deep-dive content is being updated...</p>" };
         document.getElementById('main-view').innerHTML = `
-            <div class="card">
-                <p style="font-size:0.7rem; font-weight:800; color:var(--brand); text-transform:uppercase;">${data.phase}</p>
-                <h1 style="margin:10px 0 20px;">${data.title}</h1>
-                ${data.body}
-            </div>
+            <p style="font-size:0.7rem; font-weight:800; color:var(--brand);">DentoGuide Curriculum</p>
+            <h1>${data.title}</h1>
+            <hr style="margin:20px 0; opacity:0.1;">
+            ${data.body}
         `;
-
-        // Load saved notes for this user/module
-        const savedNotes = localStorage.getItem(`${currentUser}_${modId}`);
-        document.getElementById('notes').value = savedNotes || "";
+        if(mod === 'Quiz') loadQuiz();
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.innerText.includes(mod)));
     }
 
-    // Auto-save notes
-    document.getElementById('notes').addEventListener('input', (e) => {
-        localStorage.setItem(`${currentUser}_${currentModule}`, e.target.value);
-    });
+    function loadQuiz() {
+        const q = mcqs[quizIdx];
+        document.getElementById('quiz-area').innerHTML = `
+            <div class="card">
+                <h3>Question: ${q.q}</h3>
+                <div id="opts">
+                    ${q.o.map((opt, i) => `<div class="quiz-option" onclick="checkQ(${i})">${opt}</div>`).join('')}
+                </div>
+                <div id="rat" class="rationale"><strong>Rationale:</strong> ${q.r}</div>
+                <button id="nxt" class="nav-link" style="margin-top:20px; display:none; background:var(--brand); color:white;" onclick="quizIdx=(quizIdx+1)%mcqs.length; loadQuiz();">Next Question <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        `;
+    }
 
-    function revealRationale(el, isCorrect) {
-        el.style.background = isCorrect ? '#dcfce7' : '#fee2e2';
-        document.getElementById('quiz-rationale').style.display = 'block';
+    function checkQ(idx) {
+        const q = mcqs[quizIdx];
+        const opts = document.querySelectorAll('.quiz-option');
+        opts.forEach((o, i) => {
+            if(i === q.c) o.classList.add('correct');
+            else if(i === idx) o.classList.add('wrong');
+        });
+        document.getElementById('rat').style.display = 'block';
+        document.getElementById('nxt').style.display = 'inline-flex';
     }
 
     function askAI() {
         const input = document.getElementById('ai-input');
-        const win = document.getElementById('chat-window');
+        const box = document.getElementById('chat-window');
         if(!input.value) return;
-
-        win.innerHTML += `<div class="msg user">${input.value}</div>`;
-        const q = input.value.toLowerCase();
+        box.innerHTML += `<div class="msg user">${input.value}</div>`;
+        const val = input.value.toLowerCase();
         input.value = "";
-
         setTimeout(() => {
-            let res = "Let's look at your frameworks. If you are asking about clinical steps, remember the standard: Definition, Indication, Prep, Complication.";
-            if(q.includes("anatomy")) res = "For Head & Neck, prioritize the Trigeminal and Facial nerves. Would you like a mnemonic for the foramina?";
-            if(q.includes("gv black")) res = "GV Black Classes: I (Pits), II (Post Proximal), III (Ant Proximal), IV (Incisal), V (Gingival), VI (Cusp tips).";
-            
-            win.innerHTML += `<div class="msg bot">${res}</div>`;
-            win.scrollTop = win.scrollHeight;
-        }, 700);
+            let res = "Let's review the rationale for that topic in the Mastery Lab.";
+            if(val.includes("anatomy")) res = "For Head & Neck, focus on the Trigeminal (CN V) and Facial (CN VII) nerves.";
+            box.innerHTML += `<div class="msg bot">${res}</div>`;
+            box.scrollTop = box.scrollHeight;
+        }, 600);
     }
 </script>
 

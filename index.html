@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoGuide | Foundation to Board Mastery</title>
+    <title>DentoMastery | Foundation to Board Mastery</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -210,3 +210,23 @@
         // Navigation Logic
         function showTab(tabId) {
             // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active-section');
+            });
+            // Remove active class from nav
+            document.querySelectorAll('nav ul li').forEach(li => {
+                li.classList.remove('active');
+            });
+            // Show selected
+            document.getElementById(tabId).classList.add('active-section');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Active Recall Toggle
+        function toggleRecall(element) {
+            const content = element.querySelector('.recall-content');
+            content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>

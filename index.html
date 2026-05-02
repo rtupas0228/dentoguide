@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoGuide | Board Mastery & Analytics</title>
+    <title>DentoGuide | Guided Mastery System</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -19,12 +19,13 @@
         /* --- LAYOUT --- */
         .app-container { display: grid; grid-template-columns: 80px 280px 1fr 340px; height: 100vh; }
 
-        /* Navigation Sidebar */
+        /* Phase Rail */
         .phase-rail { background: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; border-right: 1px solid rgba(255,255,255,0.1); }
         .phase-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: 0.3s; font-size: 1.2rem; }
         .phase-icon.active { background: var(--brand); box-shadow: 0 0 20px var(--brand); }
 
-        .sidebar { background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; }
+        /* Sidebar */
+        .sidebar { background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .sub-link { padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-light); margin-bottom: 5px; transition: 0.2s; }
         .sub-link:hover, .sub-link.active { background: var(--brand-light); color: var(--brand); }
 
@@ -32,46 +33,46 @@
         main.viewer { padding: 40px; overflow-y: auto; display: flex; justify-content: center; }
         .card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); width: 100%; max-width: 900px; border: 1px solid var(--border); height: fit-content; }
 
-        /* --- CLINICAL CONTENT STYLING --- */
+        /* Content Components */
         .clinical-box { background: #f8fafc; padding: 20px; border-radius: 15px; border-left: 5px solid var(--brand); margin: 15px 0; }
-        .clinical-box ul { margin-left: 20px; margin-top: 10px; }
-        .exam-point { color: var(--danger); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+        .exam-point { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; display: inline-block; margin-bottom: 10px; }
+        .study-tip { background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 12px; font-size: 0.85rem; margin-top: 20px; }
 
-        /* --- SMART QUIZ UI --- */
+        /* Quiz UI */
         .quiz-option { width: 100%; text-align: left; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: white; margin-top: 10px; cursor: pointer; transition: 0.2s; }
-        .quiz-option:hover { background: var(--brand-light); }
         .quiz-option.correct { background: #dcfce7; border-color: var(--success); color: #166534; font-weight: 700; }
         .quiz-option.wrong { background: #fee2e2; border-color: var(--danger); color: #991b1b; }
-        .rationale { margin-top: 20px; padding: 20px; background: #eff6ff; border-radius: 12px; border-left: 4px solid var(--brand); display: none; animation: fadeIn 0.3s; }
+        .rationale { margin-top: 15px; padding: 15px; background: #eff6ff; border-radius: 10px; display: none; font-size: 0.85rem; border-left: 4px solid var(--brand); }
 
-        /* --- PERFORMANCE DASHBOARD --- */
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .stat-card { padding: 15px; border-radius: 12px; border: 1px solid var(--border); }
-        .weak-badge { background: #fee2e2; color: #ef4444; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; }
-        .strong-badge { background: #dcfce7; color: #10b981; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; }
+        /* Analytics */
+        .stat-card { padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 10px; }
+        .weak-badge { color: var(--danger); font-weight: 800; font-size: 0.7rem; }
 
         /* Utility */
         .utility { background: white; border-left: 1px solid var(--border); display: flex; flex-direction: column; }
         #notes { flex: 1; border: none; padding: 20px; background: #fffdf5; outline: none; resize: none; font-size: 0.9rem; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 1024px) {
+            .app-container { grid-template-columns: 1fr; }
+            .phase-rail, .sidebar, .utility { display: none; }
+        }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <nav class="phase-rail">
-        <div class="phase-icon active" onclick="loadPhase(1)"><i class="fa-solid fa-brain"></i></div>
-        <div class="phase-icon" onclick="loadPhase(2)"><i class="fa-solid fa-tooth"></i></div>
-        <div class="phase-icon" onclick="loadPhase(3)"><i class="fa-solid fa-toolbox"></i></div>
-        <div class="phase-icon" onclick="loadPhase(4)"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div class="phase-icon active" onclick="loadPhase(1)" title="Pre-Clinical"><i class="fa-solid fa-brain"></i></div>
+        <div class="phase-icon" onclick="loadPhase(2)" title="Dental Sciences"><i class="fa-solid fa-tooth"></i></div>
+        <div class="phase-icon" onclick="loadPhase(3)" title="Clinical Subjects"><i class="fa-solid fa-toolbox"></i></div>
+        <div class="phase-icon" onclick="loadPhase(4)" title="Clinical Thinking"><i class="fa-solid fa-rotate"></i></div>
     </nav>
 
     <aside class="sidebar">
-        <div style="margin-bottom:20px;"><h2 style="font-size:1.2rem; color:var(--brand);">DentoGuide</h2></div>
+        <h2 style="font-size:1.2rem; color:var(--brand); margin-bottom:20px;">DentoGuide</h2>
         <div id="subject-list"></div>
         <hr style="margin: 20px 0; opacity: 0.1;">
-        <div class="sub-link" onclick="renderPerformance()"><i class="fa-solid fa-chart-pie"></i> Analytics</div>
+        <div class="sub-link" onclick="renderAnalytics()"><i class="fa-solid fa-chart-pie"></i> Weakness Tracker</div>
     </aside>
 
     <main class="viewer">
@@ -79,72 +80,69 @@
     </main>
 
     <aside class="utility">
-        <div style="padding:20px; font-weight:800; font-size:0.8rem; border-bottom:1px solid #eee;">PERSONAL STUDY NOTES</div>
+        <div style="padding:15px; font-weight:800; font-size:0.75rem; border-bottom:1px solid #eee;">DentoAI & PERSISTENT NOTES</div>
+        <div style="flex:1; background:#f1f5f9;">
+            <iframe src="https://www.chatbase.co/chatbot-iframe/v_your_id" style="width:100%; height:100%; border:none;"></iframe>
+        </div>
         <textarea id="notes" placeholder="Notes auto-save per subject..."></textarea>
     </aside>
 </div>
 
 <script>
-    // --- SMART PERFORMANCE TRACKING ---
-    let performance = JSON.parse(localStorage.getItem("dento_performance")) || {};
-
-    function trackAnswer(subject, isCorrect) {
-        if(!performance[subject]) performance[subject] = {correct: 0, total: 0};
-        performance[subject].total++;
-        if(isCorrect) performance[subject].correct++;
-        localStorage.setItem("dento_performance", JSON.stringify(performance));
-    }
+    // --- PERSISTENCE & ANALYTICS ---
+    let performance = JSON.parse(localStorage.getItem("dento_perf")) || {};
 
     const curriculum = {
         phase1: {
-            name: "Core Foundations",
+            name: "Pre-Clinical Mastery",
             subjects: {
                 "Anatomy": {
-                    title: "Head & Neck Mastery",
-                    content: `
-                        <h2>1. Skull & Osteology</h2>
-                        <div class="clinical-box">
-                            <b>Mandible</b>
-                            <ul>
-                                <li>Strongest facial bone</li>
-                                <li>Articulates with temporal bone (TMJ)</li>
-                                <li>Mandibular foramen → Inferior Alveolar Nerve</li>
-                            </ul>
-                        </div>
-                        <h2>2. Muscles of Mastication</h2>
-                        <div class="clinical-box">
-                            <span class="exam-point">Mandatory Exam Point</span>
-                            <ul>
-                                <li>Masseter / Temporalis / Medial Pterygoid (Elevation)</li>
-                                <li>Lateral Pterygoid (Opening/Protrusion)</li>
-                            </ul>
-                            <b>Innervation: CN V3</b>
-                        </div>
-                        <h2>3. Clinical Correlations</h2>
-                        <div class="clinical-box">
-                            <ul>
-                                <li>Bell's Palsy → CN VII damage</li>
-                                <li>Trismus → Lateral Pterygoid involvement</li>
-                            </ul>
-                        </div>`,
-                    quiz: [
-                        { q: "Patient has numb lower lip after extraction. Which nerve is involved?", options: ["Lingual", "Inferior Alveolar", "Buccal", "Facial"], a: 1, r: "The IAN gives off the mental nerve, which provides sensation to the lower lip." },
-                        { q: "Damage to the Right CN XII (Hypoglossal) causes tongue deviation to the:", options: ["Left", "Right", "Does not deviate", "Center"], a: 1, r: "The tongue deviates TOWARD the side of the lesion in LMN injuries of CN XII." }
-                    ]
-                }
+                    title: "Head & Neck Anatomy",
+                    content: `<h2>🧠 Core Foundation</h2>
+                        <div class="clinical-box"><b>Why it matters:</b><p>Essential for anesthesia, surgery, diagnosis, and nerve mapping.</p></div>
+                        <div class="clinical-box"><b>1. Skull & Landmarks</b><ul><li>Mandible: Strongest bone, contains IAN foramen.</li><li>Maxilla: Forms upper jaw & orbital floor.</li></ul></div>
+                        <div class="clinical-box"><b>2. Muscles of Mastication</b><ul><li>Elevators: Masseter, Temporalis, Medial Pterygoid.</li><li>Opener: Lateral Pterygoid (Protrusion).</li></ul><b>Innervation: CN V3</b></div>`,
+                    quiz: [{ q: "Numb lower lip after extraction involves which nerve?", options: ["Lingual", "Inferior Alveolar", "Facial"], a: 1, r: "IAN becomes the mental nerve which supplies the lower lip." }]
+                },
+                "Physiology": { title: "Physiology", content: `<div class="clinical-box"><b>Focus:</b><ul><li>Homeostasis</li><li>Saliva production (Parasympathetic vs Sympathetic)</li></ul></div>` },
+                "Biochemistry": { title: "Biochemistry", content: `<div class="clinical-box"><ul><li>Metabolism</li><li>Acid-base balance (Critical for dental decay)</li></ul></div>` },
+                "Histology": { title: "Histology", content: `<div class="clinical-box"><ul><li>Enamel rods</li><li>Dentin tubules</li></ul></div>` },
+                "Microbiology": { title: "Microbiology", content: `<div class="clinical-box"><ul><li>Oral bacteria (S. mutans)</li><li>Caries process</li></ul></div>` },
+                "Pathology": { title: "Pathology", content: `<div class="clinical-box"><ul><li>Inflammation</li><li>Cysts & Tumors</li></ul></div>` }
+            }
+        },
+        phase2: {
+            name: "Dental Sciences",
+            subjects: {
+                "Dental Anatomy": { title: "Dental Anatomy", content: `<div class="exam-point">HIGH-YIELD</div><p>Know cusp patterns and eruption ages.</p>` },
+                "Dental Materials": { title: "Dental Materials", content: `<div class="exam-point">COMPARE IN TABLES</div><p>Amalgam vs Composite; Alginate vs PVS.</p>` },
+                "Pharmacology": { title: "Pharmacology", content: `<div class="clinical-box"><ul><li>Local Anesthetics (Lidocaine, Articaine)</li><li>Antibiotics</li></ul></div>` }
+            }
+        },
+        phase3: {
+            name: "Clinical Subjects",
+            subjects: {
+                "Operative": { title: "Operative Dentistry", content: `<div class="clinical-box"><b>Framework:</b><ul><li>Definition</li><li>Indications</li><li>Procedure</li><li>Complications</li></ul></div>` },
+                "Oral Surgery": { title: "Oral Surgery", content: `<div class="clinical-box"><ul><li>Extractions</li><li>Impactions</li><li>Nerve management</li></ul></div>` }
+            }
+        },
+        phase4: {
+            name: "Clinical Thinking",
+            subjects: {
+                "Diagnosis": { title: "Clinical Reasoning", content: `<div class="clinical-box"><b>Framework:</b><p>Chief Complaint → History → Examination → Diagnosis → Tx Plan</p></div>` },
+                "Case Training": { title: "Case-Based Learning", content: `<div class="clinical-box"><p><b>Case:</b> Patient with sharp pain on cold water.</p><button onclick="this.nextElementSibling.style.display='block'">Reveal Diagnosis</button><p style="display:none; color:var(--brand); font-weight:bold;">Reversible Pulpitis</p></div>` }
             }
         }
     };
 
     let activePhase = 1;
-    let currentSub = "Anatomy";
+    let activeSub = "Anatomy";
 
     function loadPhase(num) {
         activePhase = num;
-        const list = document.getElementById('subject-list');
-        list.innerHTML = "";
         const phase = curriculum['phase'+num];
-        if(!phase) return;
+        const list = document.getElementById('subject-list');
+        list.innerHTML = `<div style="font-size:0.7rem; font-weight:800; color:var(--text-light); margin-bottom:10px;">${phase.name.toUpperCase()}</div>`;
         
         Object.keys(phase.subjects).forEach(key => {
             const div = document.createElement('div');
@@ -153,65 +151,68 @@
             div.onclick = () => renderSubject(num, key);
             list.appendChild(div);
         });
+
+        document.querySelectorAll('.phase-icon').forEach((icon, i) => icon.classList.toggle('active', (i+1) === num));
         renderSubject(num, Object.keys(phase.subjects)[0]);
     }
 
     function renderSubject(pNum, sKey) {
-        currentSub = sKey;
+        activeSub = sKey;
         const sub = curriculum['phase'+pNum].subjects[sKey];
         const target = document.getElementById('render-target');
         
-        target.innerHTML = `<h1>${sub.title}</h1>${sub.content}`;
-        
+        target.innerHTML = `<h1>${sub.title}</h1>${sub.content}
+            <div class="study-tip"><b>How to Study This Topic:</b><ul><li>Read once for concepts</li><li>Recall without notes (Blurting)</li><li>Take the MCQ below</li></ul></div>`;
+
         if(sub.quiz) {
-            target.innerHTML += `<h2>🧠 Board-Level MCQ</h2><div id="quiz-box"></div>`;
-            loadQuiz(sub.quiz);
+            target.innerHTML += `<div id="quiz-area"></div>`;
+            renderQuiz(sub.quiz);
         }
-        
+
         document.getElementById('notes').value = localStorage.getItem(`note_${sKey}`) || "";
         document.querySelectorAll('.sub-link').forEach(l => l.classList.toggle('active', l.innerText === sKey));
     }
 
-    function loadQuiz(quiz) {
-        let current = 0;
-        function showQ() {
-            const q = quiz[current];
-            document.getElementById('quiz-box').innerHTML = `
-                <div class="clinical-box">
-                    <p><b>Q:</b> ${q.q}</p>
-                    ${q.options.map((opt, i) => `<button class="quiz-option" onclick="check(${i})">${opt}</button>`).join('')}
-                    <div id="rat-box" class="rationale"><b>Rationale:</b> ${q.r}</div>
-                    <button id="next-q" style="display:none; margin-top:15px; padding:10px; cursor:pointer;" onclick="next()">Next Question</button>
-                </div>`;
+    function renderQuiz(quiz) {
+        const area = document.getElementById('quiz-area');
+        let cur = 0;
+        function show() {
+            const q = quiz[cur];
+            area.innerHTML = `<div class="clinical-box"><h3>${q.q}</h3>
+                ${q.options.map((o, i) => `<button class="quiz-option" onclick="checkAnswer(${i}, ${q.a}, '${q.r}')">${o}</button>`).join('')}
+                <div id="rationale" class="rationale"></div></div>`;
         }
-        window.check = (idx) => {
-            const correct = (idx === quiz[current].a);
-            trackAnswer(currentSub, correct);
-            document.querySelectorAll('.quiz-option').forEach((b, i) => {
-                if(i === quiz[current].a) b.classList.add('correct');
+        window.checkAnswer = (idx, correct, rat) => {
+            const isCorrect = idx === correct;
+            if(!performance[activeSub]) performance[activeSub] = {correct: 0, total: 0};
+            performance[activeSub].total++; if(isCorrect) performance[activeSub].correct++;
+            localStorage.setItem("dento_perf", JSON.stringify(performance));
+
+            const btns = document.querySelectorAll('.quiz-option');
+            btns.forEach((b, i) => {
+                if(i === correct) b.classList.add('correct');
                 else if(i === idx) b.classList.add('wrong');
                 b.style.pointerEvents = 'none';
             });
-            document.getElementById('rat-box').style.display = 'block';
-            document.getElementById('next-q').style.display = 'block';
+            const rBox = document.getElementById('rationale');
+            rBox.innerHTML = `<b>Rationale:</b> ${rat}`;
+            rBox.style.display = 'block';
         };
-        window.next = () => { current++; if(current < quiz.length) showQ(); else renderPerformance(); };
-        showQ();
+        show();
     }
 
-    function renderPerformance() {
+    function renderAnalytics() {
         const target = document.getElementById('render-target');
-        let html = `<h1>Performance Analytics</h1><div class="stat-grid">`;
+        let html = `<h1>Weakness Tracker</h1><p>Based on your quiz performance.</p><br>`;
         for(let sub in performance) {
             let rate = (performance[sub].correct / performance[sub].total) * 100;
-            let status = rate < 70 ? `<span class="weak-badge">Weak Area</span>` : `<span class="strong-badge">Mastered</span>`;
-            html += `<div class="stat-card"><h3>${sub}</h3><p>${rate.toFixed(1)}% Accuracy</p>${status}</div>`;
+            html += `<div class="stat-card"><b>${sub}</b>: ${rate.toFixed(1)}% accuracy ${rate < 70 ? '<span class="weak-badge">! ACTION NEEDED</span>' : ''}</div>`;
         }
-        target.innerHTML = html + `</div>`;
+        target.innerHTML = html;
     }
 
     document.getElementById('notes').addEventListener('input', (e) => {
-        localStorage.setItem(`note_${currentSub}`, e.target.value);
+        localStorage.setItem(`note_${activeSub}`, e.target.value);
     });
 
     window.onload = () => loadPhase(1);

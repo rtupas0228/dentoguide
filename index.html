@@ -3,235 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoGuide | My Learning Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>DentoGuide | Professional Student Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --accent: #10b981;
+            --primary: #2563eb; --secondary: #10b981; --bg: #f8fafc;
+            --card: #ffffff; --text: #1e293b; --accent: #f59e0b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); }
+        body { background-color: var(--bg); color: var(--text); overflow: hidden; }
 
-        /* --- AUTH MODAL --- */
-        #auth-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.9); z-index: 2000;
+        /* --- LOGIN SYSTEM --- */
+        #auth-screen {
+            position: fixed; inset: 0; background: #0f172a; z-index: 9999;
             display: flex; align-items: center; justify-content: center;
         }
-        .auth-card {
-            background: white; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center;
+        .auth-box {
+            background: white; padding: 40px; border-radius: 20px; width: 100%; max-width: 400px; text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
-        .auth-card input {
-            width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;
-        }
-        .btn-primary {
-            background: var(--primary); color: white; border: none; padding: 12px 24px; 
-            border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600;
-        }
+        .auth-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 8px; }
 
-        /* --- LAYOUT --- */
-        .app-grid {
-            display: grid; grid-template-columns: 260px 1fr 300px; height: 100vh;
-        }
+        /* --- MAIN LAYOUT --- */
+        .app-container { display: grid; grid-template-columns: 280px 1fr 320px; height: 100vh; }
 
-        /* Sidebar Nav */
-        nav { background: white; border-right: 1px solid #e2e8f0; padding: 20px; }
+        /* Sidebar Navigation */
+        aside.sidebar { background: white; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; }
+        .logo-area { padding: 30px; font-weight: 800; font-size: 1.5rem; color: var(--primary); letter-spacing: -1px; }
+        
+        .phase-nav { padding: 0 20px; flex: 1; overflow-y: auto; }
+        .phase-header { font-size: 0.7rem; font-weight: 800; color: #94a3b8; margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 1px; }
         .nav-item { 
-            padding: 12px; border-radius: 8px; cursor: pointer; margin-bottom: 5px; 
-            display: flex; align-items: center; gap: 10px; font-weight: 500;
+            padding: 10px 15px; border-radius: 10px; cursor: pointer; margin-bottom: 4px; 
+            font-size: 0.9rem; font-weight: 500; transition: 0.2s; display: flex; align-items: center; gap: 10px;
         }
-        .nav-item:hover { background: #f1f5f9; }
-        .nav-item.active { background: #eff6ff; color: var(--primary); }
+        .nav-item:hover { background: #f1f5f9; color: var(--primary); }
+        .nav-item.active { background: #eff6ff; color: var(--primary); font-weight: 700; }
 
-        /* Main Content */
-        main { padding: 40px; overflow-y: auto; }
-        .infographic-box {
-            background: #f1f5f9; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;
-            border: 2px dashed #cbd5e1;
-        }
-        .infographic-box img { max-width: 100%; border-radius: 8px; }
+        /* Content Area */
+        main.content { padding: 40px; overflow-y: auto; background: var(--bg); }
+        .content-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); min-height: 100%; border: 1px solid #f1f5f9; }
 
         /* Notes Panel */
-        .notes-panel { background: white; border-left: 1px solid #e2e8f0; padding: 20px; display: flex; flex-direction: column; }
-        #note-area {
-            flex: 1; width: 100%; margin-top: 15px; border: 1px solid #e2e8f0; border-radius: 8px;
-            padding: 15px; font-size: 0.9rem; resize: none; outline: none; background: #fffbeb;
-        }
+        aside.notes { background: white; border-left: 1px solid #e2e8f0; padding: 25px; display: flex; flex-direction: column; }
+        #note-editor { flex: 1; width: 100%; margin-top: 15px; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; background: #fffdf5; resize: none; outline: none; line-height: 1.5; }
 
-        /* Progress Header */
-        .header {
-            background: white; padding: 15px 40px; border-bottom: 1px solid #e2e8f0;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .progress-bar-bg { background: #e2e8f0; width: 200px; height: 8px; border-radius: 10px; overflow: hidden; }
-        .progress-fill { background: var(--accent); width: 0%; height: 100%; transition: 0.5s; }
+        /* Clinical Framework Table */
+        .framework-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .framework-table th { background: #f8fafc; text-align: left; padding: 12px; border: 1px solid #e2e8f0; font-size: 0.8rem; }
+        .framework-table td { padding: 12px; border: 1px solid #e2e8f0; }
+
+        /* UI Elements */
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-bottom: 10px; }
+        .b-foundation { background: #dcfce7; color: #166534; }
+        .b-clinical { background: #fee2e2; color: #991b1b; }
+        .progress-container { height: 6px; background: #e2e8f0; border-radius: 10px; margin-top: 5px; }
+        .progress-fill { height: 100%; background: var(--secondary); width: 0%; transition: 0.5s; }
+        
+        .high-yield-box { background: #eff6ff; border-left: 4px solid var(--primary); padding: 15px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+        .mnemonic { font-style: italic; color: var(--accent); font-weight: 700; }
 
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN OVERLAY -->
-    <div id="auth-overlay">
-        <div class="auth-card">
-            <h2 style="margin-bottom: 10px;">Welcome to DentoGuide</h2>
-            <p style="color: #64748b; margin-bottom: 20px;">Enter your name to start tracking progress</p>
-            <input type="text" id="username" placeholder="Full Name">
-            <input type="password" id="pass" placeholder="Password (Simulation)">
-            <button class="btn-primary" onclick="login()">Enter Portal</button>
-        </div>
+<!-- LOGIN SCREEN -->
+<div id="auth-screen">
+    <div class="auth-box">
+        <h1 style="color:var(--primary); margin-bottom:10px;">DentoGuide</h1>
+        <p style="color:#64748b; margin-bottom:20px;">Personal Student Portal</p>
+        <input type="text" id="user-name" placeholder="Enter Full Name">
+        <input type="password" placeholder="Access Code (Simulation)">
+        <button onclick="handleLogin()" style="width:100%; padding:14px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer;">Initialize Portal</button>
     </div>
+</div>
 
-    <div class="header">
-        <div style="font-weight: 800; color: var(--primary); font-size: 1.2rem;">DentoGuide</div>
-        <div style="display: flex; align-items: center; gap: 20px;">
-            <div style="text-align: right;">
-                <div id="user-display" style="font-weight: 600; font-size: 0.9rem;"></div>
-                <div class="progress-bar-bg"><div id="progress-fill" class="progress-fill"></div></div>
-            </div>
-            <button onclick="logout()" style="border: none; background: none; color: #ef4444; cursor: pointer;">Logout</button>
-        </div>
-    </div>
-
-    <div class="app-grid">
-        <!-- Sidebar -->
-        <nav>
-            <div style="font-size: 0.7rem; font-weight: 700; color: #94a3b8; margin-bottom: 15px; text-transform: uppercase;">Curriculum</div>
-            <div class="nav-item active" onclick="loadModule('Anatomy')"><i class="fa-solid fa-brain"></i> Anatomy</div>
-            <div class="nav-item" onclick="loadModule('Physiology')"><i class="fa-solid fa-heart-pulse"></i> Physiology</div>
-            <div class="nav-item" onclick="loadModule('Materials')"><i class="fa-solid fa-flask"></i> Dental Materials</div>
-            <div class="nav-item" onclick="loadModule('Operative')"><i class="fa-solid fa-tooth"></i> Operative</div>
-        </nav>
-
-        <!-- Main Content -->
-        <main id="main-content">
-            <h1 id="module-title">Select a Module</h1>
-            <div id="module-body">Click a topic on the left to begin studying.</div>
-            
-            <!-- Placeholder for Infographic -->
-            <div class="infographic-box" id="info-graphic">
-                <i class="fa-solid fa-image fa-3x" style="color: #cbd5e1; margin-bottom: 10px;"></i>
-                <p style="color: #94a3b8;">Module Diagram (Infographic Placeholder)</p>
+<div class="app-container">
+    <!-- SIDEBAR NAV -->
+    <aside class="sidebar">
+        <div class="logo-area">DentoGuide</div>
+        <div class="phase-nav">
+            <div id="user-info" style="padding: 10px 15px; background: #f8fafc; border-radius: 10px; margin-bottom: 20px;">
+                <div id="display-name" style="font-weight:700; font-size:0.9rem;">Dr. Student</div>
+                <div class="progress-container"><div id="p-fill" class="progress-fill"></div></div>
             </div>
 
-            <button class="btn-primary" style="width: auto;" onclick="markComplete()">Mark as Completed</button>
-        </main>
+            <div class="phase-header">1. Core Foundations</div>
+            <div class="nav-item active" onclick="render('Anatomy')">Anatomy (H&N)</div>
+            <div class="nav-item" onclick="render('Physiology')">Physiology</div>
+            <div class="nav-item" onclick="render('Biochemistry')">Biochemistry</div>
+            <div class="nav-item" onclick="render('Histology')">Histology</div>
+            <div class="nav-item" onclick="render('Microbiology')">Micro & Immuno</div>
+            <div class="nav-item" onclick="render('Pathology')">General Pathology</div>
 
-        <!-- Personal Notes Panel -->
-        <aside class="notes-panel">
-            <h3 style="font-size: 1rem;"><i class="fa-solid fa-pen-fancy"></i> My Study Notes</h3>
-            <p style="font-size: 0.75rem; color: #64748b;">Notes are saved automatically to your profile.</p>
-            <textarea id="note-area" placeholder="Type your personal insights or mnemonics here..."></textarea>
-            <div id="save-status" style="font-size: 0.7rem; color: var(--accent); margin-top: 5px; opacity: 0;">Saved!</div>
-        </aside>
-    </div>
+            <div class="phase-header">2. Dental Sciences</div>
+            <div class="nav-item" onclick="render('DentalAnatomy')">Dental Anatomy</div>
+            <div class="nav-item" onclick="render('DentalMaterials')">Dental Materials</div>
+            <div class="nav-item" onclick="render('Pharmacology')">Pharmacology</div>
 
-    <script>
-        let currentUser = null;
-        let currentModule = "Anatomy";
-        let userData = {
-            completed: [],
-            notes: {}
-        };
+            <div class="phase-header">3. Clinical Subjects</div>
+            <div class="nav-item" onclick="render('Operative')">Operative Dentistry</div>
+            <div class="nav-item" onclick="render('Prosthodontics')">Prosthodontics</div>
+            <div class="nav-item" onclick="render('Endodontics')">Endodontics</div>
 
-        const moduleContent = {
-            Anatomy: "<h1>Head & Neck Anatomy</h1><p>Focus on the <strong>Maxillary Artery</strong> branches and the muscles of mastication. Remember the path of the Mandibular Nerve (V3) through Foramen Ovale.</p>",
-            Physiology: "<h1>Physiology</h1><p>Explore Salivary flow rates and the autonomic nervous system. Sympathetic = Thick/Mucous, Parasympathetic = Thin/Serous.</p>",
-            Materials: "<h1>Dental Materials</h1><p>Key focus: Polymerization shrinkage in composite resins and the W:P ratio of Gypsum products.</p>",
-            Operative: "<h1>Operative Dentistry</h1><p>Class I to Class VI preparations. Focus on G.V. Black's principles of cavity design.</p>"
-        };
+            <div class="phase-header">4. Clinical Thinking</div>
+            <div class="nav-item" onclick="render('DiagnosticWorkflow')">Diagnostic Framework</div>
+        </div>
+    </aside>
 
-        // LOGIN SYSTEM
-        function login() {
-            const name = document.getElementById('username').value;
-            if (name.trim() === "") return alert("Please enter your name");
-            
-            currentUser = name;
-            document.getElementById('auth-overlay').classList.add('hidden');
-            document.getElementById('user-display').innerText = `Dr. ${name}`;
-            
-            // Load existing data from LocalStorage
-            const savedData = localStorage.getItem(`dentoguide_${name}`);
-            if (savedData) {
-                userData = JSON.parse(savedData);
-            }
-            
-            loadModule('Anatomy');
+    <!-- MAIN CONTENT -->
+    <main class="content">
+        <div class="content-card" id="content-view">
+            <!-- Content loaded via JS -->
+        </div>
+    </main>
+
+    <!-- NOTES PANEL -->
+    <aside class="notes">
+        <h3 style="font-size: 0.9rem; display:flex; justify-content:space-between; align-items:center;">
+            <span><i class="fa-solid fa-pen-to-square"></i> My Study Notes</span>
+            <span id="save-indicator" style="font-size:0.7rem; color:var(--secondary); opacity:0;">Saved!</span>
+        </h3>
+        <textarea id="note-editor" placeholder="Start typing your personalized notes for this module..."></textarea>
+        
+        <div style="margin-top:20px;">
+            <button onclick="markComplete()" style="width:100%; padding:12px; background:var(--secondary); color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer;">Mark Stage Completed</button>
+        </div>
+    </aside>
+</div>
+
+<script>
+    let studentName = "";
+    let currentModule = "Anatomy";
+    let store = { completed: [], notes: {} };
+
+    const curriculum = {
+        Anatomy: {
+            badge: "FOUNDATION", title: "Anatomy (Head & Neck)",
+            body: `<h2>Pre-Clinical Mastery</h2><p>Focus on the 'Root Subjects'.</p>
+                   <div class="high-yield-box"><strong>Mnemonic:</strong> Cranial Nerves (Sensory/Motor/Both): "Some Say Marry Money But My Brother Says Big Brains Matter More"</div>
+                   <h3>Visual Learning Focus</h3><ul><li>Trigeminal Nerve path</li><li>Muscles of Mastication (TEMPORALIS, MASSETER, MEDIAL PTERYGoid, LATERAL PTERYGoid)</li></ul>`
+        },
+        Operative: {
+            badge: "CLINICAL", title: "Operative Dentistry",
+            body: `<h2>Clinical Subject Framework</h2>
+                   <div class="high-yield-box"><strong>Repeatable Framework:</strong> Definition → Indications → Steps → Complications.</div>
+                   <table class="framework-table">
+                        <tr><th>Indications</th><td>Caries, Fractures, Aesthetic Improvement</td></tr>
+                        <tr><th>Steps</th><td>1. Anesthesia 2. Isolation 3. Access 4. Excavation 5. Restoration</td></tr>
+                        <tr><th>Viva Question</th><td>Why is the rubber dam mandatory? (Isolation, moisture control, patient safety)</td></tr>
+                   </table>`
+        },
+        DentalMaterials: {
+            badge: "DENTAL SCIENCE", title: "Dental Materials",
+            body: `<h2>Comparison Tables</h2>
+                   <table><tr><th>Material</th><th>W:P Ratio</th><th>Expansion</th></tr>
+                   <tr><td>Plaster</td><td>0.50</td><td>High</td></tr>
+                   <tr><td>Stone</td><td>0.30</td><td>Medium</td></tr></table>`
+        },
+        DiagnosticWorkflow: {
+            badge: "THINKING FRAMEWORK", title: "Diagnostic Workflow",
+            body: `<h2>Thinking Like a Dentist</h2><p>Do not just teach facts; teach the process.</p>
+                   <ol>
+                    <li><strong>Chief Complaint:</strong> "In the patient's own words."</li>
+                    <li><strong>History:</strong> Medical and Dental history.</li>
+                    <li><strong>Examination:</strong> Extra-oral and Intra-oral.</li>
+                    <li><strong>Diagnosis:</strong> Based on clinical & radiographic findings.</li>
+                    <li><strong>Treatment Plan:</strong> Phase 1 to Phase 4.</li>
+                   </ol>`
+        }
+    };
+
+    function handleLogin() {
+        const name = document.getElementById('user-name').value;
+        if(!name) return alert("Please enter your name");
+        studentName = name;
+        document.getElementById('display-name').innerText = `Dr. ${name}`;
+        document.getElementById('auth-screen').classList.add('hidden');
+        
+        const saved = localStorage.getItem(`dentoguide_${name}`);
+        if(saved) store = JSON.parse(saved);
+        render('Anatomy');
+        updateProgress();
+    }
+
+    function render(mod) {
+        currentModule = mod;
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.innerText.includes(mod)));
+        
+        const data = curriculum[mod] || { badge: "CORE", title: mod, body: `<p>Detailed high-yield notes for ${mod} are being loaded...</p>` };
+        
+        document.getElementById('content-view').innerHTML = `
+            <span class="badge ${data.badge === 'CLINICAL' ? 'b-clinical' : 'b-foundation'}">${data.badge}</span>
+            <h1>${data.title}</h1>
+            <hr style="margin: 20px 0; opacity: 0.1;">
+            ${data.body}
+        `;
+        
+        document.getElementById('note-editor').value = store.notes[mod] || "";
+    }
+
+    document.getElementById('note-editor').addEventListener('input', (e) => {
+        store.notes[currentModule] = e.target.value;
+        localStorage.setItem(`dentoguide_${studentName}`, JSON.stringify(store));
+        const ind = document.getElementById('save-indicator');
+        ind.style.opacity = 1;
+        setTimeout(() => ind.style.opacity = 0, 1000);
+    });
+
+    function markComplete() {
+        if(!store.completed.includes(currentModule)) {
+            store.completed.push(currentModule);
+            localStorage.setItem(`dentoguide_${studentName}`, JSON.stringify(store));
             updateProgress();
+            alert("Module completed! Progress saved.");
         }
+    }
 
-        function logout() {
-            location.reload();
-        }
+    function updateProgress() {
+        const total = 14; // Total sub-modules in sidebar
+        const percent = (store.completed.length / total) * 100;
+        document.getElementById('p-fill').style.width = `${percent}%`;
+    }
+</script>
 
-        // CONTENT SYSTEM
-        function loadModule(name) {
-            currentModule = name;
-            
-            // Update UI Active State
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.toggle('active', item.innerText.includes(name));
-            });
-
-            document.getElementById('module-title').innerText = name;
-            document.getElementById('module-body').innerHTML = moduleContent[name];
-            
-            // Load Personal Note for this module
-            document.getElementById('note-area').value = userData.notes[name] || "";
-
-            // Update Infographic Placeholder
-            updateInfographic(name);
-        }
-
-        function updateInfographic(name) {
-            const box = document.getElementById('info-graphic');
-            // Here you would link to actual dental infographics
-            if(name === 'Anatomy') {
-                box.innerHTML = `<img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=400" alt="Skull Anatomy">`;
-            } else {
-                box.innerHTML = `<i class="fa-solid fa-diagram-project fa-3x" style="color: #cbd5e1; margin-bottom: 10px;"></i><p>Infographic for ${name} goes here.</p>`;
-            }
-        }
-
-        // SAVE NOTES (Auto-save)
-        document.getElementById('note-area').addEventListener('input', (e) => {
-            userData.notes[currentModule] = e.target.value;
-            saveData();
-            
-            // Show "Saved" indicator
-            const status = document.getElementById('save-status');
-            status.style.opacity = 1;
-            setTimeout(() => status.style.opacity = 0, 1000);
-        });
-
-        // PROGRESS TRACKING
-        function markComplete() {
-            if (!userData.completed.includes(currentModule)) {
-                userData.completed.push(currentModule);
-                saveData();
-                updateProgress();
-                alert(`${currentModule} marked as completed!`);
-            }
-        }
-
-        function updateProgress() {
-            const total = Object.keys(moduleContent).length;
-            const done = userData.completed.length;
-            const percent = (done / total) * 100;
-            document.getElementById('progress-fill').style.width = `${percent}%`;
-        }
-
-        function saveData() {
-            if (currentUser) {
-                localStorage.setItem(`dentoguide_${currentUser}`, JSON.stringify(userData));
-            }
-        }
-    </script>
 </body>
 </html>

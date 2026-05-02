@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoGuide | Head & Neck Anatomy Master</title>
+    <title>DentoGuide | Clinical Anatomy & Dev Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --brand: #2563eb; --brand-light: #eff6ff; --bg: #f8fafc;
             --text: #0f172a; --text-light: #64748b; --white: #ffffff;
-            --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+            --success: #10b981; --warning: #f59e0b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -18,7 +18,7 @@
 
         .dashboard { display: grid; grid-template-columns: 280px 1fr 380px; height: 100vh; }
 
-        /* Navigation Sidebar */
+        /* Sidebar Navigation */
         aside.nav-sidebar { background: white; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 15px; overflow-y: auto; }
         .logo { font-weight: 800; font-size: 1.4rem; color: var(--brand); margin-bottom: 20px; padding: 10px; border-bottom: 2px solid var(--brand-light); }
         .phase-label { font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 15px 0 5px; padding-left: 10px; }
@@ -30,21 +30,14 @@
         .content-wrap { max-width: 900px; margin: 0 auto; }
         .card { background: white; padding: 35px; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 25px; border: 1px solid #f1f5f9; }
 
-        /* Kenhub Style Content Grid */
-        .anatomy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
-        .anatomy-box { background: #f8fafc; padding: 20px; border-radius: 15px; border-top: 4px solid var(--brand); }
-        .anatomy-box h4 { font-size: 0.9rem; color: var(--brand); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        /* Content Components */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        .info-box { background: #f8fafc; padding: 20px; border-radius: 15px; border-left: 4px solid var(--brand); }
+        .high-yield-badge { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-bottom: 10px; display: inline-block; }
         
-        /* Clinical/High Yield Styling */
-        .clinical-alert { background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 15px; margin: 20px 0; font-size: 0.9rem; color: #92400e; }
-        .mnemonic-tag { background: var(--brand); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: inline-block; }
-
-        /* Tables & Lists */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; }
         table th, table td { padding: 10px; border: 1px solid #e2e8f0; text-align: left; }
         table th { background: #f1f5f9; }
-        ul.check-list { list-style: none; }
-        ul.check-list li::before { content: '→'; color: var(--brand); font-weight: bold; margin-right: 8px; }
 
         /* AI Sidebar */
         .ai-sidebar { background: white; border-left: 1px solid #e2e8f0; display: flex; flex-direction: column; overflow: hidden; }
@@ -57,36 +50,29 @@
 
 <div class="dashboard">
     <aside class="nav-sidebar">
-        <div class="logo"><i class="fa-solid fa-tooth"></i> DentoGuide</div>
+        <div class="logo">DentoGuide</div>
         
-        <div class="phase-label">Phase 1: Foundations</div>
+        <div class="phase-label">Foundations</div>
+        <!-- To add a new tab, copy the line below and change the name inside render('') -->
         <div class="nav-link active" onclick="render('Anatomy')">Anatomy (H&N)</div>
         <div class="nav-link" onclick="render('Physiology')">Physiology</div>
-        <div class="nav-link" onclick="render('Micro')">Microbiology</div>
-
-        <div class="phase-label">Phase 2: Dental Sciences</div>
-        <div class="nav-link" onclick="render('Materials')">Dental Materials</div>
-        <div class="nav-link" onclick="render('Morphology')">Tooth Morphology</div>
-
-        <div class="phase-label">Phase 3: Clinical</div>
+        
+        <div class="phase-label">Clinical</div>
         <div class="nav-link" onclick="render('Operative')">Operative</div>
-        <div class="nav-link" onclick="render('Surgery')">Oral Surgery</div>
 
-        <div class="phase-label">Mastery</div>
-        <div class="nav-link" onclick="render('Recall')"><i class="fa-solid fa-brain"></i> Mastery Lab</div>
+        <!-- NEW TAB EXAMPLE -->
+        <div class="phase-label">Administration</div>
+        <div class="nav-link" onclick="render('DevGuide')"><i class="fa-solid fa-code"></i> How to Add Pages</div>
     </aside>
 
     <main class="viewer">
-        <div class="content-wrap" id="main-view">
-            <!-- Anatomy Content Injected Here -->
-        </div>
+        <div class="content-wrap" id="main-view"></div>
     </main>
 
     <aside class="ai-sidebar">
-        <div class="ai-header"><i class="fa-solid fa-robot"></i> DentoAI Assistant</div>
-        <iframe src="https://www.chatbase.co/chatbot-iframe/v_your_id"></iframe>
-        <div style="padding:10px; font-weight:800; font-size:0.65rem; color:#94a3b8; letter-spacing:1px;">MODULE NOTES</div>
-        <textarea id="notes" placeholder="Type your own anatomy notes here..."></textarea>
+        <div class="ai-header">DentoAI Assistant</div>
+        <iframe src="https://www.chatbase.co/chatbot-iframe/your_id"></iframe>
+        <textarea id="notes" placeholder="Notes for this module..."></textarea>
     </aside>
 </div>
 
@@ -95,62 +81,54 @@
 
     const database = {
         Anatomy: {
-            title: "Head & Neck Anatomy Mastery",
-            badge: "CORE FOUNDATION",
+            title: "Head & Neck: Dental High-Yield",
             body: `
-                <p class="text-light">Based on high-yield clinical standards for dental surgery and diagnosis.</p>
-                
-                <div class="anatomy-grid">
-                    <div class="anatomy-box">
-                        <h4><i class="fa-solid fa-skull"></i> 1. Osteology (Bones)</h4>
-                        <ul class="check-list">
-                            <li><b>Neurocranium (8):</b> Protects the brain.</li>
-                            <li><b>Viscerocranium (14):</b> Includes Maxilla, Mandible, and Zygomatic.</li>
-                            <li><b>TMJ:</b> The only mobile joint of the skull.</li>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <span class="high-yield-badge">OSTEOLOGY</span>
+                        <h4>The Mandible</h4>
+                        <ul>
+                            <li><b>Mandibular Foramen:</b> Entry for IAN (target for blocks).</li>
+                            <li><b>Mental Foramen:</b> Located near 2nd premolar apex.</li>
+                            <li><b>Lingula:</b> Bony attachment for sphenomandibular ligament.</li>
                         </ul>
                     </div>
-                    <div class="anatomy-box">
-                        <h4><i class="fa-solid fa-bolt"></i> 2. Muscles of Mastication</h4>
-                        <ul class="check-list">
-                            <li><b>Temporalis:</b> Elevates/Retracts mandible.</li>
-                            <li><b>Masseter:</b> Powerful elevation (biting).</li>
-                            <li><b>Pterygoids:</b> Medial (elevation), Lateral (protrusion/grinding).</li>
-                        </ul>
+                    <div class="info-box">
+                        <span class="high-yield-badge">SPACES</span>
+                        <h4>Infratemporal Fossa</h4>
+                        <p>Contains: Muscles of mastication, Maxillary Artery, and Mandibular Nerve (V3).</p>
                     </div>
                 </div>
 
-                <div class="clinical-alert">
-                    <span class="mnemonic-tag">Clinical Tip</span>
-                    <p>All muscles of mastication are innervated by the <b>Mandibular Nerve (V3)</b>, the 3rd branch of the Trigeminal Nerve.</p>
-                </div>
-
-                <div class="anatomy-box" style="width:100%;">
-                    <h4><i class="fa-solid fa-network-wired"></i> 3. Neurovasculature (High Yield)</h4>
-                    <table>
-                        <tr><th>Nerve/Vessel</th><th>Clinical Relevance</th></tr>
-                        <tr><td><b>Trigeminal (CN V)</b></td><td>Sensory to all teeth; Target for LA blocks.</td></tr>
-                        <tr><td><b>Facial (CN VII)</b></td><td>Muscles of expression; Chorda tympani (taste).</td></tr>
-                        <tr><td><b>Maxillary Artery</b></td><td>Primary blood supply to upper/lower teeth.</td></tr>
-                    </table>
-                </div>
-
-                <div class="framework-box" style="margin-top:25px; padding:20px; border:1px solid #e2e8f0; border-radius:15px;">
-                    <span class="mnemonic-tag">Mnemonic: Foramina Exits</span>
-                    <p style="font-weight:700; color:var(--brand);">"Standing Room Only"</p>
-                    <p><b>S</b>uperior Orbital Fissure (V1) | <b>R</b>otundum (V2) | <b>O</b>vale (V3)</p>
-                </div>
+                <h3>Neurovasculature Summary</h3>
+                <table>
+                    <tr><th>Structure</th><th>Dental Significance</th></tr>
+                    <tr><td><b>Inferior Alveolar Nerve</b></td><td>Sensory to all lower teeth in one quadrant.</td></tr>
+                    <tr><td><b>Lingual Nerve</b></td><td>Sensory to anterior 2/3 of tongue.</td></tr>
+                    <tr><td><b>Maxillary Artery</b></td><td>Supplies upper/lower teeth via alveolar branches.</td></tr>
+                </table>
             `
         },
-        Operative: {
-            title: "Operative Dentistry",
-            badge: "CLINICAL PHASE",
+        DevGuide: {
+            title: "Developer Guide: Adding Content",
             body: `
-                <div class="anatomy-box">
-                    <h4>The Clinical Framework</h4>
-                    <p><b>Definition:</b> Restoration of form and function.</p>
-                    <p><b>Indications:</b> Caries, Fracture, or Aesthetics.</p>
-                    <p><b>Steps:</b> 1. Access 2. Prep 3. Isolate 4. Fill.</p>
-                    <p><b>Viva:</b> What is the purpose of a 90-degree cavosurface angle?</p>
+                <h3>How to add a new Tab/Page</h3>
+                <p>Follow these 2 steps to expand your website:</p>
+                <br>
+                <div class="info-box">
+                    <h4>Step 1: The Sidebar Link</h4>
+                    <code>&lt;div class="nav-link" onclick="render('NewPageName')"&gt;New Page&lt;/div&gt;</code>
+                </div>
+                <br>
+                <div class="info-box">
+                    <h4>Step 2: The Data Entry</h4>
+                    <p>Go to the JavaScript section in the code and add a new entry to the <b>database</b> object:</p>
+                    <pre>
+                    NewPageName: {
+                        title: "My New Page Title",
+                        body: "&lt;h3&gt;Welcome&lt;/h3&gt;&lt;p&gt;Your text here.&lt;/p&gt;"
+                    }
+                    </pre>
                 </div>
             `
         }
@@ -158,27 +136,18 @@
 
     function render(mod) {
         currentMod = mod;
-        const data = database[mod] || { title: mod, badge: "CURRICULUM", body: "Content loading..." };
-        
+        const data = database[mod] || { title: mod, body: "Content coming soon..." };
         document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.innerText.includes(mod)));
-
         document.getElementById('main-view').innerHTML = `
             <div class="card">
-                <span style="font-size:0.7rem; font-weight:800; color:var(--brand);">${data.badge}</span>
-                <h1 style="margin:10px 0 20px;">${data.title}</h1>
-                <hr style="opacity:0.1; margin-bottom:20px;">
+                <h1>${data.title}</h1>
+                <hr style="opacity:0.1; margin: 20px 0;">
                 ${data.body}
             </div>
         `;
-        document.getElementById('notes').value = localStorage.getItem(`note_${mod}`) || "";
     }
-
-    document.getElementById('notes').addEventListener('input', (e) => {
-        localStorage.setItem(`note_${currentMod}`, e.target.value);
-    });
 
     window.onload = () => render('Anatomy');
 </script>
-
 </body>
 </html>

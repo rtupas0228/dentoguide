@@ -3,230 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoMastery | Foundation to Board Mastery</title>
+    <title>DentoMastery | Interactive Roadmap</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #0f4c81; /* Classic Blue */
-            --secondary: #16a085; /* Medical Teal */
-            --accent: #e67e22; /* High-yield Orange */
-            --bg: #f8fafc;
-            --text: #2c3e50;
+            --primary: #0f4c81;
+            --secondary: #16a085;
+            --bg: #f0f4f8;
             --white: #ffffff;
+            --gray: #95a5a6;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-        body { background-color: var(--bg); color: var(--text); display: flex; }
-
-        /* Sidebar - Navigation */
-        nav {
-            width: 280px;
+        header {
+            width: 100%;
             background: var(--primary);
             color: white;
-            height: 100vh;
-            position: fixed;
-            padding: 20px;
-            overflow-y: auto;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        .logo { font-weight: 800; font-size: 1.4rem; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
-        
-        .nav-group { margin-bottom: 25px; }
-        .nav-group h4 { font-size: 0.75rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; margin-bottom: 10px; }
-        
-        nav ul { list-style: none; }
-        nav ul li { 
-            padding: 12px; 
-            cursor: pointer; 
-            border-radius: 8px; 
-            transition: 0.2s; 
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        nav ul li:hover { background: rgba(255,255,255,0.1); }
-        nav ul li.active { background: var(--secondary); color: white; }
-
-        /* Main Content */
-        main { margin-left: 280px; padding: 40px; width: 100%; }
-
-        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        
-        /* Roadmap Component */
-        .roadmap {
+        /* --- THE CLICKABLE ROADMAP --- */
+        .roadmap-container {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 900px;
             background: var(--white);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 30px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            margin-bottom: 40px;
         }
-        .step { text-align: center; flex: 1; position: relative; }
-        .step i { font-size: 1.2rem; color: #ddd; margin-bottom: 5px; }
-        .step.completed i { color: var(--secondary); }
-        .step p { font-size: 0.7rem; font-weight: bold; }
 
-        /* Content Sections */
-        .section { display: none; }
-        .active-section { display: block; animation: fadeIn 0.4s ease-out; }
+        /* The Connecting Line */
+        .roadmap-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: #e0e0e0;
+            z-index: 1;
+            transform: translateY(-50%);
+        }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Module Cards */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .card h3 { margin-bottom: 15px; color: var(--primary); }
-
-        /* Active Recall Feature */
-        .recall-box {
-            background: #fff3cd;
-            border-left: 5px solid #ffc107;
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 4px;
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
             cursor: pointer;
+            flex: 1;
+            transition: all 0.3s ease;
         }
-        .recall-content { display: none; margin-top: 10px; color: #856404; }
 
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
-        .high-yield { background: #ffeaa7; color: #d35400; }
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--white);
+            border: 4px solid #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: var(--gray);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-label {
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: var(--gray);
+            transition: all 0.3s ease;
+        }
+
+        /* Active State Styles */
+        .step.active .step-icon {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(22, 160, 133, 0.3);
+        }
+
+        .step.active .step-label {
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        /* Hover Effect */
+        .step:hover .step-icon {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* --- CONTENT SECTIONS --- */
+        .content-area {
+            width: 90%;
+            max-width: 900px;
+            min-height: 300px;
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 { color: var(--primary); margin-top: 0; }
+        ul { line-height: 1.8; color: #555; }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo"><i class="fas fa-tooth"></i> DentoMastery</div>
+    <header>
+        <h1>Dental Student Learning Path</h1>
+        <p>Click a stage to explore the curriculum</p>
+    </header>
+
+    <!-- Roadmap -->
+    <div class="roadmap-container">
+        <div class="step active" onclick="openStage(event, 'foundations')">
+            <div class="step-icon"><i class="fas fa-book"></i></div>
+            <div class="step-label">Foundations</div>
+        </div>
         
-        <div class="nav-group">
-            <h4>Learning Path</h4>
+        <div class="step" onclick="openStage(event, 'sciences')">
+            <div class="step-icon"><i class="fas fa-microscope"></i></div>
+            <div class="step-label">Dental Sciences</div>
+        </div>
+
+        <div class="step" onclick="openStage(event, 'clinical')">
+            <div class="step-icon"><i class="fas fa-user-md"></i></div>
+            <div class="step-label">Clinical Prep</div>
+        </div>
+
+        <div class="step" onclick="openStage(event, 'board')">
+            <div class="step-icon"><i class="fas fa-graduation-cap"></i></div>
+            <div class="step-label">Board Mastery</div>
+        </div>
+    </div>
+
+    <!-- Content Sections -->
+    <div class="content-area">
+        
+        <div id="foundations" class="tab-content active">
+            <h2>🧠 Phase 1: Core Foundations</h2>
+            <p>Before touching a patient, you must master the biological building blocks.</p>
             <ul>
-                <li class="active" onclick="showTab('dashboard')"><i class="fas fa-chart-line"></i> Roadmap</li>
-                <li onclick="showTab('foundations')"><i class="fas fa-atom"></i> 1. Core Foundations</li>
-                <li onclick="showTab('clinical')"><i class="fas fa-stethoscope"></i> 2. Clinical Subjects</li>
+                <li><strong>Gross Anatomy:</strong> Head, neck, and neuroanatomy.</li>
+                <li><strong>Biochemistry:</strong> Metabolic pathways and nutrition.</li>
+                <li><strong>Microbiology:</strong> Identification of oral pathogens.</li>
+            </ul>
+            <a href="#" class="btn">Start Flashcards</a>
+        </div>
+
+        <div id="sciences" class="tab-content">
+            <h2>🦷 Phase 2: Dental Sciences</h2>
+            <p>Connecting medical knowledge specifically to the oral cavity.</p>
+            <ul>
+                <li><strong>Tooth Morphology:</strong> Carving and identifying 32 teeth.</li>
+                <li><strong>Oral Pathology:</strong> Identifying lesions and cysts.</li>
+                <li><strong>Dental Materials:</strong> Chemistry of gypsum, alginate, and composite.</li>
             </ul>
         </div>
 
-        <div class="nav-group">
-            <h4>Exam Mastery</h4>
+        <div id="clinical" class="tab-content">
+            <h2>🛠️ Phase 3: Clinical Prep</h2>
+            <p>Moving from the lab bench to the simulation clinic.</p>
             <ul>
-                <li onclick="showTab('recall')"><i class="fas fa-brain"></i> Active Recall</li>
-                <li onclick="showTab('highyield')"><i class="fas fa-star"></i> High-Yield Lists</li>
-                <li onclick="showTab('cases')"><i class="fas fa-user-md"></i> Case Thinking</li>
+                <li><strong>Operative Dentistry:</strong> Drills, burs, and cavity prep.</li>
+                <li><strong>Endodontics:</strong> Root canal basics on plastic teeth.</li>
+                <li><strong>Radiology:</strong> Positioning sensors and reading X-rays.</li>
             </ul>
         </div>
-    </nav>
 
-    <main>
-        <!-- Dashboard / Roadmap -->
-        <div id="dashboard" class="section active-section">
-            <div class="header-bar">
-                <h1>Study Roadmap</h1>
-                <span>Welcome, Doctor-in-training</span>
-            </div>
-
-            <div class="roadmap">
-                <div class="step completed"><i class="fas fa-check-circle"></i><p>Foundations</p></div>
-                <div class="step"><i class="fas fa-circle"></i><p>Dental Sciences</p></div>
-                <div class="step"><i class="fas fa-circle"></i><p>Clinical Prep</p></div>
-                <div class="step"><i class="fas fa-circle"></i><p>Board Mastery</p></div>
-            </div>
-
-            <div class="grid">
-                <div class="card">
-                    <h3><i class="fas fa-calendar-day"></i> Daily Goal</h3>
-                    <p>Review <strong>Kennedy Classification</strong> and take 10 MCQs on RPD design.</p>
-                </div>
-                <div class="card">
-                    <h3><i class="fas fa-lightbulb"></i> Mnemonic of the Day</h3>
-                    <p><strong>Cranial Nerves:</strong> "Oh Once One Takes The Anatomy Final..."</p>
-                </div>
-            </div>
+        <div id="board" class="tab-content">
+            <h2>📊 Phase 4: Board Mastery</h2>
+            <p>Final preparation for licensure and clinical exams.</p>
+            <ul>
+                <li><strong>High-Yield Review:</strong> Case-based questions.</li>
+                <li><strong>Timed Mock Exams:</strong> Simulated board environment.</li>
+                <li><strong>Ethics & Jurisprudence:</strong> Laws of dental practice.</li>
+            </ul>
         </div>
 
-        <!-- 1. Foundations -->
-        <div id="foundations" class="section">
-            <h1>1. Core Foundations</h1>
-            <p>The "Root Subjects" of Dentistry.</p><br>
-            <div class="grid">
-                <div class="card">
-                    <h3>Head & Neck Anatomy</h3>
-                    <ul>
-                        <li>Trigeminal Nerve (CN V) - The Dentist's Nerve</li>
-                        <li>Muscles of Mastication</li>
-                        <li>TMJ Anatomy</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h3>Microbiology</h3>
-                    <p>Focus on: <em>S. Mutans</em> (Caries) and <em>P. Gingivalis</em> (Perio).</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. Clinical -->
-        <div id="clinical" class="section">
-            <h1>2. Clinical Subjects</h1>
-            <div class="grid">
-                <div class="card">
-                    <span class="badge high-yield">High Yield</span>
-                    <h3>Operative Dentistry</h3>
-                    <p>Master GV Black's Classifications and bonding protocols.</p>
-                    <button style="margin-top:10px;">View Procedure Steps</button>
-                </div>
-                <div class="card">
-                    <h3>Prosthodontics</h3>
-                    <p>Kennedy Classifications, Major connectors, and surveying.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Recall Tab -->
-        <div id="recall" class="section">
-            <h1>Active Recall Hub</h1>
-            <p>Don't just read. Test yourself.</p>
-            
-            <div class="recall-box" onclick="toggleRecall(this)">
-                <strong>Question:</strong> What are the 4 stages of Tooth Development? (Click to reveal)
-                <div class="recall-content">
-                    1. Bud Stage <br> 2. Cap Stage <br> 3. Bell Stage <br> 4. Maturation
-                </div>
-            </div>
-
-            <div class="recall-box" onclick="toggleRecall(this)">
-                <strong>Question:</strong> Indications for a Pulpotomy vs Pulpectomy?
-                <div class="recall-content">
-                    Pulpotomy: Vital pulp, coronal involvement only. <br>
-                    Pulpectomy: Non-vital pulp, radicular involvement.
-                </div>
-            </div>
-        </div>
-
-    </main>
+    </div>
 
     <script>
-        // Navigation Logic
-        function showTab(tabId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active-section');
-            });
-            // Remove active class from nav
-            document.querySelectorAll('nav ul li').forEach(li => {
-                li.classList.remove('active');
-            });
-            // Show selected
-            document.getElementById(tabId).classList.add('active-section');
-            event.currentTarget.classList.add('active');
-        }
+        function openStage(evt, stageName) {
+            // 1. Hide all tab content
+            var content = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < content.length; i++) {
+                content[i].classList.remove("active");
+            }
 
-        // Active Recall Toggle
-        function toggleRecall(element) {
-            const content = element.querySelector('.recall-content');
-            content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+            // 2. Remove "active" class from all steps
+            var steps = document.getElementsByClassName("step");
+            for (var i = 0; i < steps.length; i++) {
+                steps[i].classList.remove("active");
+            }
+
+            // 3. Show the current tab and add an "active" class to the clicked step
+            document.getElementById(stageName).classList.add("active");
+            evt.currentTarget.classList.add("active");
         }
     </script>
+
 </body>
 </html>

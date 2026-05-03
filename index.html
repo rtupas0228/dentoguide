@@ -147,7 +147,7 @@
     const muscleTabs = {
         general: `
             <h3>🧠 1. MUSCLE DEFINITION & OVERVIEW</h3>
-            <div class="image-container" onclick="openZoom('https://image1.slideserve.com/2447927/head-and-neck-muscles-l.jpg')">
+            <div class="https://image1.slideserve.com/2447927/head-and-neck-muscles-l.jpg')">
                 <img src="https://image1.slideserve.com/2447927/head-and-neck-muscles-l.jpg">
             </div>
             <p>Specialized muscles responsible for: Mastication, Expression, Swallowing, Speech, and Head movement.</p>
@@ -212,7 +212,7 @@
                 <img src="https://www.earthslab.com/wp-content/uploads/2017/07/070417_0828_Suprahyoida1.jpg">
             </div>
             <p><b>Suprahyoids:</b> Elevate hyoid (My Dear Stylist Gets - Mylohyoid, Digastric, Stylohyoid, Geniohyoid).</p>
-            <p><b>Infrahyoids:</b> Depress hyoid (Some Old Soldiers Take - Sternohyoid, Omohyoid, Sternothyroid, Thyrohyoid).</p>
+            <p><b>Infrahyoids:</b> Depress hyoid (Some Old Soldiers Take - Sternoid, Omohyoid, Sternothyroid, Thyrohyoid).</p>
         `,
         summary: `
             <h3>🎯 ULTRA-HIGH YIELD SUMMARY</h3>
@@ -222,6 +222,103 @@
                     <li><b>Lateral Pterygoid:</b> Opens Jaw</li>
                     <li><b>Buccinator:</b> Keeps food in place</li>
                     <li><b>CN XII Lesion:</b> Deviates SAME side</li>
+                </ul>
+            </div>
+        `
+    };
+
+    const tmjTabs = {
+        overview: `
+            <h3>🧠 1. TMJ DEFINITION & BONES</h3>
+            <div class="image-container" onclick="openZoom('https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder')">
+                <img src="https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder" alt="TMJ Anatomy">
+            </div>
+            <p>The Temporomandibular Joint (TMJ) is a <b>Synovial, modified hinge joint</b>.</p>
+            <div class="clinical-box">
+                <b>Joint Mechanics:</b> Allows both <b>Rotation</b> (hinge) and <b>Translation</b> (gliding).
+            </div>
+            <div class="clinical-box" style="border-color:var(--warning)">
+                <b>🦴 ARTICULATING STRUCTURES:</b>
+                <ul>
+                    <li>Mandibular condyle</li>
+                    <li>Temporal bone (Glenoid fossa + Articular eminence)</li>
+                </ul>
+            </div>
+            <div class="mnemonic-box">🔥 UNIQUE FEATURE: Has an <b>articular disc (fibrocartilage)</b>. NOT hyaline cartilage.</div>
+        `,
+        mechanics: `
+            <h3>📊 3. ARTICULAR DISC & MOVEMENTS</h3>
+            <p>The disc acts as a shock absorber and divides the joint into 2 compartments.</p>
+            <table>
+                <tr><th>Compartment</th><th>Movement</th></tr>
+                <tr><td>Upper</td><td>Translation (sliding)</td></tr>
+                <tr><td>Lower</td><td>Rotation (hinge)</td></tr>
+            </table>
+            <div class="mnemonic-box">👉 MNEMONIC: “ROTATE below, GLIDE above”</div>
+            
+            <h4>⚙️ 4. MOVEMENTS OF TMJ</h4>
+            <table>
+                <tr><th>Movement</th><th>Muscle</th></tr>
+                <tr><td>Elevation</td><td>Masseter, Temporalis, Medial Pterygoid</td></tr>
+                <tr><td>Depression</td><td>Lateral pterygoid</td></tr>
+                <tr><td>Protrusion</td><td>Lateral pterygoid</td></tr>
+                <tr><td>Retraction</td><td>Temporalis</td></tr>
+                <tr><td>Lateral</td><td>Pterygoids</td></tr>
+            </table>
+            <div class="clinical-box" style="border-color:var(--danger)">
+                <b>🔥 MUSCLE RELATION:</b> Lateral pterygoid attaches directly to the disc. Displacement causes <b>clicking</b>.
+            </div>
+        `,
+        anatomy: `
+            <h3>🧠 6. LIGAMENTS, NERVES & BLOOD</h3>
+            <div class="clinical-box">
+                <b>Stabilizing Ligaments:</b> Lateral (TMJ), Sphenomandibular, Stylomandibular.
+            </div>
+            <div class="clinical-box" style="border-color:var(--brand)">
+                <b>⚡ NERVE SUPPLY:</b> Trigeminal nerve (V3) — specifically the <b>Auriculotemporal nerve</b>.
+            </div>
+            <div class="clinical-box">
+                <b>🩸 BLOOD SUPPLY:</b> Maxillary artery & Superficial temporal artery.
+            </div>
+            <h4>📏 IMPORTANT MEASUREMENTS</h4>
+            <ul>
+                <li>Normal mouth opening: <b>35–45 mm</b></li>
+                <li>Trismus: <b>< 35 mm</b></li>
+                <li>Severe restriction: <b>< 25 mm</b></li>
+            </ul>
+        `,
+        disorders: `
+            <h3>🚨 10. TMJ DISORDERS (TMD)</h3>
+            <p>Conditions affecting the joint, muscles, or disc.</p>
+            <div class="mnemonic-box">👉 MNEMONIC: “PAIN + CLICK + LOCK”</div>
+            <div class="clinical-box" style="border-color:var(--danger)">
+                <b>⚠️ 12. DISC DISPLACEMENT:</b>
+                <ul>
+                    <li><b>With reduction:</b> Clicking sound.</li>
+                    <li><b>Without reduction:</b> Locking, limited opening.</li>
+                </ul>
+            </div>
+            <div class="clinical-box">
+                <b>Clinical Signs:</b> Deviation toward affected side, muscle tenderness, Crepitus (degeneration).
+            </div>
+            <h4>🛠️ 15. MANAGEMENT</h4>
+            <ul>
+                <li><b>Conservative:</b> Soft diet, NSAIDs, Splints.</li>
+                <li><b>Dental:</b> Bite adjustment, Night guard.</li>
+                <li><b>Advanced:</b> Arthrocentesis, Surgery (rare).</li>
+            </ul>
+            <div class="mnemonic-box" style="background:var(--success); color:white; border:none;">90% of cases are treated NON-surgically.</div>
+        `,
+        summary: `
+            <h3>🎯 ULTRA-HIGH YIELD SUMMARY</h3>
+            <div class="mnemonic-box" style="background:var(--text); color:white; border:none;">
+                <ul style="margin-left:20px; line-height:2;">
+                    <li><b>Modified Hinge:</b> Disc divides joint.</li>
+                    <li><b>Fibrocartilage:</b> NOT hyaline.</li>
+                    <li><b>Rotation ↓ / Translation ↑</b></li>
+                    <li><b>Lateral pterygoid:</b> Key opener and disc attachement.</li>
+                    <li><b>Clicking:</b> Disc displacement.</li>
+                    <li><b>Opening:</b> 35–45 mm.</li>
                 </ul>
             </div>
         `
@@ -304,6 +401,18 @@
                 </div>
                 <div id="nested-content">${muscleTabs.general}</div>
             `;
+        } else if (topic === "TMJ") {
+            target.innerHTML = `
+                <h1>TMJ Mastery Hub</h1>
+                <div class="nested-tab-nav">
+                    <button class="tab-btn active-tab" onclick="switchNested(this, 'tmj', 'overview')">Definition & Bones</button>
+                    <button class="tab-btn" onclick="switchNested(this, 'tmj', 'mechanics')">Disc & Movements</button>
+                    <button class="tab-btn" onclick="switchNested(this, 'tmj', 'anatomy')">Nerves & Blood</button>
+                    <button class="tab-btn" onclick="switchNested(this, 'tmj', 'disorders')">TMD & Clinical</button>
+                    <button class="tab-btn" onclick="switchNested(this, 'tmj', 'summary')">🎯 Summary</button>
+                </div>
+                <div id="nested-content">${tmjTabs.overview}</div>
+            `;
         } else {
             target.innerHTML = `<h1>${topic}</h1><p>High-yield content for ${topic} is being populated.</p>`;
         }
@@ -315,7 +424,13 @@
     function switchNested(btn, type, id) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
         btn.classList.add('active-tab');
-        document.getElementById('nested-content').innerHTML = (type === 'osteo') ? osteoTabs[id] : muscleTabs[id];
+        
+        let content = "";
+        if(type === 'osteo') content = osteoTabs[id];
+        else if(type === 'muscle') content = muscleTabs[id];
+        else if(type === 'tmj') content = tmjTabs[id];
+        
+        document.getElementById('nested-content').innerHTML = content;
     }
 
     function renderSubject(sub) {

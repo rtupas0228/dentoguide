@@ -3,59 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoGuide | Anatomy Mastery Portal</title>
+    <title>DentoGuide | Osteology Mastery</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --brand: #2563eb; --brand-light: #eff6ff; --bg: #f8fafc;
             --text: #0f172a; --text-light: #64748b; --white: #ffffff;
-            --border: #e2e8f0; --success: #10b981; --warning: #f59e0b;
+            --border: #e2e8f0; --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
 
         /* --- LAYOUT --- */
-        .app-container { display: grid; grid-template-columns: 80px 240px 1fr 340px; height: 100vh; }
+        .app-container { display: grid; grid-template-columns: 80px 260px 1fr 340px; height: 100vh; }
 
-        /* Phase Rail (Icons) */
+        /* Navigation */
         .phase-rail { background: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; border-right: 1px solid rgba(255,255,255,0.1); }
         .phase-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: 0.3s; font-size: 1.2rem; }
         .phase-icon.active { background: var(--brand); box-shadow: 0 0 20px var(--brand); }
 
-        /* Subject Sidebar */
         .sidebar { background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .sidebar-title { font-size: 0.65rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
         .sub-link { padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-light); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
         .sub-link:hover, .sub-link.active { background: var(--brand-light); color: var(--brand); }
 
-        /* --- ANATOMY SUB-MENU --- */
         .anatomy-menu { background: #f1f5f9; padding: 10px; border-radius: 12px; margin-top: 10px; display: none; }
-        .anatomy-menu.active { display: block; animation: slideDown 0.3s ease; }
+        .anatomy-menu.active { display: block; }
         .topic-link { padding: 8px 10px; font-size: 0.75rem; font-weight: 700; color: var(--text-light); cursor: pointer; border-radius: 6px; display: block; margin-bottom: 2px; }
         .topic-link:hover { color: var(--brand); background: white; }
         .topic-link.active-topic { background: var(--brand); color: white; }
 
         /* Content Viewer */
         main.viewer { padding: 40px; overflow-y: auto; display: flex; justify-content: center; }
-        .card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); width: 100%; max-width: 900px; border: 1px solid var(--border); height: fit-content; }
+        .card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); width: 100%; max-width: 950px; border: 1px solid var(--border); height: fit-content; }
 
-        /* Visual System */
-        .diagram-container { background: #1e293b; border-radius: 20px; padding: 30px; margin: 20px 0; text-align: center; color: #94a3b8; border: 1px solid #334155; position: relative; }
-        .diagram-label { position: absolute; background: var(--brand); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; }
+        /* --- OSTEOLOGY SPECIFIC STYLES --- */
+        .mnemonic-box { background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 12px; margin: 15px 0; color: #92400e; font-weight: 600; }
+        .clinical-tag { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+        .tag-danger { background: #fee2e2; color: #ef4444; }
+        .tag-brand { background: var(--brand-light); color: var(--brand); }
+        
+        .landmark-item { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 12px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+        
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .stat-card { background: var(--brand); color: white; padding: 20px; border-radius: 15px; text-align: center; }
+        .stat-card h1 { font-size: 2rem; margin: 0; }
+        .stat-card p { font-size: 0.7rem; opacity: 0.9; text-transform: uppercase; font-weight: 800; }
 
-        /* Clinical UI */
-        .clinical-box { background: #f8fafc; padding: 20px; border-radius: 15px; border-left: 5px solid var(--brand); margin: 20px 0; }
-        .high-yield-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .high-yield-table th { background: var(--brand-light); color: var(--brand); text-align: left; padding: 12px; font-size: 0.8rem; }
-        .high-yield-table td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background: #f1f5f9; text-align: left; padding: 12px; font-size: 0.8rem; border: 1px solid var(--border); }
+        td { padding: 12px; border: 1px solid var(--border); font-size: 0.85rem; }
 
-        /* Utility */
         .utility { background: white; border-left: 1px solid var(--border); display: flex; flex-direction: column; }
         #notes { flex: 1; border: none; padding: 20px; background: #fffdf5; outline: none; resize: none; font-size: 0.9rem; }
-
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -91,50 +94,112 @@
         "Osteology": {
             title: "Osteology (Skull & Mandible)",
             content: `
-                <div class="diagram-container">
-                    <i class="fa-solid fa-skull fa-4x"></i>
-                    <p style="margin-top:20px;">[Interactive Osteology Diagram]</p>
-                    <div class="diagram-label" style="top:20%; left:30%;">Maxilla</div>
-                    <div class="diagram-label" style="top:70%; left:45%;">Mandible</div>
+                <div class="stat-grid">
+                    <div class="stat-card"><h1>22</h1><p>Total Bones</p></div>
+                    <div class="stat-card"><h1>8</h1><p>Cranial</p></div>
+                    <div class="stat-card"><h1>14</h1><p>Facial</p></div>
                 </div>
-                <div class="clinical-box">
-                    <b>High-Yield:</b> The Mandibular Foramen transmits the IAN. Mental Foramen is typically located near the apex of the 2nd premolar.
+
+                <h3>🔢 Cranial Bones (8)</h3>
+                <p>Frontal (1), Parietal (2), Temporal (2), Occipital (1), Sphenoid (1), Ethmoid (1)</p>
+                <div class="mnemonic-box">👉 Mnemonic: “PEST OF 6” (Parietal, Ethmoid, Sphenoid, Temporal, Occipital, Frontal)</div>
+
+                <h3>🔢 Facial Bones (14)</h3>
+                <p>Maxilla (2), Zygomatic (2), Nasal (2), Lacrimal (2), Palatine (2), Inferior nasal concha (2), Vomer (1), Mandible (1)</p>
+                <div class="mnemonic-box">👉 Mnemonic: “Virgil Can Not Make My Pet Zebra Laugh”</div>
+
+                <hr style="margin:30px 0; opacity:0.1;">
+
+                <span class="clinical-tag tag-danger">🦷 2. MANDIBLE: Most Important Bone in Dentistry</span>
+                <p><b>Strongest</b> facial bone, only movable bone of the skull. Forms TMJ with temporal bone.</p>
+                
+                <h4 style="margin:15px 0;">📍 IMPORTANT LANDMARKS (EXAM GOLD)</h4>
+                
+                <div class="landmark-item">
+                    <div class="dot" style="background:#ef4444;"></div>
+                    <div>
+                        <b>Mandibular Foramen:</b> Medial ramus. Entry of <b>Inferior Alveolar Nerve</b>.
+                        <div style="color:var(--brand); font-size:0.8rem; font-weight:700;">👉 Clinical: IAN block target</div>
+                    </div>
                 </div>
-            `
-        },
-        "Muscles": {
-            title: "Muscles of Mastication",
-            content: `<div class="clinical-box"><b>4 Main Muscles:</b> Masseter, Temporalis, Medial Pterygoid, Lateral Pterygoid. All innervated by CN V3.</div>`
-        },
-        "TMJ": {
-            title: "Temporomandibular Joint",
-            content: `<p>A ginglymoarthrodial joint involving the mandibular condyle and the temporal bone.</p>`
-        },
-        "Cranial Nerves": {
-            title: "Cranial Nerves (Full Breakdown)",
-            content: `
-                <table class="high-yield-table">
-                    <tr><th>Nerve</th><th>Type</th><th>Clinical Importance</th></tr>
-                    <tr><td>V (Trigeminal)</td><td>Mixed</td><td>Target for Dental Blocks</td></tr>
-                    <tr><td>VII (Facial)</td><td>Mixed</td><td>Bell's Palsy / Expression</td></tr>
+
+                <div class="landmark-item">
+                    <div class="dot" style="background:#2563eb;"></div>
+                    <div>
+                        <b>Mental Foramen:</b> Near premolars. Exit of mental nerve.
+                        <div style="color:var(--brand); font-size:0.8rem; font-weight:700;">👉 Mnemonic: “Mental = Mouth Exit”</div>
+                    </div>
+                </div>
+
+                <div class="landmark-item">
+                    <div class="dot" style="background:#f59e0b;"></div>
+                    <div><b>Lingula:</b> Tongue-shaped projection. Landmark for anesthesia.</div>
+                </div>
+
+                <div class="landmark-item">
+                    <div class="dot" style="background:#10b981;"></div>
+                    <div><b>Mylohyoid Line:</b> Muscle attachment.</div>
+                </div>
+
+                <span class="clinical-tag tag-brand">🧠 3. MAXILLA</span>
+                <p>Forms upper jaw, contains <b>Maxillary Sinus</b>.</p>
+                <div class="mnemonic-box" style="background:#f1f5f9; border-color:#cbd5e1;">
+                    <b>👉 Clinical Impact:</b> Sinus infections → Tooth pain. Extractions → Risk of Sinus Perforation.
+                </div>
+
+                <hr style="margin:30px 0; opacity:0.1;">
+
+                <h3>🧬 4. DEVELOPMENT & OSSIFICATION</h3>
+                <table>
+                    <tr><th>Type</th><th>Example</th></tr>
+                    <tr><td><b>Intramembranous</b></td><td>Mandible, Maxilla (1st Pharyngeal Arch / Meckel's Cartilage)</td></tr>
+                    <tr><td><b>Endochondral</b></td><td>Base of skull</td></tr>
                 </table>
+                <div class="mnemonic-box">👉 Mnemonic: “Face = Membrane, Base = Cartilage”</div>
+
+                <h3>⚡ 6. IMPORTANT FORAMINA</h3>
+                <table>
+                    <tr><th>Foramen</th><th>Structure</th><th>Clinical</th></tr>
+                    <tr><td>Mandibular</td><td>IAN</td><td>Nerve Block</td></tr>
+                    <tr><td>Mental</td><td>Mental Nerve</td><td>Lip Numbness</td></tr>
+                    <tr><td>Ovale</td><td>CN V3</td><td>Mastication</td></tr>
+                </table>
+
+                <h3 style="margin-top:30px;">🧠 7. MUSCLE ATTACHMENTS</h3>
+                <table>
+                    <tr><th>Muscle</th><th>Attachment</th></tr>
+                    <tr><td>Masseter</td><td>Angle of Mandible</td></tr>
+                    <tr><td>Temporalis</td><td>Coronoid Process</td></tr>
+                    <tr><td>Lateral Pterygoid</td><td>Condyle</td></tr>
+                </table>
+
+                <h3 style="margin-top:30px;">🔥 8. CLINICAL CORRELATIONS</h3>
+                <div class="mnemonic-box" style="background:#fee2e2; border-color:#f87171;">
+                    <b>❗ Fracture Sites (CAP):</b> Condyle, Angle, Parasymphysis.
+                </div>
+                <p><b>Nerve Injury:</b> IAN damage → Lower lip numbness.</p>
+
+                <h3 style="margin-top:30px;">📚 9. AUTHORS & DISCOVERIES</h3>
+                <ul>
+                    <li><b>Andreas Vesalius:</b> Father of modern anatomy.</li>
+                    <li><b>Henry Gray:</b> Gray's Anatomy.</li>
+                    <li><b>Johann Meckel:</b> Meckel’s cartilage (guides mandible).</li>
+                </ul>
+
+                <div class="stat-card" style="margin-top:30px; background:var(--text);">
+                    <p>RAPID RECALL</p>
+                    <div style="font-size:0.8rem; line-height:1.8;">Skull: 22 | Cranial: 8 | Facial: 14 | Teeth: 32</div>
+                </div>
             `
-        },
-        "Clinical Correlations": {
-            title: "Clinical Correlations",
-            content: `<div class="clinical-box" style="border-color:var(--danger);"><b>Bell's Palsy:</b> Lower motor neuron lesion of CN VII causing unilateral facial paralysis.</div>`
         }
-        // Add remaining topics: Blood Supply, Venous, Lymphatics, Salivary, Fascial, Oral Cavity, Tongue, Pharynx
     };
 
     const curriculum = {
         phase1: { name: "Core Foundations", subjects: ["Anatomy", "Physiology", "Biochemistry", "Histology", "Microbiology", "Pathology"] },
         phase2: { name: "Dental Sciences", subjects: ["Dental Anatomy", "Dental Materials", "Pharmacology"] },
-        phase3: { name: "Clinical Subjects", subjects: ["Operative", "Oral Surgery", "Endodontics"] },
+        phase3: { name: "Clinical Subjects", subjects: ["Operative", "Oral Surgery", "Endo"] },
         phase4: { name: "Clinical Thinking", subjects: ["Diagnosis", "Case Training"] }
     };
-
-    let activeTopic = "Osteology";
 
     function loadPhase(num) {
         const phase = curriculum['phase' + num];
@@ -148,7 +213,6 @@
             link.className = "sub-link";
             link.innerHTML = `<span>${sub}</span>` + (sub === 'Anatomy' ? `<i class="fa-solid fa-chevron-down"></i>` : "");
             link.onclick = () => (sub === 'Anatomy') ? toggleAnatomyMenu() : renderSubject(sub);
-            
             container.appendChild(link);
             
             if(sub === 'Anatomy') {
@@ -156,63 +220,39 @@
                 subMenu.className = "anatomy-menu";
                 subMenu.id = "anatomy-submenu";
                 const topics = ["Osteology", "Muscles", "TMJ", "Cranial Nerves", "Blood Supply", "Venous Drainage", "Lymphatics", "Salivary Glands", "Fascial Spaces", "Oral Cavity", "Tongue", "Pharynx", "Clinical Correlations"];
-                
                 topics.forEach(t => {
                     const tLink = document.createElement('div');
                     tLink.className = "topic-link";
                     tLink.innerText = t;
-                    tLink.onclick = (e) => {
-                        e.stopPropagation();
-                        renderAnatomyTopic(t);
-                    };
+                    tLink.onclick = (e) => { e.stopPropagation(); renderAnatomyTopic(t); };
                     subMenu.appendChild(tLink);
                 });
                 container.appendChild(subMenu);
             }
-
             list.appendChild(container);
         });
-
         document.querySelectorAll('.phase-icon').forEach((icon, i) => icon.classList.toggle('active', (i+1) === num));
         renderSubject(phase.subjects[0]);
     }
 
     function toggleAnatomyMenu() {
-        const menu = document.getElementById('anatomy-submenu');
-        menu.classList.toggle('active');
+        document.getElementById('anatomy-submenu').classList.toggle('active');
         renderAnatomyTopic("Osteology");
     }
 
     function renderAnatomyTopic(topic) {
-        activeTopic = topic;
         const target = document.getElementById('render-target');
-        const data = anatomyData[topic] || { title: topic, content: `<p>High-yield clinical data for ${topic} is being populated.</p>` };
-        
-        target.innerHTML = `
-            <div style="font-size:0.7rem; font-weight:800; color:var(--brand); text-transform:uppercase; margin-bottom:5px;">Phase 1: Anatomy</div>
-            <h1>${data.title}</h1>
-            <hr style="opacity:0.1; margin: 20px 0;">
-            ${data.content}
-        `;
-
+        const data = anatomyData[topic] || { title: topic, content: `<p>Data for ${topic} is being populated.</p>` };
+        target.innerHTML = `<h1>${data.title}</h1><hr style="opacity:0.1; margin: 20px 0;">${data.content}`;
         document.querySelectorAll('.topic-link').forEach(l => l.classList.toggle('active-topic', l.innerText === topic));
-        document.getElementById('notes').value = localStorage.getItem(`note_${topic}`) || "";
     }
 
     function renderSubject(sub) {
         const target = document.getElementById('render-target');
-        document.getElementById('anatomy-submenu')?.classList.remove('active');
+        if(sub !== 'Anatomy') document.getElementById('anatomy-submenu')?.classList.remove('active');
         target.innerHTML = `<h1>${sub}</h1><p>Module content for ${sub} is loading...</p>`;
-        
         document.querySelectorAll('.sub-link').forEach(l => l.classList.toggle('active', l.innerText === sub));
-        document.getElementById('notes').value = localStorage.getItem(`note_${sub}`) || "";
     }
-
-    // Auto-save notes
-    document.getElementById('notes').addEventListener('input', (e) => {
-        const key = document.querySelector('.active-topic')?.innerText || document.querySelector('.sub-link.active')?.innerText;
-        localStorage.setItem(`note_${key}`, e.target.value);
-    });
 
     window.onload = () => loadPhase(1);
 </script>

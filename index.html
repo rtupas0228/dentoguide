@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoGuide | Osteology Mastery</title>
+    <title>DentoGuide | Interactive Osteology</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -39,20 +39,18 @@
         main.viewer { padding: 40px; overflow-y: auto; display: flex; justify-content: center; }
         .card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); width: 100%; max-width: 950px; border: 1px solid var(--border); height: fit-content; }
 
-        /* --- OSTEOLOGY SPECIFIC STYLES --- */
+        /* --- INTERACTIVE OSTEOLOGY MENU --- */
+        .osteo-nav { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px; overflow-x: auto; }
+        .osteo-btn { padding: 8px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 50px; cursor: pointer; font-size: 0.75rem; font-weight: 800; white-space: nowrap; transition: 0.2s; }
+        .osteo-btn:hover { border-color: var(--brand); color: var(--brand); }
+        .osteo-btn.active-btn { background: var(--brand); color: white; border-color: var(--brand); }
+
+        /* Sub-Content Styling */
         .mnemonic-box { background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 12px; margin: 15px 0; color: #92400e; font-weight: 600; }
-        .clinical-tag { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
-        .tag-danger { background: #fee2e2; color: #ef4444; }
-        .tag-brand { background: var(--brand-light); color: var(--brand); }
-        
-        .landmark-item { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 12px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
-        
+        .landmark-card { background: #f8fafc; padding: 20px; border-radius: 15px; border-left: 5px solid var(--brand); margin-bottom: 15px; }
         .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
         .stat-card { background: var(--brand); color: white; padding: 20px; border-radius: 15px; text-align: center; }
-        .stat-card h1 { font-size: 2rem; margin: 0; }
-        .stat-card p { font-size: 0.7rem; opacity: 0.9; text-transform: uppercase; font-weight: 800; }
-
+        
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th { background: #f1f5f9; text-align: left; padding: 12px; font-size: 0.8rem; border: 1px solid var(--border); }
         td { padding: 12px; border: 1px solid var(--border); font-size: 0.85rem; }
@@ -90,115 +88,59 @@
 </div>
 
 <script>
+    // Sub-Content for Osteology
+    const osteoSubTabs = {
+        overview: `
+            <div class="stat-grid">
+                <div class="stat-card"><h1>22</h1><p>Total Bones</p></div>
+                <div class="stat-card"><h1>8</h1><p>Cranial</p></div>
+                <div class="stat-card"><h1>14</h1><p>Facial</p></div>
+            </div>
+            <p>The skull is the most complex bony structure of the skeleton, protecting the brain and supporting the tissues of the face.</p>
+        `,
+        cranial: `
+            <h3>🔢 Cranial Bones (8)</h3>
+            <p>Frontal (1), Parietal (2), Temporal (2), Occipital (1), Sphenoid (1), Ethmoid (1)</p>
+            <div class="mnemonic-box">👉 Mnemonic: “PEST OF 6” <br>(Parietal, Ethmoid, Sphenoid, Temporal, Occipital, Frontal)</div>
+            <div class="landmark-card"><b>Sphenoid:</b> Known as the "Keystone" bone as it articulates with all other cranial bones.</div>
+        `,
+        facial: `
+            <h3>🔢 Facial Bones (14)</h3>
+            <p>Maxilla (2), Zygomatic (2), Nasal (2), Lacrimal (2), Palatine (2), Inferior nasal concha (2), Vomer (1), Mandible (1)</p>
+            <div class="mnemonic-box">👉 Mnemonic: “Virgil Can Not Make My Pet Zebra Laugh”</div>
+            <div class="landmark-card"><b>Zygomatic:</b> Forms the prominence of the cheek and the lateral wall of the orbit.</div>
+        `,
+        mandible: `
+            <h3>🦷 2. THE MANDIBLE</h3>
+            <div class="mnemonic-box" style="background:var(--brand-light); border-color:var(--brand);">
+                Strongest facial bone | Only movable bone of skull | Forms TMJ with temporal bone
+            </div>
+            <h4 style="margin:15px 0;">📍 PARTS OF MANDIBLE</h4>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <div class="landmark-card"><b>Body:</b> Horizontal part holding teeth.</div>
+                <div class="landmark-card"><b>Ramus:</b> Vertical part.</div>
+                <div class="landmark-card"><b>Angle:</b> Where body meets ramus.</div>
+                <div class="landmark-card"><b>Alveolar Process:</b> Bone supporting the teeth.</div>
+            </div>
+            <h4 style="margin:20px 0 10px;">📍 IMPORTANT LANDMARKS (EXAM GOLD)</h4>
+            <div class="landmark-card" style="border-color:var(--danger);">
+                <b>Mandibular Foramen:</b> Medial ramus. Entry of Inferior Alveolar Nerve (IAN). <br>👉 Clinical: IAN block target.
+            </div>
+            <div class="landmark-card" style="border-color:var(--brand);">
+                <b>Mental Foramen:</b> Near premolars. Exit of mental nerve.<br>👉 Mnemonic: “Mental = Mouth Exit”
+            </div>
+        `
+    };
+
     const anatomyData = {
         "Osteology": {
             title: "Osteology (Skull & Mandible)",
-            content: `
-                <div class="stat-grid">
-                    <div class="stat-card"><h1>22</h1><p>Total Bones</p></div>
-                    <div class="stat-card"><h1>8</h1><p>Cranial</p></div>
-                    <div class="stat-card"><h1>14</h1><p>Facial</p></div>
-                </div>
-
-                <h3>🔢 Cranial Bones (8)</h3>
-                <p>Frontal (1), Parietal (2), Temporal (2), Occipital (1), Sphenoid (1), Ethmoid (1)</p>
-                <div class="mnemonic-box">👉 Mnemonic: “PEST OF 6” (Parietal, Ethmoid, Sphenoid, Temporal, Occipital, Frontal)</div>
-
-                <h3>🔢 Facial Bones (14)</h3>
-                <p>Maxilla (2), Zygomatic (2), Nasal (2), Lacrimal (2), Palatine (2), Inferior nasal concha (2), Vomer (1), Mandible (1)</p>
-                <div class="mnemonic-box">👉 Mnemonic: “Virgil Can Not Make My Pet Zebra Laugh”</div>
-
-                <hr style="margin:30px 0; opacity:0.1;">
-
-                <span class="clinical-tag tag-danger">🦷 2. MANDIBLE: Most Important Bone in Dentistry</span>
-                <p><b>Strongest</b> facial bone, only movable bone of the skull. Forms TMJ with temporal bone.</p>
-                
-                <h4 style="margin:15px 0;">📍 IMPORTANT LANDMARKS (EXAM GOLD)</h4>
-                
-                <div class="landmark-item">
-                    <div class="dot" style="background:#ef4444;"></div>
-                    <div>
-                        <b>Mandibular Foramen:</b> Medial ramus. Entry of <b>Inferior Alveolar Nerve</b>.
-                        <div style="color:var(--brand); font-size:0.8rem; font-weight:700;">👉 Clinical: IAN block target</div>
-                    </div>
-                </div>
-
-                <div class="landmark-item">
-                    <div class="dot" style="background:#2563eb;"></div>
-                    <div>
-                        <b>Mental Foramen:</b> Near premolars. Exit of mental nerve.
-                        <div style="color:var(--brand); font-size:0.8rem; font-weight:700;">👉 Mnemonic: “Mental = Mouth Exit”</div>
-                    </div>
-                </div>
-
-                <div class="landmark-item">
-                    <div class="dot" style="background:#f59e0b;"></div>
-                    <div><b>Lingula:</b> Tongue-shaped projection. Landmark for anesthesia.</div>
-                </div>
-
-                <div class="landmark-item">
-                    <div class="dot" style="background:#10b981;"></div>
-                    <div><b>Mylohyoid Line:</b> Muscle attachment.</div>
-                </div>
-
-                <span class="clinical-tag tag-brand">🧠 3. MAXILLA</span>
-                <p>Forms upper jaw, contains <b>Maxillary Sinus</b>.</p>
-                <div class="mnemonic-box" style="background:#f1f5f9; border-color:#cbd5e1;">
-                    <b>👉 Clinical Impact:</b> Sinus infections → Tooth pain. Extractions → Risk of Sinus Perforation.
-                </div>
-
-                <hr style="margin:30px 0; opacity:0.1;">
-
-                <h3>🧬 4. DEVELOPMENT & OSSIFICATION</h3>
-                <table>
-                    <tr><th>Type</th><th>Example</th></tr>
-                    <tr><td><b>Intramembranous</b></td><td>Mandible, Maxilla (1st Pharyngeal Arch / Meckel's Cartilage)</td></tr>
-                    <tr><td><b>Endochondral</b></td><td>Base of skull</td></tr>
-                </table>
-                <div class="mnemonic-box">👉 Mnemonic: “Face = Membrane, Base = Cartilage”</div>
-
-                <h3>⚡ 6. IMPORTANT FORAMINA</h3>
-                <table>
-                    <tr><th>Foramen</th><th>Structure</th><th>Clinical</th></tr>
-                    <tr><td>Mandibular</td><td>IAN</td><td>Nerve Block</td></tr>
-                    <tr><td>Mental</td><td>Mental Nerve</td><td>Lip Numbness</td></tr>
-                    <tr><td>Ovale</td><td>CN V3</td><td>Mastication</td></tr>
-                </table>
-
-                <h3 style="margin-top:30px;">🧠 7. MUSCLE ATTACHMENTS</h3>
-                <table>
-                    <tr><th>Muscle</th><th>Attachment</th></tr>
-                    <tr><td>Masseter</td><td>Angle of Mandible</td></tr>
-                    <tr><td>Temporalis</td><td>Coronoid Process</td></tr>
-                    <tr><td>Lateral Pterygoid</td><td>Condyle</td></tr>
-                </table>
-
-                <h3 style="margin-top:30px;">🔥 8. CLINICAL CORRELATIONS</h3>
-                <div class="mnemonic-box" style="background:#fee2e2; border-color:#f87171;">
-                    <b>❗ Fracture Sites (CAP):</b> Condyle, Angle, Parasymphysis.
-                </div>
-                <p><b>Nerve Injury:</b> IAN damage → Lower lip numbness.</p>
-
-                <h3 style="margin-top:30px;">📚 9. AUTHORS & DISCOVERIES</h3>
-                <ul>
-                    <li><b>Andreas Vesalius:</b> Father of modern anatomy.</li>
-                    <li><b>Henry Gray:</b> Gray's Anatomy.</li>
-                    <li><b>Johann Meckel:</b> Meckel’s cartilage (guides mandible).</li>
-                </ul>
-
-                <div class="stat-card" style="margin-top:30px; background:var(--text);">
-                    <p>RAPID RECALL</p>
-                    <div style="font-size:0.8rem; line-height:1.8;">Skull: 22 | Cranial: 8 | Facial: 14 | Teeth: 32</div>
-                </div>
-            `
+            isHub: true // Marker for special rendering
         }
     };
 
     const curriculum = {
-        phase1: { name: "Core Foundations", subjects: ["Anatomy", "Physiology", "Biochemistry", "Histology", "Microbiology", "Pathology"] },
-        phase2: { name: "Dental Sciences", subjects: ["Dental Anatomy", "Dental Materials", "Pharmacology"] },
-        phase3: { name: "Clinical Subjects", subjects: ["Operative", "Oral Surgery", "Endo"] },
-        phase4: { name: "Clinical Thinking", subjects: ["Diagnosis", "Case Training"] }
+        phase1: { name: "Core Foundations", subjects: ["Anatomy", "Physiology", "Biochemistry", "Histology", "Microbiology", "Pathology"] }
     };
 
     function loadPhase(num) {
@@ -242,9 +184,30 @@
 
     function renderAnatomyTopic(topic) {
         const target = document.getElementById('render-target');
-        const data = anatomyData[topic] || { title: topic, content: `<p>Data for ${topic} is being populated.</p>` };
-        target.innerHTML = `<h1>${data.title}</h1><hr style="opacity:0.1; margin: 20px 0;">${data.content}`;
+        const data = anatomyData[topic];
+
+        if (topic === "Osteology") {
+            target.innerHTML = `
+                <h1>Osteology Hub</h1>
+                <div class="osteo-nav">
+                    <button class="osteo-btn active-btn" onclick="switchOsteoTab(this, 'overview')">Skull Overview</button>
+                    <button class="osteo-btn" onclick="switchOsteoTab(this, 'cranial')">Cranial Bones</button>
+                    <button class="osteo-btn" onclick="switchOsteoTab(this, 'facial')">Facial Bones</button>
+                    <button class="osteo-btn" onclick="switchOsteoTab(this, 'mandible')">Parts of Mandible</button>
+                </div>
+                <div id="osteo-content">${osteoSubTabs.overview}</div>
+            `;
+        } else {
+            target.innerHTML = `<h1>${topic}</h1><p>Content for ${topic} coming soon.</p>`;
+        }
+        
         document.querySelectorAll('.topic-link').forEach(l => l.classList.toggle('active-topic', l.innerText === topic));
+    }
+
+    function switchOsteoTab(btn, tabId) {
+        document.querySelectorAll('.osteo-btn').forEach(b => b.classList.remove('active-btn'));
+        btn.classList.add('active-btn');
+        document.getElementById('osteo-content').innerHTML = osteoSubTabs[tabId];
     }
 
     function renderSubject(sub) {

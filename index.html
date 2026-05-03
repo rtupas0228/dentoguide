@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoGuide | Interactive Visual Anatomy</title>
+    <title>DentoGuide | Complete Anatomy & Osteology</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -16,110 +16,68 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
 
+        /* --- APP LAYOUT --- */
         .app-container { display: grid; grid-template-columns: 80px 260px 1fr 340px; height: 100vh; }
 
-        /* Navigation */
+        /* Navigation Rail */
         .phase-rail { background: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; border-right: 1px solid rgba(255,255,255,0.1); }
         .phase-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: 0.3s; font-size: 1.2rem; }
         .phase-icon.active { background: var(--brand); box-shadow: 0 0 20px var(--brand); }
 
+        /* Sidebar Navigation */
         .sidebar { background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .sidebar-title { font-size: 0.65rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .sub-link { padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-light); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; }
+        
+        .sub-link { padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-light); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
         .sub-link:hover, .sub-link.active { background: var(--brand-light); color: var(--brand); }
 
-        .anatomy-menu { background: #f1f5f9; padding: 10px; border-radius: 12px; margin-top: 10px; display: none; }
-        .anatomy-menu.active { display: block; }
-        .topic-link { padding: 8px 10px; font-size: 0.75rem; font-weight: 700; color: var(--text-light); cursor: pointer; border-radius: 6px; display: block; margin-bottom: 2px; }
-        .topic-link:hover { color: var(--brand); background: white; }
-        .topic-link.active-topic { background: var(--brand); color: white; }
+        /* Anatomy Sub-Menu */
+        .anatomy-submenu { margin-top: 5px; padding-left: 10px; border-left: 2px solid var(--border); display: none; }
+        .anatomy-submenu.active { display: block; }
+        .topic-link { padding: 6px 10px; font-size: 0.75rem; font-weight: 700; color: var(--text-light); cursor: pointer; border-radius: 6px; display: block; margin-bottom: 2px; }
+        .topic-link:hover { color: var(--brand); background: var(--bg); }
+        .topic-link.active-topic { color: var(--brand); background: var(--brand-light); }
 
-        /* Main Viewer */
+        /* Main Content View */
         main.viewer { padding: 40px; overflow-y: auto; display: flex; justify-content: center; }
-        .card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); width: 100%; max-width: 950px; border: 1px solid var(--border); height: fit-content; }
+        .card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); width: 100%; max-width: 950px; border: 1px solid var(--border); height: fit-content; min-height: 90%; }
 
-        /* --- IMAGE ZOOM SYSTEM --- */
-        .image-container { 
-            position: relative; 
-            width: 100%; 
-            margin: 20px 0; 
-            border-radius: 15px; 
-            overflow: hidden; 
-            border: 1px solid var(--border);
-            cursor: zoom-in;
-            background: #fff;
-        }
-        .image-container img { 
-            width: 100%; 
-            height: auto; 
-            display: block; 
-            transition: transform 0.5s ease;
-        }
-        .image-container:hover img {
-            transform: scale(1.03);
-        }
-        .zoom-hint {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.6rem;
-            pointer-events: none;
-        }
+        /* Content UI Components */
+        .image-container { position: relative; width: 100%; margin: 20px 0; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); cursor: zoom-in; }
+        .image-container img { width: 100%; height: auto; display: block; transition: transform 0.5s; }
+        .image-container:hover img { transform: scale(1.02); }
 
-        /* Fullscreen Modal */
-        #zoom-modal {
-            display: none;
-            position: fixed;
-            z-index: 10000;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            align-items: center;
-            justify-content: center;
-            cursor: zoom-out;
-        }
-        #modal-img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 10px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            transform: scale(1);
-            transition: transform 0.3s;
-        }
-        #modal-img:active {
-            transform: scale(1.5); /* Click and hold to zoom even more in modal */
-        }
-        .close-modal {
-            position: absolute;
-            top: 20px; right: 30px;
-            color: white; font-size: 30px; font-weight: bold;
-            cursor: pointer;
-        }
+        .osteo-tab-nav { display: flex; gap: 8px; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; overflow-x: auto; }
+        .tab-btn { padding: 8px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 50px; cursor: pointer; font-size: 0.7rem; font-weight: 800; white-space: nowrap; transition: 0.2s; }
+        .tab-btn.active-tab { background: var(--brand); color: white; border-color: var(--brand); }
 
-        /* Content Styling */
-        .osteo-nav { display: flex; gap: 8px; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px; overflow-x: auto; }
-        .osteo-btn { padding: 8px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 50px; cursor: pointer; font-size: 0.72rem; font-weight: 800; white-space: nowrap; }
-        .osteo-btn.active-btn { background: var(--brand); color: white; border-color: var(--brand); }
-        .mnemonic-box { background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 12px; margin: 15px 0; color: #92400e; font-size: 0.85rem; }
-        .clinical-box { background: #f8fafc; padding: 20px; border-radius: 15px; border-left: 5px solid var(--brand); margin-bottom: 15px; }
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-        th { background: #f1f5f9; text-align: left; padding: 12px; font-size: 0.75rem; border: 1px solid var(--border); }
-        td { padding: 12px; border: 1px solid var(--border); font-size: 0.85rem; }
+        .mnemonic-box { background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 12px; margin: 15px 0; color: #92400e; font-size: 0.85rem; font-weight: 600; }
+        .clinical-box { background: #f8fafc; padding: 20px; border-radius: 15px; border-left: 5px solid var(--brand); margin-bottom: 15px; font-size: 0.9rem; }
+        .clinical-box b { color: var(--brand); text-transform: uppercase; font-size: 0.75rem; display: block; margin-bottom: 5px; }
 
+        .tag { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; margin-right: 5px; }
+        .t-red { background: #fee2e2; color: #ef4444; }
+        .t-blue { background: #eff6ff; color: #2563eb; }
+        .t-yellow { background: #fef9c3; color: #ca8a04; }
+        .t-green { background: #dcfce7; color: #16a34a; }
+
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem; }
+        th { background: #f1f5f9; text-align: left; padding: 12px; border: 1px solid var(--border); text-transform: uppercase; }
+        td { padding: 12px; border: 1px solid var(--border); }
+
+        /* Zoom Modal */
+        #zoom-modal { display: none; position: fixed; z-index: 10000; inset: 0; background: rgba(15, 23, 42, 0.95); align-items: center; justify-content: center; cursor: zoom-out; }
+        #modal-img { max-width: 90%; max-height: 90%; border-radius: 10px; }
+
+        /* Utility Panel */
         .utility { background: white; border-left: 1px solid var(--border); display: flex; flex-direction: column; }
         #notes { flex: 1; border: none; padding: 20px; background: #fffdf5; outline: none; resize: none; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-<!-- ZOOM MODAL -->
-<div id="zoom-modal" onclick="closeZoom()">
-    <span class="close-modal">&times;</span>
-    <img id="modal-img" src="" alt="Zoomed Image">
-    <div style="position:absolute; bottom:20px; color:white; font-size:0.8rem;">Click anywhere to close | Hold click to Magnify</div>
+<div id="zoom-modal" onclick="this.style.display='none'">
+    <img id="modal-img" src="">
 </div>
 
 <div class="app-container">
@@ -140,60 +98,97 @@
     </main>
 
     <aside class="utility">
-        <div style="padding:15px; font-weight:800; font-size:0.7rem; border-bottom:1px solid #eee;">DentoAI & NOTES</div>
+        <div style="padding:15px; font-weight:800; font-size:0.7rem; border-bottom:1px solid #eee;">DentoAI & PERSISTENT NOTES</div>
         <div style="flex:1; background:#f1f5f9;">
             <iframe src="https://www.chatbase.co/chatbot-iframe/v_your_id" style="width:100%; height:100%; border:none;"></iframe>
         </div>
-        <textarea id="notes" placeholder="Notes auto-save per topic..."></textarea>
+        <textarea id="notes" placeholder="Notes save per module..."></textarea>
     </aside>
 </div>
 
 <script>
-    // Utility for Zoom
+    // --- OSTEOLOGY SUB-CONTENT ---
+    const osteoTabs = {
+        overview: `
+            <h3>🧠 1. SKULL OVERVIEW (HIGH-YIELD)</h3>
+            <div class="image-container" onclick="openZoom('https://cdn.britannica.com/71/74271-050-E3E9773D/Lateral-views-human-skull.jpg')">
+                <img src="https://cdn.britannica.com/71/74271-050-E3E9773D/Lateral-views-human-skull.jpg">
+            </div>
+            <div class="clinical-box">
+                <b>Skull Bone Counts</b>
+                Total: 22 bones | Cranial: 8 | Facial: 14 | Adult Teeth: 32
+            </div>
+            <h4>🔢 Cranial Bones (8)</h4>
+            <p>Frontal (1), Parietal (2), Temporal (2), Occipital (1), Sphenoid (1), Ethmoid (1)</p>
+            <div class="mnemonic-box">👉 Mnemonic: “PEST OF 6” (Parietal, Ethmoid, Sphenoid, Temporal, Occipital, Frontal)</div>
+            <h4>🔢 Facial Bones (14)</h4>
+            <p>Maxilla (2), Zygomatic (2), Nasal (2), Lacrimal (2), Palatine (2), Inferior nasal concha (2), Vomer (1), Mandible (1)</p>
+            <div class="mnemonic-box">👉 Mnemonic: “Virgil Can Not Make My Pet Zebra Laugh”</div>
+        `,
+        mandible: `
+            <h3>🦷 2. THE MANDIBLE & MAXILLA</h3>
+            <div class="image-container" onclick="openZoom('https://cdn.britannica.com/96/99196-050-ED0AA964/mandible.jpg')">
+                <img src="https://cdn.britannica.com/96/99196-050-ED0AA964/mandible.jpg">
+            </div>
+            <div class="clinical-box" style="border-color:var(--danger)">
+                <b>The Mandible</b>
+                Strongest facial bone. Only movable bone of skull. Forms TMJ with temporal bone.
+            </div>
+            <h4>📍 Landmarks (Exam Gold)</h4>
+            <div class="clinical-box"><span class="tag t-red">🔴 Mandibular Foramen</span> Medial ramus. Entry of IAN. 👉 Clinical: IAN block target.</div>
+            <div class="clinical-box"><span class="tag t-blue">🔵 Mental Foramen</span> Near premolars. Exit of mental nerve. 👉 Mnemonic: “Mental = Mouth Exit”</div>
+            <div class="clinical-box"><span class="tag t-yellow">🟡 Lingula</span> Tongue-shaped projection. Landmark for anesthesia.</div>
+            <div class="clinical-box"><span class="tag t-green">🟢 Mylohyoid Line</span> Muscle attachment landmark.</div>
+            
+            <div class="clinical-box" style="border-color:var(--brand)">
+                <b>🧠 3. MAXILLA</b>
+                Forms upper jaw, contains Maxillary Sinus. <br>
+                👉 Clinical: Sinus infections → tooth pain | Extractions → sinus perforation risk.
+            </div>
+        `,
+        examprep: `
+            <h3>⚡ EXAM PREP MASTER HUB</h3>
+            <div class="mnemonic-box">🎯 ULTRA-HIGH YIELD SUMMARY: If exam is tomorrow, remember only this: Mandible = movable, Mandibular foramen = IAN, Mental = lip sensation, CN V3 = mastication, Maxilla = sinus risk.</div>
+            
+            <h4>🧬 Development & Ossification</h4>
+            <table>
+                <tr><th>Type</th><th>Example</th><th>Mnemonic</th></tr>
+                <tr><td>Intramembranous</td><td>Mandible, Maxilla</td><td>Face = Membrane</td></tr>
+                <tr><td>Endochondral</td><td>Base of skull</td><td>Base = Cartilage</td></tr>
+            </table>
+            <p>Mandible Origin: 1st pharyngeal arch. Guides: Johann Friedrich Meckel (Meckel's cartilage).</p>
+
+            <h4>⚡ Important Foramina</h4>
+            <table>
+                <tr><th>Foramen</th><th>Structure Passing</th><th>Clinical</th></tr>
+                <tr><td>Mandibular</td><td>IAN</td><td>Nerve block</td></tr>
+                <tr><td>Mental</td><td>Mental nerve</td><td>Lip numbness</td></tr>
+                <tr><td>Infraorbital</td><td>Infraorbital nerve</td><td>Midface anesthesia</td></tr>
+                <tr><td>Ovale</td><td>CN V3</td><td>Mastication</td></tr>
+            </table>
+
+            <h4>🔥 Clinical Correlations (Board Favorites)</h4>
+            <div class="clinical-box" style="border-color:var(--danger)">
+                <b>Fracture Sites (Weak Areas)</b>
+                Condyle, Angle, Parasymphysis. 👉 Mnemonic: “CAP breaks easily”
+            </div>
+            <ul>
+                <li>IAN damage → lower lip numbness</li>
+                <li>Dry Socket Risk → bone healing</li>
+                <li>Andreas Vesalius → Father of Modern Anatomy</li>
+                <li>Henry Gray → Gray's Anatomy</li>
+            </ul>
+        `
+    };
+
+    const curriculum = {
+        phase1: { name: "Core Foundations", subjects: ["Anatomy", "Physiology", "Biochemistry", "Histology", "Microbiology", "Pathology"] }
+    };
+
     function openZoom(src) {
         document.getElementById('modal-img').src = src;
         document.getElementById('zoom-modal').style.display = 'flex';
     }
-    function closeZoom() {
-        document.getElementById('zoom-modal').style.display = 'none';
-    }
-
-    const osteoSubTabs = {
-        overview: `
-            <h3>🧠 1. SKULL OVERVIEW</h3>
-            <div class="image-container" onclick="openZoom('https://cdn.britannica.com/71/74271-050-E3E9773D/Lateral-views-human-skull.jpg')">
-                <img src="https://cdn.britannica.com/71/74271-050-E3E9773D/Lateral-views-human-skull.jpg">
-                <div class="zoom-hint"><i class="fa-solid fa-magnifying-glass-plus"></i> Click to Zoom</div>
-            </div>
-            <div class="clinical-box">Total skull bones: <b>22</b>. Note the suture lines connecting the cranial plates.</div>
-        `,
-        cranial: `
-            <h3>🔢 CRANIAL BONES (8)</h3>
-            <div class="image-container" onclick="openZoom('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa90Dbo7nyT4dJnij6ZeeoW0EhFiG4xhD1Pw&s')">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa90Dbo7nyT4dJnij6ZeeoW0EhFiG4xhD1Pw&s">
-                <div class="zoom-hint"><i class="fa-solid fa-magnifying-glass-plus"></i> Click to Zoom</div>
-            </div>
-            <div class="mnemonic-box">👉 Mnemonic: “PEST OF 6” <br>(Parietal, Ethmoid, Sphenoid, Temporal, Occipital, Frontal)</div>
-        `,
-        facial: `
-            <h3>🔢 FACIAL BONES (14)</h3>
-            <div class="image-container" onclick="openZoom('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvXFaQkkuT_kQ0Op5LoCyPLBXW0SBKZ6NgLw&s')">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvXFaQkkuT_kQ0Op5LoCyPLBXW0SBKZ6NgLw&s">
-                <div class="zoom-hint"><i class="fa-solid fa-magnifying-glass-plus"></i> Click to Zoom</div>
-            </div>
-            <div class="mnemonic-box">👉 Mnemonic: “Virgil Can Not Make My Pet Zebra Laugh”</div>
-        `,
-        mandible: `
-            <h3>🦷 2. THE MANDIBLE</h3>
-            <div class="image-container" onclick="openZoom('https://cdn.britannica.com/96/99196-050-ED0AA964/mandible.jpg')">
-                <img src="https://cdn.britannica.com/96/99196-050-ED0AA964/mandible.jpg">
-                <div class="zoom-hint"><i class="fa-solid fa-magnifying-glass-plus"></i> Click to Zoom</div>
-            </div>
-            <div class="clinical-box">Target the <b>Mandibular Foramen</b> for successful Inferior Alveolar Nerve blocks.</div>
-        `
-    };
-
-    const curriculum = { phase1: { name: "Core Foundations", subjects: ["Anatomy", "Physiology", "Microbiology"] } };
 
     function loadPhase(num) {
         const phase = curriculum['phase' + num];
@@ -206,14 +201,14 @@
             const link = document.createElement('div');
             link.className = "sub-link";
             link.innerHTML = `<span>${sub}</span>` + (sub === 'Anatomy' ? `<i class="fa-solid fa-chevron-down"></i>` : "");
-            link.onclick = () => (sub === 'Anatomy') ? toggleAnatomyMenu() : renderSubject(sub);
+            link.onclick = () => (sub === 'Anatomy') ? toggleAnatomy() : renderSubject(sub);
             container.appendChild(link);
             
             if(sub === 'Anatomy') {
                 const subMenu = document.createElement('div');
-                subMenu.className = "anatomy-menu";
-                subMenu.id = "anatomy-submenu";
-                const topics = ["Osteology", "Muscles", "TMJ", "Nerves"];
+                subMenu.className = "anatomy-submenu";
+                subMenu.id = "anatomy-list";
+                const topics = ["Osteology", "Muscles", "TMJ", "Cranial Nerves (FULL)", "Blood Supply", "Venous Drainage", "Lymphatics", "Salivary Glands", "Fascial Spaces", "Oral Cavity", "Tongue", "Pharynx", "Clinical Correlations"];
                 topics.forEach(t => {
                     const tLink = document.createElement('div');
                     tLink.className = "topic-link";
@@ -229,42 +224,48 @@
         renderSubject(phase.subjects[0]);
     }
 
-    function toggleAnatomyMenu() {
-        document.getElementById('anatomy-submenu').classList.toggle('active');
+    function toggleAnatomy() {
+        document.getElementById('anatomy-list').classList.toggle('active');
         renderAnatomyTopic("Osteology");
     }
 
     function renderAnatomyTopic(topic) {
         const target = document.getElementById('render-target');
-        if (topic === "Osteology") {
+        if (topic.includes("Osteology")) {
             target.innerHTML = `
                 <h1>Osteology Hub</h1>
-                <div class="osteo-nav">
-                    <button class="osteo-btn active-btn" onclick="switchOsteoTab(this, 'overview')">Skull Overview</button>
-                    <button class="osteo-btn" onclick="switchOsteoTab(this, 'cranial')">Cranial Bones</button>
-                    <button class="osteo-btn" onclick="switchOsteoTab(this, 'facial')">Facial Bones</button>
-                    <button class="osteo-btn" onclick="switchOsteoTab(this, 'mandible')">Mandible</button>
+                <div class="osteo-tab-nav">
+                    <button class="tab-btn active-tab" onclick="switchOsteo(this, 'overview')">Skull Overview</button>
+                    <button class="tab-btn" onclick="switchOsteo(this, 'mandible')">Mandible & Maxilla</button>
+                    <button class="tab-btn" onclick="switchOsteo(this, 'examprep')">🔥 Exam Prep Hub</button>
                 </div>
-                <div id="osteo-content">${osteoSubTabs.overview}</div>
+                <div id="osteo-content">${osteoTabs.overview}</div>
             `;
         } else {
-            target.innerHTML = `<h1>${topic}</h1><p>Content coming soon...</p>`;
+            target.innerHTML = `<h1>${topic}</h1><p>Deep-dive clinical notes for ${topic} are being prepared.</p>`;
         }
         document.querySelectorAll('.topic-link').forEach(l => l.classList.toggle('active-topic', l.innerText === topic));
+        document.getElementById('notes').value = localStorage.getItem(`note_${topic}`) || "";
     }
 
-    function switchOsteoTab(btn, tabId) {
-        document.querySelectorAll('.osteo-btn').forEach(b => b.classList.remove('active-btn'));
-        btn.classList.add('active-btn');
-        document.getElementById('osteo-content').innerHTML = osteoSubTabs[tabId];
+    function switchOsteo(btn, id) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
+        btn.classList.add('active-tab');
+        document.getElementById('osteo-content').innerHTML = osteoTabs[id];
     }
 
     function renderSubject(sub) {
         const target = document.getElementById('render-target');
-        if(sub !== 'Anatomy') document.getElementById('anatomy-submenu')?.classList.remove('active');
-        target.innerHTML = `<h1>${sub}</h1><p>Loading ${sub} module...</p>`;
+        if(sub !== 'Anatomy') document.getElementById('anatomy-list')?.classList.remove('active');
+        target.innerHTML = `<h1>${sub}</h1><p>Module content for ${sub} is loading...</p>`;
         document.querySelectorAll('.sub-link').forEach(l => l.classList.toggle('active', l.innerText === sub));
+        document.getElementById('notes').value = localStorage.getItem(`note_${sub}`) || "";
     }
+
+    document.getElementById('notes').addEventListener('input', (e) => {
+        const key = document.querySelector('.active-topic')?.innerText || document.querySelector('.sub-link.active')?.innerText;
+        localStorage.setItem(`note_${key}`, e.target.value);
+    });
 
     window.onload = () => loadPhase(1);
 </script>

@@ -3,52 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DentoGuide | Anatomy Mastery Hub</title>
+    <title>DentoGuide | Anatomy Mastery Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --brand: #2563eb; --brand-light: #eff6ff; --bg: #f8fafc;
             --text: #0f172a; --text-light: #64748b; --white: #ffffff;
-            --border: #e2e8f0; --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+            --border: #e2e8f0; --success: #10b981; --warning: #f59e0b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
 
         /* --- LAYOUT --- */
-        .app-container { display: grid; grid-template-columns: 80px 260px 1fr 340px; height: 100vh; }
+        .app-container { display: grid; grid-template-columns: 80px 240px 1fr 340px; height: 100vh; }
 
-        /* Phase Rail */
+        /* Phase Rail (Icons) */
         .phase-rail { background: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; border-right: 1px solid rgba(255,255,255,0.1); }
         .phase-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: 0.3s; font-size: 1.2rem; }
         .phase-icon.active { background: var(--brand); box-shadow: 0 0 20px var(--brand); }
 
-        /* Sidebar */
+        /* Subject Sidebar */
         .sidebar { background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
-        .sub-link { padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-light); margin-bottom: 5px; transition: 0.2s; }
+        .sidebar-title { font-size: 0.65rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .sub-link { padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-light); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
         .sub-link:hover, .sub-link.active { background: var(--brand-light); color: var(--brand); }
 
+        /* --- ANATOMY SUB-MENU --- */
+        .anatomy-menu { background: #f1f5f9; padding: 10px; border-radius: 12px; margin-top: 10px; display: none; }
+        .anatomy-menu.active { display: block; animation: slideDown 0.3s ease; }
+        .topic-link { padding: 8px 10px; font-size: 0.75rem; font-weight: 700; color: var(--text-light); cursor: pointer; border-radius: 6px; display: block; margin-bottom: 2px; }
+        .topic-link:hover { color: var(--brand); background: white; }
+        .topic-link.active-topic { background: var(--brand); color: white; }
+
         /* Content Viewer */
-        main.viewer { padding: 40px; overflow-y: auto; display: flex; justify-content: center; position: relative; }
-        .card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); width: 100%; max-width: 950px; border: 1px solid var(--border); height: fit-content; min-height: 80vh; }
+        main.viewer { padding: 40px; overflow-y: auto; display: flex; justify-content: center; }
+        .card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); width: 100%; max-width: 900px; border: 1px solid var(--border); height: fit-content; }
 
-        /* --- ANATOMY HUB GRID --- */
-        .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 25px; }
-        .hub-item { background: var(--white); border: 1px solid var(--border); padding: 20px; border-radius: 16px; cursor: pointer; transition: 0.3s; text-align: center; }
-        .hub-item:hover { border-color: var(--brand); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .hub-item i { font-size: 1.5rem; color: var(--brand); margin-bottom: 10px; display: block; }
-        .hub-item span { font-size: 0.85rem; font-weight: 700; }
+        /* Visual System */
+        .diagram-container { background: #1e293b; border-radius: 20px; padding: 30px; margin: 20px 0; text-align: center; color: #94a3b8; border: 1px solid #334155; position: relative; }
+        .diagram-label { position: absolute; background: var(--brand); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; }
 
-        /* Visual System (Diagrams) */
-        .diagram-container { background: #1e293b; color: #94a3b8; padding: 40px; border-radius: 20px; margin: 20px 0; text-align: center; border: 1px solid #334155; position: relative; min-height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .diagram-label { position: absolute; background: var(--brand); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; cursor: help; }
+        /* Clinical UI */
+        .clinical-box { background: #f8fafc; padding: 20px; border-radius: 15px; border-left: 5px solid var(--brand); margin: 20px 0; }
+        .high-yield-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .high-yield-table th { background: var(--brand-light); color: var(--brand); text-align: left; padding: 12px; font-size: 0.8rem; }
+        .high-yield-table td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
 
-        /* General UI */
-        .clinical-box { background: #f8fafc; padding: 20px; border-radius: 15px; border-left: 5px solid var(--brand); margin: 15px 0; }
-        .back-btn { background: var(--brand-light); color: var(--brand); border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 700; margin-bottom: 20px; font-size: 0.8rem; }
+        /* Utility */
         .utility { background: white; border-left: 1px solid var(--border); display: flex; flex-direction: column; }
         #notes { flex: 1; border: none; padding: 20px; background: #fffdf5; outline: none; resize: none; font-size: 0.9rem; }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -62,18 +69,16 @@
     </nav>
 
     <aside class="sidebar">
-        <h2 style="font-size:1.2rem; color:var(--brand); margin-bottom:20px;">DentoGuide</h2>
+        <div class="sidebar-title" id="phase-title">Phase 1</div>
         <div id="subject-list"></div>
     </aside>
 
     <main class="viewer">
-        <div id="render-target" class="card">
-            <!-- Anatomy Hub or Topic Content will be injected here -->
-        </div>
+        <div id="render-target" class="card"></div>
     </main>
 
     <aside class="utility">
-        <div style="padding:15px; font-weight:800; font-size:0.75rem; border-bottom:1px solid #eee;">DentoAI & PERSISTENT NOTES</div>
+        <div style="padding:15px; font-weight:800; font-size:0.7rem; border-bottom:1px solid #eee;">DentoAI & NOTES</div>
         <div style="flex:1; background:#f1f5f9;">
             <iframe src="https://www.chatbase.co/chatbot-iframe/v_your_id" style="width:100%; height:100%; border:none;"></iframe>
         </div>
@@ -82,120 +87,132 @@
 </div>
 
 <script>
-    const anatomyTopics = {
+    const anatomyData = {
         "Osteology": {
-            icon: "fa-skull",
+            title: "Osteology (Skull & Mandible)",
             content: `
-                <h3>Osteology (Skull & Mandible)</h3>
                 <div class="diagram-container">
-                    <i class="fa-solid fa-bone fa-3x"></i>
-                    <p style="margin-top:15px">Interactive Skull Visualization Placeholder</p>
+                    <i class="fa-solid fa-skull fa-4x"></i>
+                    <p style="margin-top:20px;">[Interactive Osteology Diagram]</p>
                     <div class="diagram-label" style="top:20%; left:30%;">Maxilla</div>
                     <div class="diagram-label" style="top:70%; left:45%;">Mandible</div>
-                    <div class="diagram-label" style="top:40%; left:60%;">Zygomatic</div>
                 </div>
                 <div class="clinical-box">
-                    <b>Mandibular Foramen:</b> Critical landmark for the IAN block. Located on the medial surface of the ramus.
+                    <b>High-Yield:</b> The Mandibular Foramen transmits the IAN. Mental Foramen is typically located near the apex of the 2nd premolar.
                 </div>
             `
         },
         "Muscles": {
-            icon: "fa-mound",
-            content: `<h3>Muscles of Mastication & Expression</h3>
-                <div class="clinical-box"><b>Mastication Group:</b> Temporalis, Masseter, Medial Pterygoid, Lateral Pterygoid. All innervated by CN V3.</div>
-                <div class="diagram-container">
-                    <p>[Diagram: Superficial vs Deep Masticatory Muscles]</p>
-                </div>`
+            title: "Muscles of Mastication",
+            content: `<div class="clinical-box"><b>4 Main Muscles:</b> Masseter, Temporalis, Medial Pterygoid, Lateral Pterygoid. All innervated by CN V3.</div>`
         },
         "TMJ": {
-            icon: "fa-joint",
-            content: `<h3>Temporomandibular Joint (TMJ)</h3>
-                <div class="clinical-box"><b>Components:</b> Condyle, Ginglymoarthrodial movement, Articular Disc (Type I Collagen).</div>
-                <div class="diagram-container">
-                    <div class="diagram-label" style="top:40%; left:40%;">Articular Disc</div>
-                </div>`
+            title: "Temporomandibular Joint",
+            content: `<p>A ginglymoarthrodial joint involving the mandibular condyle and the temporal bone.</p>`
         },
-        "Nerves": {
-            icon: "fa-bolt",
-            content: `<h3>Cranial Nerves (Dental Focus)</h3>
-                <div class="clinical-box"><b>CN V (Trigeminal):</b> The Great Sensory Nerve of the face. V3 carries motor fibers to mastication muscles.</div>
-                <ul>
-                    <li><b>I-XII:</b> Comprehensive Nerve Mapping...</li>
-                </ul>`
+        "Cranial Nerves": {
+            title: "Cranial Nerves (Full Breakdown)",
+            content: `
+                <table class="high-yield-table">
+                    <tr><th>Nerve</th><th>Type</th><th>Clinical Importance</th></tr>
+                    <tr><td>V (Trigeminal)</td><td>Mixed</td><td>Target for Dental Blocks</td></tr>
+                    <tr><td>VII (Facial)</td><td>Mixed</td><td>Bell's Palsy / Expression</td></tr>
+                </table>
+            `
         },
-        "Blood": { icon: "fa-droplet", content: "<h3>Blood Supply (Maxillary Artery)</h3><p>Detailed branches and clinical significance...</p>" },
-        "Drainage": { icon: "fa-vial", content: "<h3>Venous Drainage</h3><p>Pterygoid Plexus and Facial Vein pathways...</p>" },
-        "Lymphatics": { icon: "fa-circle-nodes", content: "<h3>Lymphatics</h3><p>Submandibular vs Submental drainage...</p>" },
-        "Salivary": { icon: "fa-faucet", content: "<h3>Salivary Glands</h3><p>Parotid, Submandibular, Sublingual structures...</p>" },
-        "Fascial": { icon: "fa-layer-group", content: "<h3>Fascial Spaces</h3><p>Spread of dental infections (Ludwig's Angina)...</p>" },
-        "OralCavity": { icon: "fa-mouth", content: "<h3>Oral Cavity</h3><p>Hard/Soft Palate and Vestibule anatomy...</p>" },
-        "Tongue": { icon: "fa-language", content: "<h3>Tongue Anatomy</h3><p>Intrinsic vs Extrinsic muscles and Taste innervation...</p>" },
-        "Pharynx": { icon: "fa-wind", content: "<h3>Pharynx</h3><p>Nasopharynx, Oropharynx, Laryngopharynx...</p>" }
+        "Clinical Correlations": {
+            title: "Clinical Correlations",
+            content: `<div class="clinical-box" style="border-color:var(--danger);"><b>Bell's Palsy:</b> Lower motor neuron lesion of CN VII causing unilateral facial paralysis.</div>`
+        }
+        // Add remaining topics: Blood Supply, Venous, Lymphatics, Salivary, Fascial, Oral Cavity, Tongue, Pharynx
     };
 
     const curriculum = {
         phase1: { name: "Core Foundations", subjects: ["Anatomy", "Physiology", "Biochemistry", "Histology", "Microbiology", "Pathology"] },
         phase2: { name: "Dental Sciences", subjects: ["Dental Anatomy", "Dental Materials", "Pharmacology"] },
-        phase3: { name: "Clinical Subjects", subjects: ["Operative", "Oral Surgery", "Endo", "Perio"] },
-        phase4: { name: "Clinical Thinking", subjects: ["Diagnostic Flow", "Case Training"] }
+        phase3: { name: "Clinical Subjects", subjects: ["Operative", "Oral Surgery", "Endodontics"] },
+        phase4: { name: "Clinical Thinking", subjects: ["Diagnosis", "Case Training"] }
     };
 
+    let activeTopic = "Osteology";
+
     function loadPhase(num) {
-        const phase = curriculum['phase'+num];
+        const phase = curriculum['phase' + num];
+        document.getElementById('phase-title').innerText = phase.name;
         const list = document.getElementById('subject-list');
-        list.innerHTML = `<div style="font-size:0.7rem; font-weight:800; color:var(--text-light); margin-bottom:10px;">${phase.name.toUpperCase()}</div>`;
-        phase.subjects.forEach(key => {
-            const div = document.createElement('div');
-            div.className = "sub-link";
-            div.innerText = key;
-            div.onclick = () => renderSubject(key);
-            list.appendChild(div);
+        list.innerHTML = "";
+        
+        phase.subjects.forEach(sub => {
+            const container = document.createElement('div');
+            const link = document.createElement('div');
+            link.className = "sub-link";
+            link.innerHTML = `<span>${sub}</span>` + (sub === 'Anatomy' ? `<i class="fa-solid fa-chevron-down"></i>` : "");
+            link.onclick = () => (sub === 'Anatomy') ? toggleAnatomyMenu() : renderSubject(sub);
+            
+            container.appendChild(link);
+            
+            if(sub === 'Anatomy') {
+                const subMenu = document.createElement('div');
+                subMenu.className = "anatomy-menu";
+                subMenu.id = "anatomy-submenu";
+                const topics = ["Osteology", "Muscles", "TMJ", "Cranial Nerves", "Blood Supply", "Venous Drainage", "Lymphatics", "Salivary Glands", "Fascial Spaces", "Oral Cavity", "Tongue", "Pharynx", "Clinical Correlations"];
+                
+                topics.forEach(t => {
+                    const tLink = document.createElement('div');
+                    tLink.className = "topic-link";
+                    tLink.innerText = t;
+                    tLink.onclick = (e) => {
+                        e.stopPropagation();
+                        renderAnatomyTopic(t);
+                    };
+                    subMenu.appendChild(tLink);
+                });
+                container.appendChild(subMenu);
+            }
+
+            list.appendChild(container);
         });
+
         document.querySelectorAll('.phase-icon').forEach((icon, i) => icon.classList.toggle('active', (i+1) === num));
         renderSubject(phase.subjects[0]);
     }
 
-    function renderSubject(key) {
-        const target = document.getElementById('render-target');
-        document.querySelectorAll('.sub-link').forEach(l => l.classList.toggle('active', l.innerText === key));
-        
-        if(key === "Anatomy") {
-            renderAnatomyHub();
-        } else {
-            target.innerHTML = `<h1>${key}</h1><p>Module content coming soon.</p>`;
-        }
-        document.getElementById('notes').value = localStorage.getItem(`note_${key}`) || "";
+    function toggleAnatomyMenu() {
+        const menu = document.getElementById('anatomy-submenu');
+        menu.classList.toggle('active');
+        renderAnatomyTopic("Osteology");
     }
 
-    function renderAnatomyHub() {
+    function renderAnatomyTopic(topic) {
+        activeTopic = topic;
         const target = document.getElementById('render-target');
-        let hubHtml = `<h1>Anatomy Mastery Hub</h1><p>Select a sub-topic to deep dive into Head & Neck structures.</p><div class="hub-grid">`;
+        const data = anatomyData[topic] || { title: topic, content: `<p>High-yield clinical data for ${topic} is being populated.</p>` };
         
-        for(let topic in anatomyTopics) {
-            hubHtml += `
-                <div class="hub-item" onclick="renderAnatomyTopic('${topic}')">
-                    <i class="fa-solid ${anatomyTopics[topic].icon}"></i>
-                    <span>${topic}</span>
-                </div>`;
-        }
-        hubHtml += `</div>`;
-        target.innerHTML = hubHtml;
-    }
-
-    function renderAnatomyTopic(topicKey) {
-        const target = document.getElementById('render-target');
-        const topic = anatomyTopics[topicKey];
         target.innerHTML = `
-            <button class="back-btn" onclick="renderAnatomyHub()"><i class="fa-solid fa-arrow-left"></i> Back to Anatomy Hub</button>
-            <div class="badge" style="background:var(--brand-light); color:var(--brand); padding:5px 10px; border-radius:5px; font-size:0.7rem; font-weight:800; margin-bottom:10px;">ANATOMY : ${topicKey.toUpperCase()}</div>
-            ${topic.content}
+            <div style="font-size:0.7rem; font-weight:800; color:var(--brand); text-transform:uppercase; margin-bottom:5px;">Phase 1: Anatomy</div>
+            <h1>${data.title}</h1>
+            <hr style="opacity:0.1; margin: 20px 0;">
+            ${data.content}
         `;
-        // Save topic-specific notes
-        document.getElementById('notes').value = localStorage.getItem(`note_anatomy_${topicKey}`) || "";
-        document.getElementById('notes').oninput = (e) => {
-            localStorage.setItem(`note_anatomy_${topicKey}`, e.target.value);
-        };
+
+        document.querySelectorAll('.topic-link').forEach(l => l.classList.toggle('active-topic', l.innerText === topic));
+        document.getElementById('notes').value = localStorage.getItem(`note_${topic}`) || "";
     }
+
+    function renderSubject(sub) {
+        const target = document.getElementById('render-target');
+        document.getElementById('anatomy-submenu')?.classList.remove('active');
+        target.innerHTML = `<h1>${sub}</h1><p>Module content for ${sub} is loading...</p>`;
+        
+        document.querySelectorAll('.sub-link').forEach(l => l.classList.toggle('active', l.innerText === sub));
+        document.getElementById('notes').value = localStorage.getItem(`note_${sub}`) || "";
+    }
+
+    // Auto-save notes
+    document.getElementById('notes').addEventListener('input', (e) => {
+        const key = document.querySelector('.active-topic')?.innerText || document.querySelector('.sub-link.active')?.innerText;
+        localStorage.setItem(`note_${key}`, e.target.value);
+    });
 
     window.onload = () => loadPhase(1);
 </script>

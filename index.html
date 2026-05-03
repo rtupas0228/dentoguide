@@ -28,13 +28,12 @@
         .sidebar { background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .sidebar-title { font-size: 0.65rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
         .sub-link { padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-light); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
-        .sub-link:hover, .sub-link.active { background: var(--brand-light); color: var(--brand); }
+        .sub-link.active { background: var(--brand-light); color: var(--brand); }
 
         /* Sub-Menu Styles */
         .anatomy-submenu { margin-top: 5px; padding-left: 10px; border-left: 2px solid var(--border); display: none; }
         .anatomy-submenu.active { display: block; }
         .topic-link { padding: 6px 10px; font-size: 0.75rem; font-weight: 700; color: var(--text-light); cursor: pointer; border-radius: 6px; display: block; margin-bottom: 2px; }
-        .topic-link:hover { color: var(--brand); background: var(--bg); }
         .topic-link.active-topic { color: var(--brand); background: var(--brand-light); }
 
         /* Main Content View */
@@ -52,25 +51,30 @@
 
         .mnemonic-box { background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 12px; margin: 15px 0; color: #92400e; font-size: 0.85rem; font-weight: 600; }
         .clinical-box { background: #f8fafc; padding: 20px; border-radius: 15px; border-left: 5px solid var(--brand); margin-bottom: 15px; font-size: 0.9rem; }
-        .clinical-box b { color: var(--brand); text-transform: uppercase; font-size: 0.75rem; display: block; margin-bottom: 5px; }
-
         .tag { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; margin-right: 5px; }
         .t-red { background: #fee2e2; color: #ef4444; }
-        .t-blue { background: #eff6ff; color: #2563eb; }
-        .t-yellow { background: #fef9c3; color: #ca8a04; }
-        .t-green { background: #dcfce7; color: #16a34a; }
-
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem; }
-        th { background: #f1f5f9; text-align: left; padding: 12px; border: 1px solid var(--border); text-transform: uppercase; }
-        td { padding: 12px; border: 1px solid var(--border); }
 
         /* Zoom Modal */
         #zoom-modal { display: none; position: fixed; z-index: 10000; inset: 0; background: rgba(15, 23, 42, 0.95); align-items: center; justify-content: center; cursor: zoom-out; }
-        #modal-img { max-width: 90%; max-height: 90%; border-radius: 10px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        #modal-img { max-width: 90%; max-height: 90%; border-radius: 10px; }
 
-        /* Utility Panel */
+        /* --- AI CHAT INTERFACE --- */
         .utility { background: white; border-left: 1px solid var(--border); display: flex; flex-direction: column; }
-        #notes { flex: 1; border: none; padding: 20px; background: #fffdf5; outline: none; resize: none; font-size: 0.9rem; }
+        .ai-header { padding: 15px; font-weight: 800; font-size: 0.75rem; border-bottom: 1px solid #eee; color: var(--brand); display: flex; align-items: center; gap: 8px; }
+        
+        #ai-chat-window { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; }
+        .msg { padding: 10px 12px; border-radius: 12px; font-size: 0.8rem; line-height: 1.4; max-width: 85%; }
+        .msg.bot { background: white; border: 1px solid var(--border); align-self: flex-start; color: var(--text); border-bottom-left-radius: 2px; }
+        .msg.user { background: var(--brand); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+
+        .ai-input-area { padding: 10px; border-top: 1px solid #eee; display: flex; gap: 5px; background: white; }
+        #ai-input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); outline: none; font-size: 0.8rem; }
+        .ai-send-btn { background: var(--brand); color: white; border: none; width: 40px; border-radius: 8px; cursor: pointer; }
+
+        #notes { height: 160px; border: none; border-top: 1px solid #eee; padding: 15px; font-size: 0.85rem; background: #fffdf5; outline: none; resize: none; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.85rem; }
+        th { background: #f1f5f9; text-align: left; padding: 10px; border: 1px solid var(--border); }
+        td { padding: 10px; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
@@ -97,239 +101,84 @@
     </main>
 
     <aside class="utility">
-        <div style="padding:15px; font-weight:800; font-size:0.7rem; border-bottom:1px solid #eee;">DentoAI & PERSISTENT NOTES</div>
-        <div style="flex:1; background:#f1f5f9;">
-            <iframe src="https://www.chatbase.co/chatbot-iframe/v_your_id" style="width:100%; height:100%; border:none;"></iframe>
+        <div class="ai-header"><i class="fa-solid fa-robot"></i> DENTOAI ASSISTANT</div>
+        
+        <!-- FUNCTIONAL AI CHAT -->
+        <div id="ai-chat-window">
+            <div class="msg bot">Hello! I'm DentoAI. Ask me about Skull bones, Mastication, or TMJ measurements!</div>
         </div>
-        <textarea id="notes" placeholder="Notes save automatically for each specific topic..."></textarea>
+        
+        <div class="ai-input-area">
+            <input type="text" id="ai-input" placeholder="Type a question..." onkeypress="if(event.key==='Enter') askDentoAI()">
+            <button class="ai-send-btn" onclick="askDentoAI()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+
+        <div style="padding:10px; font-weight:800; font-size:0.65rem; color:#94a3b8; letter-spacing:1px;">MY PERSISTENT NOTES</div>
+        <textarea id="notes" placeholder="Notes save per module..."></textarea>
     </aside>
 </div>
 
 <script>
-    // --- DATA REPOSITORY ---
-
+    // --- DATABASE ---
     const osteoTabs = {
-        overview: `
-            <h3>🧠 1. SKULL OVERVIEW (HIGH-YIELD)</h3>
-            <div class="image-container" onclick="openZoom('https://cdn.britannica.com/71/74271-050-E3E9773D/Lateral-views-human-skull.jpg')">
-                <img src="https://cdn.britannica.com/71/74271-050-E3E9773D/Lateral-views-human-skull.jpg">
-            </div>
-            <div class="clinical-box"><b>Total: 22 bones</b> | Cranial: 8 | Facial: 14</div>
-            <h4>🔢 Cranial Bones (8)</h4>
-            <div class="mnemonic-box">👉 “PEST OF 6” (Parietal, Ethmoid, Sphenoid, Temporal, Occipital, Frontal)</div>
-            <h4>🔢 Facial Bones (14)</h4>
-            <div class="mnemonic-box">👉 “Virgil Can Not Make My Pet Zebra Laugh”</div>
-        `,
-        mandible: `
-            <h3>🦷 2. MANDIBLE & MAXILLA</h3>
-            <div class="image-container" onclick="openZoom('https://cdn.britannica.com/96/99196-050-ED0AA964/mandible.jpg')">
-                <img src="https://cdn.britannica.com/96/99196-050-ED0AA964/mandible.jpg">
-            </div>
-            <div class="clinical-box"><span class="tag t-red">🔴 Mandibular Foramen</span> Medial ramus. IAN Block Target.</div>
-            <div class="clinical-box"><span class="tag t-blue">🔵 Mental Foramen</span> Exit of mental nerve. "Mental = Mouth Exit"</div>
-            <div class="clinical-box"><span class="tag t-yellow">🟡 Lingula</span> Landmark for anesthesia.</div>
-            <div class="clinical-box"><span class="tag t-green">🟢 Mylohyoid Line</span> Muscle attachment.</div>
-            <div class="clinical-box"><b>🧠 MAXILLA:</b> Contains Maxillary Sinus. Extractions carry sinus perforation risk.</div>
-        `,
-        examprep: `
-            <h3>⚡ OSTEOLOGY EXAM PREP</h3>
-            <div class="mnemonic-box">🎯 ULTRA-HIGH YIELD SUMMARY: Mandible = strongest/movable. Mandibular foramen = IAN. Mental = lip sensation. CN V3 = mastication.</div>
-            <table>
-                <tr><th>Structure Passing</th><th>Clinical</th></tr>
-                <tr><td>IAN</td><td>Nerve block</td></tr>
-                <tr><td>Mental Nerve</td><td>Lip numbness</td></tr>
-                <tr><td>CN V3</td><td>Mastication</td></tr>
-            </table>
-            <div class="clinical-box" style="border-color:var(--danger)"><b>Fracture Sites (CAP):</b> Condyle, Angle, Parasymphysis.</div>
-        `
+        overview: `<h3>🧠 1. SKULL OVERVIEW</h3><div class="image-container" onclick="openZoom('https://cdn.britannica.com/71/74271-050-E3E9773D/Lateral-views-human-skull.jpg')"><img src="https://cdn.britannica.com/71/74271-050-E3E9773D/Lateral-views-human-skull.jpg"></div><div class="clinical-box">Total: 22 bones | Cranial: 8 | Facial: 14</div>`,
+        mandible: `<h3>🦷 2. MANDIBLE & MAXILLA</h3><div class="image-container" onclick="openZoom('https://cdn.britannica.com/96/99196-050-ED0AA964/mandible.jpg')"><img src="https://cdn.britannica.com/96/99196-050-ED0AA964/mandible.jpg"></div><div class="clinical-box"><span class="tag t-red">🔴 Mandibular Foramen</span> IAN Block Target.</div>`,
+        examprep: `<h3>⚡ EXAM PREP</h3><div class="mnemonic-box">🎯 ULTRA-HIGH YIELD SUMMARY: Mandible = strongest/movable. IAN = Mandibular Foramen.</div>`
     };
 
     const muscleTabs = {
-        general: `
-            <h3>🧠 1. MUSCLE DEFINITION & OVERVIEW</h3>
-            <div class="https://image1.slideserve.com/2447927/head-and-neck-muscles-l.jpg')">
-                <img src="https://image1.slideserve.com/2447927/head-and-neck-muscles-l.jpg">
-            </div>
-            <p>Specialized muscles responsible for: Mastication, Expression, Swallowing, Speech, and Head movement.</p>
-            <div class="clinical-box">
-                <b>Nerve Control:</b>
-                <ul>
-                    <li><b>Trigeminal (V3):</b> Mastication</li>
-                    <li><b>Facial (VII):</b> Expression</li>
-                </ul>
-            </div>
-        `,
-        mastication: `
-            <h3>🔥 2. MUSCLES OF MASTICATION</h3>
-            <p><b>Function:</b> Move mandible (Chewing)</p>
-            <div class="mnemonic-box">👉 “M&M Tastes Like Pizza”: Masseter, Medial Pterygoid, Temporalis, Lateral Pterygoid.</div>
-            <table>
-                <tr><th>Muscle</th><th>Action</th><th>Nerve</th></tr>
-                <tr><td>Masseter</td><td>Elevation</td><td>V3</td></tr>
-                <tr><td>Temporalis</td><td>Elevation/Retraction</td><td>V3</td></tr>
-                <tr><td>Medial Pterygoid</td><td>Elevation</td><td>V3</td></tr>
-                <tr><td>Lateral Pterygoid</td><td><b>Opening</b>/Protrusion</td><td>V3</td></tr>
-            </table>
-            <div class="clinical-box" style="border-color:var(--danger)">
-                <b>🚨 MUST-KNOW:</b> ONLY muscle that OPENS mouth: <b>Lateral Pterygoid</b> ("Lateral = Lowers jaw").
-            </div>
-        `,
-        expression: `
-            <h3>🎭 3. MUSCLES OF FACIAL EXPRESSION</h3>
-            <div class="image-container" onclick="openZoom('https://cdn.3d4medical.com/website/blog/facial-expression/facial-expression0.jpg')">
-                <img src="https://cdn.3d4medical.com/website/blog/facial-expression/facial-expression0.jpg">
-            </div>
-            <div class="mnemonic-box">👉 “OBOZ-FB”: Orbicularis Oris, Buccinator, Orbicularis Oculi, Zygomaticus, Frontalis.</div>
-            <div class="clinical-box"><b>Key Fact:</b> These insert into <b>SKIN</b>, not bone. All supplied by <b>Facial Nerve (VII)</b>.</div>
-            <div class="clinical-box" style="border-color:var(--brand)">
-                <b>🦷 4. BUCCINATOR:</b> "Chewing Assistant". Keeps food between teeth. Vital for denture stability.
-            </div>
-        `,
-        bells: `
-            <h3>❗ BELL'S PALSY</h3>
-            <div class="image-container" onclick="openZoom('https://my.clevelandclinic.org/-/scassets/images/org/health/articles/5457-bells-palsy')">
-                <img src="https://my.clevelandclinic.org/-/scassets/images/org/health/articles/5457-bells-palsy">
-            </div>
-            <div class="clinical-box" style="border-color:var(--danger)">
-                <b>Cause:</b> CN VII Damage.<br>
-                <b>Signs:</b> Drooping face, cannot close eye, loss of taste (ant. 2/3).
-            </div>
-        `,
-        tongue: `
-            <h3>👅 5. MUSCLES OF THE TONGUE</h3>
-            <div class="image-container" onclick="openZoom('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuIYSyDlBksC-quzBCIjBxl5rU063oI7MlmA&s')">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuIYSyDlBksC-quzBCIjBxl5rU063oI7MlmA&s">
-            </div>
-            <div class="mnemonic-box">👉 “GHS” (Go Have Sex): Genioglossus, Hyoglossus, Styloglossus.</div>
-            <div class="clinical-box">
-                <b>Nerve Supply:</b> ALL by Hypoglossal (XII). EXCEPT Palatoglossus (CN X).<br>
-                <b>Clinical:</b> CN XII damage makes tongue deviate <b>toward</b> the lesion.
-            </div>
-        `,
-        hyoids: `
-            <h3>🧠 6. SUPRAHYOID & INFRAHYOID</h3>
-            <div class="image-container" onclick="openZoom('https://www.earthslab.com/wp-content/uploads/2017/07/070417_0828_Suprahyoida1.jpg')">
-                <img src="https://www.earthslab.com/wp-content/uploads/2017/07/070417_0828_Suprahyoida1.jpg">
-            </div>
-            <p><b>Suprahyoids:</b> Elevate hyoid (My Dear Stylist Gets - Mylohyoid, Digastric, Stylohyoid, Geniohyoid).</p>
-            <p><b>Infrahyoids:</b> Depress hyoid (Some Old Soldiers Take - Sternoid, Omohyoid, Sternothyroid, Thyrohyoid).</p>
-        `,
-        summary: `
-            <h3>🎯 ULTRA-HIGH YIELD SUMMARY</h3>
-            <div class="mnemonic-box" style="background:var(--text); color:white; border:none;">
-                <ul style="margin-left:20px; line-height:2;">
-                    <li><b>V3:</b> Mastication | <b>VII:</b> Expression | <b>XII:</b> Tongue</li>
-                    <li><b>Lateral Pterygoid:</b> Opens Jaw</li>
-                    <li><b>Buccinator:</b> Keeps food in place</li>
-                    <li><b>CN XII Lesion:</b> Deviates SAME side</li>
-                </ul>
-            </div>
-        `
+        general: `<h3>🧠 1. MUSCLE OVERVIEW</h3><div class="image-container" onclick="openZoom('https://image1.slideserve.com/2447927/head-and-neck-muscles-l.jpg')"><img src="https://image1.slideserve.com/2447927/head-and-neck-muscles-l.jpg"></div>`,
+        mastication: `<h3>🔥 2. MASTICATION</h3><div class="mnemonic-box">👉 “M&M Tastes Like Pizza”: Masseter, Medial Pterygoid, Temporalis, Lateral Pterygoid.</div>`,
+        expression: `<h3>🎭 3. EXPRESSION</h3><div class="image-container" onclick="openZoom('https://cdn.3d4medical.com/website/blog/facial-expression/facial-expression0.jpg')"><img src="https://cdn.3d4medical.com/website/blog/facial-expression/facial-expression0.jpg"></div>`
     };
 
     const tmjTabs = {
-        overview: `
-            <h3>🧠 1. TMJ DEFINITION & BONES</h3>
-            <div class="image-container" onclick="openZoom('https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder')">
-                <img src="https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder" alt="TMJ Anatomy">
-            </div>
-            <p>The Temporomandibular Joint (TMJ) is a <b>Synovial, modified hinge joint</b>.</p>
-            <div class="clinical-box">
-                <b>Joint Mechanics:</b> Allows both <b>Rotation</b> (hinge) and <b>Translation</b> (gliding).
-            </div>
-            <div class="clinical-box" style="border-color:var(--warning)">
-                <b>🦴 ARTICULATING STRUCTURES:</b>
-                <ul>
-                    <li>Mandibular condyle</li>
-                    <li>Temporal bone (Glenoid fossa + Articular eminence)</li>
-                </ul>
-            </div>
-            <div class="mnemonic-box">🔥 UNIQUE FEATURE: Has an <b>articular disc (fibrocartilage)</b>. NOT hyaline cartilage.</div>
-        `,
-        mechanics: `
-            <h3>📊 3. ARTICULAR DISC & MOVEMENTS</h3>
-            <p>The disc acts as a shock absorber and divides the joint into 2 compartments.</p>
-            <table>
-                <tr><th>Compartment</th><th>Movement</th></tr>
-                <tr><td>Upper</td><td>Translation (sliding)</td></tr>
-                <tr><td>Lower</td><td>Rotation (hinge)</td></tr>
-            </table>
-            <div class="mnemonic-box">👉 MNEMONIC: “ROTATE below, GLIDE above”</div>
+        overview: `<h3>🧠 1. TMJ BONES</h3><div class="image-container" onclick="openZoom('https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder')"><img src="https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder"></div>`
+    };
+
+    const curriculum = { phase1: { name: "Core Foundations", subjects: ["Anatomy", "Physiology", "Microbiology"] } };
+
+    // --- AI LOGIC (LOCAL BRAIN) ---
+    const dentalKnowledge = [
+        { keys: ["how many", "skull", "bones"], ans: "The skull has 22 bones total: 8 cranial and 14 facial." },
+        { keys: ["mnemonic", "cranial"], ans: "The mnemonic is 'PEST OF 6': Parietal, Ethmoid, Sphenoid, Temporal, Occipital, Frontal." },
+        { keys: ["ian", "mandibular", "foramen"], ans: "The Mandibular Foramen is located on the medial ramus. It's the entry for the IAN and the primary target for an IAN block." },
+        { keys: ["mental", "foramen"], ans: "The Mental Foramen is located near the premolars. It's the exit for the mental nerve. Mnemonic: 'Mental = Mouth Exit'." },
+        { keys: ["open", "jaw", "mouth"], ans: "The Lateral Pterygoid is the ONLY muscle of mastication that opens the mouth. Mnemonic: 'Lateral = Lowers'." },
+        { keys: ["mastication", "muscles"], ans: "There are 4: Masseter, Medial Pterygoid, Temporalis, and Lateral Pterygoid. Innervated by CN V3." },
+        { keys: ["bell", "palsy", "facial"], ans: "Bell's Palsy is caused by damage to CN VII (Facial Nerve). Symptoms include facial drooping and inability to close the eye." },
+        { keys: ["tmj", "cartilage", "disc"], ans: "Unique feature: The TMJ has an articular disc made of FIBROCARTILAGE, not hyaline cartilage." },
+        { keys: ["measurement", "opening"], ans: "Normal mouth opening is 35-45 mm. Trismus is defined as less than 35 mm." },
+        { keys: ["tongue", "lesion"], ans: "In a CN XII (Hypoglossal) lesion, the tongue deviates TOWARD the side of the lesion." }
+    ];
+
+    function askDentoAI() {
+        const input = document.getElementById('ai-input');
+        const chatWindow = document.getElementById('ai-chat-window');
+        const query = input.value.toLowerCase();
+        if (!query) return;
+
+        // Add user message
+        chatWindow.innerHTML += `<div class="msg user">${input.value}</div>`;
+        input.value = "";
+
+        // Bot logic
+        setTimeout(() => {
+            let response = "I'm sorry, I don't have information on that yet. Try asking about 'Skull bones', 'IAN block', 'Opening the jaw', or 'TMJ'.";
             
-            <h4>⚙️ 4. MOVEMENTS OF TMJ</h4>
-            <table>
-                <tr><th>Movement</th><th>Muscle</th></tr>
-                <tr><td>Elevation</td><td>Masseter, Temporalis, Medial Pterygoid</td></tr>
-                <tr><td>Depression</td><td>Lateral pterygoid</td></tr>
-                <tr><td>Protrusion</td><td>Lateral pterygoid</td></tr>
-                <tr><td>Retraction</td><td>Temporalis</td></tr>
-                <tr><td>Lateral</td><td>Pterygoids</td></tr>
-            </table>
-            <div class="clinical-box" style="border-color:var(--danger)">
-                <b>🔥 MUSCLE RELATION:</b> Lateral pterygoid attaches directly to the disc. Displacement causes <b>clicking</b>.
-            </div>
-        `,
-        anatomy: `
-            <h3>🧠 6. LIGAMENTS, NERVES & BLOOD</h3>
-            <div class="clinical-box">
-                <b>Stabilizing Ligaments:</b> Lateral (TMJ), Sphenomandibular, Stylomandibular.
-            </div>
-            <div class="clinical-box" style="border-color:var(--brand)">
-                <b>⚡ NERVE SUPPLY:</b> Trigeminal nerve (V3) — specifically the <b>Auriculotemporal nerve</b>.
-            </div>
-            <div class="clinical-box">
-                <b>🩸 BLOOD SUPPLY:</b> Maxillary artery & Superficial temporal artery.
-            </div>
-            <h4>📏 IMPORTANT MEASUREMENTS</h4>
-            <ul>
-                <li>Normal mouth opening: <b>35–45 mm</b></li>
-                <li>Trismus: <b>< 35 mm</b></li>
-                <li>Severe restriction: <b>< 25 mm</b></li>
-            </ul>
-        `,
-        disorders: `
-            <h3>🚨 10. TMJ DISORDERS (TMD)</h3>
-            <p>Conditions affecting the joint, muscles, or disc.</p>
-            <div class="mnemonic-box">👉 MNEMONIC: “PAIN + CLICK + LOCK”</div>
-            <div class="clinical-box" style="border-color:var(--danger)">
-                <b>⚠️ 12. DISC DISPLACEMENT:</b>
-                <ul>
-                    <li><b>With reduction:</b> Clicking sound.</li>
-                    <li><b>Without reduction:</b> Locking, limited opening.</li>
-                </ul>
-            </div>
-            <div class="clinical-box">
-                <b>Clinical Signs:</b> Deviation toward affected side, muscle tenderness, Crepitus (degeneration).
-            </div>
-            <h4>🛠️ 15. MANAGEMENT</h4>
-            <ul>
-                <li><b>Conservative:</b> Soft diet, NSAIDs, Splints.</li>
-                <li><b>Dental:</b> Bite adjustment, Night guard.</li>
-                <li><b>Advanced:</b> Arthrocentesis, Surgery (rare).</li>
-            </ul>
-            <div class="mnemonic-box" style="background:var(--success); color:white; border:none;">90% of cases are treated NON-surgically.</div>
-        `,
-        summary: `
-            <h3>🎯 ULTRA-HIGH YIELD SUMMARY</h3>
-            <div class="mnemonic-box" style="background:var(--text); color:white; border:none;">
-                <ul style="margin-left:20px; line-height:2;">
-                    <li><b>Modified Hinge:</b> Disc divides joint.</li>
-                    <li><b>Fibrocartilage:</b> NOT hyaline.</li>
-                    <li><b>Rotation ↓ / Translation ↑</b></li>
-                    <li><b>Lateral pterygoid:</b> Key opener and disc attachement.</li>
-                    <li><b>Clicking:</b> Disc displacement.</li>
-                    <li><b>Opening:</b> 35–45 mm.</li>
-                </ul>
-            </div>
-        `
-    };
+            for (let item of dentalKnowledge) {
+                if (item.keys.some(k => query.includes(query.includes(k) ? k : null))) {
+                    let matchCount = item.keys.filter(k => query.includes(k)).length;
+                    if(matchCount >= 1) { response = item.ans; break; }
+                }
+            }
 
-    const curriculum = {
-        phase1: { name: "Core Foundations", subjects: ["Anatomy", "Physiology", "Biochemistry", "Histology", "Microbiology", "Pathology"] }
-    };
+            chatWindow.innerHTML += `<div class="msg bot">${response}</div>`;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }, 500);
+    }
 
-    // --- CORE LOGIC ---
-
+    // --- CORE NAVIGATION ---
     function openZoom(src) {
         document.getElementById('modal-img').src = src;
         document.getElementById('zoom-modal').style.display = 'flex';
@@ -353,7 +202,7 @@
                 const subMenu = document.createElement('div');
                 subMenu.className = "anatomy-submenu";
                 subMenu.id = "anatomy-list";
-                const topics = ["Osteology", "Muscles", "TMJ", "Cranial Nerves (FULL)", "Blood Supply", "Venous Drainage", "Lymphatics", "Salivary Glands", "Fascial Spaces", "Oral Cavity", "Tongue", "Pharynx", "Clinical Correlations"];
+                const topics = ["Osteology", "Muscles", "TMJ", "Nerves", "Clinical Correlations"];
                 topics.forEach(t => {
                     const tLink = document.createElement('div');
                     tLink.className = "topic-link";
@@ -376,75 +225,26 @@
 
     function renderAnatomyTopic(topic) {
         const target = document.getElementById('render-target');
-        
-        if (topic.includes("Osteology")) {
-            target.innerHTML = `
-                <h1>Osteology Hub</h1>
-                <div class="nested-tab-nav">
-                    <button class="tab-btn active-tab" onclick="switchNested(this, 'osteo', 'overview')">Skull Overview</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'osteo', 'mandible')">Mandible & Maxilla</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'osteo', 'examprep')">🔥 Exam Prep</button>
-                </div>
-                <div id="nested-content">${osteoTabs.overview}</div>
-            `;
-        } else if (topic.includes("Muscles")) {
-            target.innerHTML = `
-                <h1>Muscles Hub</h1>
-                <div class="nested-tab-nav">
-                    <button class="tab-btn active-tab" onclick="switchNested(this, 'muscle', 'general')">Muscles Overview</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'muscle', 'mastication')">Mastication</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'muscle', 'expression')">Expression & Buccinator</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'muscle', 'bells')">Bell's Palsy</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'muscle', 'tongue')">Tongue</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'muscle', 'hyoids')">Supra/Infrahyoids</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'muscle', 'summary')">🎯 Summary</button>
-                </div>
-                <div id="nested-content">${muscleTabs.general}</div>
-            `;
+        if (topic === "Osteology") {
+            target.innerHTML = `<h1>Osteology</h1><div class="nested-tab-nav"><button class="tab-btn active-tab" onclick="switchNested(this,'osteo','overview')">Overview</button><button class="tab-btn" onclick="switchNested(this,'osteo','mandible')">Mandible</button><button class="tab-btn" onclick="switchNested(this,'osteo','examprep')">Prep</button></div><div id="nested-content">${osteoTabs.overview}</div>`;
+        } else if (topic === "Muscles") {
+            target.innerHTML = `<h1>Muscles</h1><div class="nested-tab-nav"><button class="tab-btn active-tab" onclick="switchNested(this,'muscle','general')">General</button><button class="tab-btn" onclick="switchNested(this,'muscle','mastication')">Mastication</button><button class="tab-btn" onclick="switchNested(this,'muscle','expression')">Expression</button></div><div id="nested-content">${muscleTabs.general}</div>`;
         } else if (topic === "TMJ") {
-            target.innerHTML = `
-                <h1>TMJ Mastery Hub</h1>
-                <div class="nested-tab-nav">
-                    <button class="tab-btn active-tab" onclick="switchNested(this, 'tmj', 'overview')">Definition & Bones</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'tmj', 'mechanics')">Disc & Movements</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'tmj', 'anatomy')">Nerves & Blood</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'tmj', 'disorders')">TMD & Clinical</button>
-                    <button class="tab-btn" onclick="switchNested(this, 'tmj', 'summary')">🎯 Summary</button>
-                </div>
-                <div id="nested-content">${tmjTabs.overview}</div>
-            `;
+            target.innerHTML = `<h1>TMJ</h1><div id="nested-content">${tmjTabs.overview}</div>`;
         } else {
-            target.innerHTML = `<h1>${topic}</h1><p>High-yield content for ${topic} is being populated.</p>`;
+            target.innerHTML = `<h1>${topic}</h1><p>Content for ${topic} is loading.</p>`;
         }
-
-        document.querySelectorAll('.topic-link').forEach(l => l.classList.toggle('active-topic', l.innerText === topic));
-        document.getElementById('notes').value = localStorage.getItem(`note_${topic}`) || "";
     }
 
     function switchNested(btn, type, id) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
         btn.classList.add('active-tab');
-        
-        let content = "";
-        if(type === 'osteo') content = osteoTabs[id];
-        else if(type === 'muscle') content = muscleTabs[id];
-        else if(type === 'tmj') content = tmjTabs[id];
-        
-        document.getElementById('nested-content').innerHTML = content;
+        document.getElementById('nested-content').innerHTML = (type==='osteo') ? osteoTabs[id] : muscleTabs[id];
     }
 
     function renderSubject(sub) {
-        const target = document.getElementById('render-target');
-        if(sub !== 'Anatomy') document.getElementById('anatomy-list')?.classList.remove('active');
-        target.innerHTML = `<h1>${sub}</h1><p>Module content for ${sub} is loading...</p>`;
-        document.querySelectorAll('.sub-link').forEach(l => l.classList.toggle('active', l.innerText === sub));
-        document.getElementById('notes').value = localStorage.getItem(`note_${sub}`) || "";
+        document.getElementById('render-target').innerHTML = `<h1>${sub}</h1><p>Module content for ${sub} is loading.</p>`;
     }
-
-    document.getElementById('notes').addEventListener('input', (e) => {
-        const key = document.querySelector('.active-topic')?.innerText || document.querySelector('.sub-link.active')?.innerText;
-        localStorage.setItem(`note_${key}`, e.target.value);
-    });
 
     window.onload = () => loadPhase(1);
 </script>

@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="DentoGuide">
-    
-    <title>DentoGuide | Clinical Mastery Portal</title>
+    <title>DentoGuide | Master Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
@@ -22,10 +19,10 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
 
-        /* --- APP LAYOUT --- */
-        .app-container { display: grid; grid-template-columns: 80px 280px 1fr 340px; height: 100vh; }
+        /* --- DESKTOP LAYOUT --- */
+        .app-container { display: grid; grid-template-columns: 80px 280px 1fr 340px; height: 100vh; transition: 0.3s; }
 
-        /* Mobile Header */
+        /* Mobile Top Bar */
         .mobile-header {
             display: none;
             background: var(--white);
@@ -33,73 +30,84 @@
             border-bottom: 1px solid var(--border);
             justify-content: space-between;
             align-items: center;
-            position: fixed; top: 0; width: 100%; z-index: 1100;
+            position: fixed; top: 0; width: 100%; z-index: 2000;
         }
-        .mobile-header b { font-size: 0.9rem; color: var(--brand); }
-        .m-btn { background: var(--brand-light); border: none; color: var(--brand); padding: 8px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; display: flex; align-items: center; gap: 5px; }
+        .m-btn { background: var(--brand-light); border: none; color: var(--brand); padding: 8px 12px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; display: flex; align-items: center; gap: 5px; cursor: pointer; }
 
-        /* Navigation Sidebars */
+        /* Navigation Phase Rail (Left/Bottom) */
         .phase-rail { background: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; border-right: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
         .phase-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: 0.3s; font-size: 1.2rem; position: relative; }
         .phase-icon.active { background: var(--brand); box-shadow: 0 0 20px var(--brand); }
         .phase-icon span { position: absolute; left: 65px; background: var(--text); color: white; padding: 5px 12px; border-radius: 6px; font-size: 0.7rem; white-space: nowrap; opacity: 0; pointer-events: none; }
 
-        .sidebar { background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; z-index: 999; }
-        .sidebar-title { font-size: 0.65rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .sub-link { padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-light); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; }
-        .sub-link.active { background: var(--brand-light); color: var(--brand); }
+        /* Sidebar Topic Drawer */
+        .sidebar { background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; z-index: 1500; }
+        .sidebar-title { font-size: 0.6rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .sub-link { padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.82rem; font-weight: 600; color: var(--text-light); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
+        .sub-link:hover, .sub-link.active { background: var(--brand-light); color: var(--brand); }
 
+        /* Anatomy Sub-Topics List */
         .anatomy-submenu { margin-top: 5px; padding-left: 10px; border-left: 2px solid var(--border); display: none; }
         .anatomy-submenu.active { display: block; }
-        .topic-link { padding: 8px 10px; font-size: 0.75rem; font-weight: 700; color: var(--text-light); cursor: pointer; border-radius: 6px; display: block; }
-        .topic-link.active-topic { color: var(--brand); background: var(--brand-light); }
+        .topic-link { padding: 10px; font-size: 0.75rem; font-weight: 700; color: var(--text-light); cursor: pointer; border-radius: 6px; display: block; margin-bottom: 2px; }
+        .topic-link:hover, .topic-link.active-topic { color: var(--brand); background: var(--brand-light); }
 
-        /* Main View */
-        main.viewer { padding: 40px; overflow-y: auto; display: flex; justify-content: center; }
-        .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); width: 100%; max-width: 800px; border: 1px solid var(--border); height: fit-content; }
+        /* Content Viewer */
+        main.viewer { padding: 40px; overflow-y: auto; display: flex; justify-content: center; width: 100%; }
+        .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); width: 100%; max-width: 900px; border: 1px solid var(--border); height: fit-content; min-height: 80%; }
 
-        /* Utility Panel (AI/Notes) */
-        .utility { background: white; border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+        /* AI & Notes Sidebar */
+        .utility { background: white; border-left: 1px solid var(--border); display: flex; flex-direction: column; z-index: 1500; }
         .ai-header { padding: 15px; font-weight: 800; font-size: 0.75rem; border-bottom: 1px solid #eee; color: var(--brand); }
-        #ai-chat-window { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; font-size: 0.8rem; }
+        #ai-chat-window { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; font-size: 0.75rem; }
         .msg { padding: 10px; border-radius: 10px; max-width: 85%; line-height: 1.4; }
         .msg.bot { background: white; border: 1px solid var(--border); align-self: flex-start; }
         .msg.user { background: var(--brand); color: white; align-self: flex-end; }
-        
         #notes { height: 180px; border: none; border-top: 1px solid #eee; padding: 15px; font-size: 0.85rem; background: #fffdf5; outline: none; resize: none; }
 
-        /* Zoom modal */
-        #zoom-modal { display: none; position: fixed; z-index: 10000; inset: 0; background: rgba(15, 23, 42, 0.95); align-items: center; justify-content: center; }
-        #modal-img { max-width: 95%; max-height: 80%; border-radius: 10px; }
-
+        /* Image & Clinical Tools */
         .image-container { position: relative; width: 100%; margin: 15px 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); cursor: zoom-in; }
-        .image-container img { width: 100%; display: block; }
-
+        .image-container img { width: 100%; display: block; transition: 0.3s; }
         .clinical-box { background: #f8fafc; padding: 15px; border-radius: 12px; border-left: 4px solid var(--brand); margin: 10px 0; font-size: 0.85rem; }
         .mnemonic-box { background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 10px; margin: 10px 0; color: #92400e; font-size: 0.8rem; font-weight: 600; }
-        
-        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1001; }
+        .tag { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; margin-right: 5px; }
+        .t-red { background: #fee2e2; color: #ef4444; }
 
-        /* --- MOBILE MEDIA QUERIES --- */
+        /* Zoom Overlay */
+        #zoom-modal { display: none; position: fixed; z-index: 5000; inset: 0; background: rgba(15, 23, 42, 0.95); align-items: center; justify-content: center; }
+        #modal-img { max-width: 95%; max-height: 85%; border-radius: 10px; }
+
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1400; }
+
+        /* --- MOBILE NAVIGATION BREAKPOINTS --- */
         @media (max-width: 1024px) {
             .app-container { grid-template-columns: 80px 240px 1fr; }
             .utility { display: none; }
         }
 
         @media (max-width: 768px) {
-            .app-container { grid-template-columns: 1fr; display: block; padding-top: 60px; padding-bottom: 70px; }
+            body { overflow: auto; }
+            .app-container { grid-template-columns: 1fr; display: block; padding-top: 60px; padding-bottom: 80px; }
             .mobile-header { display: flex; }
-            .phase-rail { flex-direction: row; width: 100%; height: 70px; position: fixed; bottom: 0; padding: 0; justify-content: space-around; border-top: 1px solid #333; }
+            
+            /* Phase Bar (Bottom) */
+            .phase-rail { flex-direction: row; width: 100%; height: 70px; position: fixed; bottom: 0; padding: 0; justify-content: space-around; border-top: 1px solid #334155; }
             .phase-icon span { display: none; }
             
-            .sidebar { position: fixed; left: -100%; top: 60px; bottom: 70px; width: 80%; transition: 0.3s; box-shadow: 10px 0 30px rgba(0,0,0,0.2); }
+            /* Sidebar Topic Drawer */
+            .sidebar { position: fixed; left: -100%; top: 60px; bottom: 70px; width: 85%; transition: 0.3s; background: #fff; }
             .sidebar.active { left: 0; }
             
-            .utility { position: fixed; right: -100%; top: 60px; bottom: 70px; width: 90%; transition: 0.3s; z-index: 1005; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
+            /* AI/Notes Drawer */
+            .utility { 
+                display: flex !important; 
+                position: fixed; right: -100%; top: 60px; bottom: 70px; width: 90%; transition: 0.3s; 
+                box-shadow: -10px 0 30px rgba(0,0,0,0.2); 
+            }
             .utility.active { right: 0; }
 
-            main.viewer { padding: 15px; overflow-x: hidden; }
-            .card { padding: 20px; border-radius: 15px; }
+            main.viewer { padding: 15px; width: 100%; }
+            .card { padding: 20px; border-radius: 15px; min-height: auto; }
             .overlay.active { display: block; }
         }
     </style>
@@ -108,18 +116,20 @@
 
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
+<!-- MOBILE UI TOP BAR -->
 <div class="mobile-header">
-    <button class="m-btn" onclick="toggleMenu('sidebar')"><i class="fa-solid fa-bars"></i> TOPICS</button>
+    <button class="m-btn" onclick="toggleMenu('sidebar')"><i class="fa-solid fa-list-ul"></i> TOPICS</button>
     <b>DentoGuide</b>
-    <button class="m-btn" onclick="toggleMenu('utility')"><i class="fa-solid fa-pen-nib"></i> AI & NOTES</button>
+    <button class="m-btn" onclick="toggleMenu('utility')"><i class="fa-solid fa-message-dots"></i> AI & NOTES</button>
 </div>
 
+<!-- IMAGE MODAL -->
 <div id="zoom-modal" onclick="this.style.display='none'">
     <img id="modal-img" src="">
-    <p style="color:white; font-size:0.7rem; margin-top:10px;">Tap to close</p>
 </div>
 
 <div class="app-container">
+    <!-- NAVIGATION RAIL -->
     <nav class="phase-rail">
         <div class="phase-icon active" onclick="loadPhase(1)"><i class="fa-solid fa-brain"></i></div>
         <div class="phase-icon" onclick="loadPhase(2)"><i class="fa-solid fa-tooth"></i></div>
@@ -128,42 +138,45 @@
         <div class="phase-icon" onclick="loadPhase(5)"><i class="fa-solid fa-vial"></i></div>
     </nav>
 
+    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-title" id="phase-title">Phase 1</div>
         <div id="subject-list"></div>
     </aside>
 
+    <!-- MAIN VIEWER -->
     <main class="viewer">
         <div id="render-target" class="card"></div>
     </main>
 
+    <!-- AI & NOTES PANEL -->
     <aside class="utility" id="utility">
         <div class="ai-header"><i class="fa-solid fa-robot"></i> DentoAI ASSISTANT</div>
         <div id="ai-chat-window">
-            <div class="msg bot">Hi! Ask me anything about Skull bones, TMJ, or Cranial nerves!</div>
+            <div class="msg bot">Hello! I'm DentoAI. I can help with any dental related questions. Ask me!</div>
         </div>
         <div style="padding:10px; background:white; display:flex; gap:5px; border-top:1px solid #eee;">
-            <input type="text" id="ai-input" placeholder="Ask a question..." style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd; outline:none; font-size:0.8rem;" onkeypress="if(event.key==='Enter') askAI()">
-            <button onclick="askAI()" style="background:var(--brand); color:white; border:none; width:40px; border-radius:8px;"><i class="fa-solid fa-paper-plane"></i></button>
+            <input type="text" id="ai-input" placeholder="Type a question..." style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd; outline:none; font-size:0.75rem;" onkeypress="if(event.key==='Enter') askDentoAI()">
+            <button onclick="askDentoAI()" style="background:var(--brand); color:white; border:none; width:40px; border-radius:8px;"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
-        <div style="padding:10px; font-weight:800; font-size:0.6rem; color:#94a3b8; border-top:1px solid #eee;">PERSISTENT NOTES</div>
-        <textarea id="notes" placeholder="Notes auto-save per module..."></textarea>
+        <div style="padding:10px; font-weight:800; font-size:0.6rem; color:#94a3b8; border-top:1px solid #eee; background:white;">MY PERSISTENT NOTES</div>
+        <textarea id="notes" placeholder="Auto-saves for each specific module..."></textarea>
     </aside>
 </div>
 
 <script>
-    // --- DATABASE ---
+    // --- COMPLETE DATASET ---
     const curriculum = {
-        phase1: { name: "Foundations", subjects: ["Anatomy", "Physiology", "Biochemistry", "Histology", "Microbiology", "Pathology"] },
-        phase2: { name: "Dental Sciences", subjects: ["Dental Anatomy", "Oral Histology", "Dental Materials", "Pharmacology"] },
-        phase3: { name: "Clinical Subjects", subjects: ["Operative", "Endodontics", "Prosthodontics", "Oral Surgery", "Orthodontics", "Pediatrics"] },
+        phase1: { name: "Core Foundations", subjects: ["Anatomy", "Physiology", "Biochemistry", "Histology", "Microbiology", "Pathology"] },
+        phase2: { name: "Dental Sciences", subjects: ["Dental Anatomy", "Oral Histology", "Oral Pathology", "Dental Materials", "Pharmacology"] },
+        phase3: { name: "Clinical Subjects", subjects: ["Operative Dentistry", "Prosthodontics", "Endodontics", "Oral Surgery", "Orthodontics", "Pediatric Dentistry"] },
         phase4: { name: "Frameworks", subjects: ["Chief complaint", "History", "Examination", "Diagnosis", "Treatment plan"] },
         phase5: { name: "Active Recall", subjects: ["MCQs", "Flashcards", "Blurting", "Quizzes"] }
     };
 
     const anatomyContent = {
         "Osteology": `
-            <h3<h3> OSTEOLOGY: SKULL & MANDIBLE (MASTER PACK)</h3>
+            <h3>🦴 OSTEOLOGY: SKULL & MANDIBLE (MASTER PACK)</h3>
             
             <div class="image-container" onclick="openZoom('https://cdn.britannica.com/71/74271-050-E3E9773D/Lateral-views-human-skull.jpg')">
                 <img src="https://cdn.britannica.com/71/74271-050-E3E9773D/Lateral-views-human-skull.jpg">
@@ -376,16 +389,23 @@
                     <li>V3 = Mastication | VII = Expression | XII = Tongue</li>
                     <li>Lateral Pterygoid = Opens Jaw</li>
                     <li>CN XII Lesion = Deviates same side</li>
-                </ul>
-            </div>`,
-        "TMJ": `<h3>🧠 TMJ Mastery</h3><div class="image-container" onclick="openZoom('https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder')"><img src="https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder"></div>`
+                </ul></div>`,
+        "TMJ": `<h3>🧠 TMJ MASTER GUIDE</h3><div class="image-container" onclick="openZoom('https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder')"><img src="https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder"></div>`,
+        "Cranial Nerves": `<h3>⚡ CRANIAL NERVES</h3><div class="image-container" onclick="openZoom('https://static.wixstatic.com/media/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png/v1/fill/w_980,h_541,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png')"><img src="https://static.wixstatic.com/media/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png"></div>`
     };
+
+    const aiDB = [
+        { k: ["ian", "mandibular", "foramen"], a: "The Mandibular Foramen transmits the IAN. Target for block." },
+        { k: ["open", "mouth"], a: "Lateral Pterygoid is the only muscle that opens the jaw." },
+        { k: ["skull", "bones"], a: "22 bones: 8 cranial, 14 facial." }
+    ];
 
     // --- LOGIC ---
     function toggleMenu(type) {
         document.getElementById(type).classList.toggle('active');
         document.getElementById('overlay').classList.toggle('active');
     }
+
     function closeAll() {
         document.getElementById('sidebar').classList.remove('active');
         document.getElementById('utility').classList.remove('active');
@@ -409,6 +429,7 @@
             link.innerHTML = `<span>${sub}</span>` + (sub === 'Anatomy' ? `<i class="fa-solid fa-chevron-down"></i>` : "");
             link.onclick = () => { if(sub==='Anatomy') toggleAnat(); else { renderSubject(sub); if(window.innerWidth < 768) closeAll(); } };
             list.appendChild(link);
+
             if(sub === 'Anatomy') {
                 const subMenu = document.createElement('div');
                 subMenu.className = "anatomy-submenu";
@@ -428,36 +449,35 @@
     function toggleAnat() { document.getElementById('anatomy-list').classList.toggle('active'); }
 
     function renderAnatomy(t) {
-        const content = anatomyContent[t] || `<h3>${t}</h3><p>Content is loading...</p>`;
-        document.getElementById('render-target').innerHTML = content;
+        document.getElementById('render-target').innerHTML = anatomyContent[t] || `<h3>${t}</h3><p>Detailed master notes are being populated for ${t}.</p>`;
         document.getElementById('notes').value = localStorage.getItem(`note_${t}`) || "";
+        document.querySelectorAll('.topic-link').forEach(l => l.classList.toggle('active-topic', l.innerText === t));
     }
 
     function renderSubject(sub) {
-        document.getElementById('render-target').innerHTML = `<h1>${sub}</h1><p>Mastery module is ready. Use notes to study!</p>`;
+        document.getElementById('render-target').innerHTML = `<h1>${sub}</h1><p>Mastery module is ready. Use persistent notes to study!</p>`;
         document.getElementById('notes').value = localStorage.getItem(`note_${sub}`) || "";
     }
 
-    function askAI() {
+    function askDentoAI() {
         const input = document.getElementById('ai-input');
         const win = document.getElementById('ai-chat-window');
-        if(!input.value) return;
-        win.innerHTML += `<div class="msg user">${input.value}</div>`;
         const q = input.value.toLowerCase();
+        if(!q) return;
+        win.innerHTML += `<div class="msg user">${input.value}</div>`;
         input.value = "";
         setTimeout(() => {
-            let res = "I'm studyng your notes! Ask about 'Skull bones', 'TMJ', or 'IAN Block'.";
-            if(q.includes("skull")) res = "The skull has 22 bones: 8 cranial and 14 facial.";
-            if(q.includes("tmj")) res = "The TMJ is a modified hinge joint with a fibrocartilage disc.";
+            let res = "Check your notes for more! Ask about 'Skull', 'IAN', or 'TMJ'.";
+            for(let i of aiDB) { if(i.k.some(key => q.includes(key))) { res = i.a; break; } }
             win.innerHTML += `<div class="msg bot">${res}</div>`;
             win.scrollTop = win.scrollHeight;
         }, 400);
     }
 
-    document.getElementById('notes').addEventListener('input', (e) => {
-        const current = document.getElementById('render-target').querySelector('h1, h3').innerText;
-        localStorage.setItem(`note_${current}`, e.target.value);
-    });
+    document.getElementById('notes').oninput = (e) => {
+        const title = document.querySelector('h1, h3').innerText;
+        localStorage.setItem(`note_${title}`, e.target.value);
+    };
 
     window.onload = () => loadPhase(1);
 </script>

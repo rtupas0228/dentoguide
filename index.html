@@ -360,45 +360,63 @@
     const prosthoContent = {
         "RPD": `
             <h3>🦷 REMOVABLE PARTIAL DENTURE (RPD)</h3>
-            <div class="clinical-box"><b>🧠 1. DEFINITION:</b> A prosthesis that replaces missing teeth in a partially edentulous arch; patient-removable.</div>
+            <div class="clinical-box"><b>🧠 1. DEFINITION:</b> A patient-removable prosthesis for edentulous spaces.</div>
             
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <div class="clinical-box"><b>📌 2. INDICATIONS:</b> Distal extensions, span length, cost factor, interim needs.</div>
-                <div class="clinical-box" style="border-color:var(--danger)"><b>🚫 3. CONTRAINDICATIONS:</b> Poor hygiene, high caries risk, uncooperative.</div>
-            </div>
+            <div class="clinical-box"><b>📌 2. INDICATIONS & CONTRAINDICATIONS</b><br>
+            Indications: Distal extensions, spans too long for fixed, limited finances.<br>
+            Contraindications: Poor oral hygiene, severe gag reflex.</div>
 
             <h4>🛠️ 4. CLINICAL WORKFLOW</h4>
-            <p style="font-size:0.8rem; line-height:1.6;">Dx -> Prelim Impression -> <b>Surveying</b> -> Mouth Prep -> Final Impression -> Framework -> Try-in -> Jaw Relation -> Setup -> Insertion.</p>
+            <p style="font-size:0.8rem;">Diagnosis -> Prelim Impression -> <b>Surveying</b> -> Mouth Prep -> Final Impression -> Framework Try-in -> Setup -> Insertion.</p>
 
-            <div class="clinical-box" style="border-color:var(--warning)">
-                <b>🧩 7. COMPONENTS OF RPD</b>
-                <ul>
-                    <li><b>Major Connector:</b> Cross-arch rigidity (Lingual Bar, Palatal Strap).</li>
-                    <li><b>Minor Connector:</b> Connects components to major.</li>
-                    <li><b>Rests:</b> Provide <b>SUPPORT</b> (Vertical stops).</li>
-                    <li><b>Clasps:</b> Provide <b>RETENTION</b> (Retentive vs Reciprocal arms).</li>
-                </ul>
+            <h3>🧩 7. COMPONENTS OF RPD</h3>
+            
+            <!-- Major Connector Section -->
+            <div class="clinical-box" style="border-color:var(--brand)">
+                <b>🔹 MAJOR CONNECTORS</b>
+                <p>Functions to provide cross-arch rigidity. Maxillary: Palatal Strap. Mandibular: Lingual Bar/Plate.</p>
+                <div class="image-container" onclick="openZoom('https://i.ytimg.com/vi/i8PtpaaasiU/maxresdefault.jpg')">
+                    <img src="https://i.ytimg.com/vi/i8PtpaaasiU/maxresdefault.jpg">
+                    <div style="position:absolute; bottom:5px; right:10px; background:rgba(0,0,0,0.5); color:white; padding:3px 8px; border-radius:10px; font-size:0.6rem;">Major Connector Guide</div>
+                </div>
             </div>
-            <div class="mnemonic-box">👉 Clasp Part Mnemonic: “R-R-R” (Retentive, Reciprocal, Rest)</div>
 
-            <h4>📌 8. KENNEDY CLASSIFICATION</h4>
-            <div class="mnemonic-box">👉 “B-U-T-A” (Bilateral, Unilateral, Tooth-bounded, Anterior)</div>
-            <ul>
-                <li><b>Class I:</b> Bilateral distal extension.</li>
-                <li><b>Class II:</b> Unilateral distal extension.</li>
-                <li><b>Class III:</b> Tooth-bounded space.</li>
-                <li><b>Class IV:</b> Anterior space crossing midline.</li>
-            </ul>
+            <!-- Rests Section -->
+            <div class="clinical-box" style="border-color:var(--warning)">
+                <b>🔹 RESTS (SUPPORT)</b>
+                <p>Provide vertical stops. Types: Occlusal, Cingulum, Incisal.</p>
+                <div class="image-container" onclick="openZoom('https://image.slidesharecdn.com/presentation1-150302091207-conversion-gate02/85/Rest-and-Rest-Seat-preparation-removable-partial-denture-11-320.jpg')">
+                    <img src="https://image.slidesharecdn.com/presentation1-150302091207-conversion-gate02/85/Rest-and-Rest-Seat-preparation-removable-partial-denture-11-320.jpg">
+                    <div style="position:absolute; bottom:5px; right:10px; background:rgba(0,0,0,0.5); color:white; padding:3px 8px; border-radius:10px; font-size:0.6rem;">Rest Seat Prep</div>
+                </div>
+            </div>
+
+            <!-- Clasps Section -->
+            <div class="clinical-box" style="border-color:var(--success)">
+                <b>🔹 CLASPS (RETENTION)</b>
+                <p>Consists of Retentive arm, Reciprocal arm, and Rest. Mnemonic: <b>"R-R-R"</b>.</p>
+                <div class="image-container" onclick="openZoom('https://www.bremadent.co.uk/uploads/4/8/6/4/48649227/clasps-design-for-rpd_orig.png')">
+                    <img src="https://www.bremadent.co.uk/uploads/4/8/6/4/48649227/clasps-design-for-rpd_orig.png">
+                    <div style="position:absolute; bottom:5px; right:10px; background:rgba(0,0,0,0.5); color:white; padding:3px 8px; border-radius:10px; font-size:0.6rem;">Clasp Design Patterns</div>
+                </div>
+            </div>
+
+            <h3>📌 8. KENNEDY CLASSIFICATION</h3>
+            <div class="mnemonic-box">👉 Mnemonic: <b>“B-U-T-A”</b> (Bilateral, Unilateral, Tooth-bounded, Anterior)</div>
+            <div class="image-container" onclick="openZoom('https://thefuturedentistry.com/wp-content/uploads/2023/04/kennedy.jpg')">
+                <img src="https://thefuturedentistry.com/wp-content/uploads/2023/04/kennedy.jpg">
+                <div style="position:absolute; bottom:5px; right:10px; background:rgba(0,0,0,0.5); color:white; padding:3px 8px; border-radius:10px; font-size:0.6rem;">Kennedy Classes I-IV</div>
+            </div>
 
             <div class="clinical-box">
-                <b>📌 9. SURVEYING (P-U-M):</b> Path of Insertion, Undercuts, Marking. Determines clasp placement.
+                <b>📌 9. SURVEYING (Definition):</b> Analyzing cast with a surveyor for <b>Path of Insertion</b>. <br>Mnemonic: <b>"PUM"</b> (Path, Undercut, Marking).
             </div>
 
             <div class="mnemonic-box" style="background:var(--text); color:white; border:none;">
-                <h4 style="color:var(--success)">🎯 ULTRA HIGH-YIELD EXAM POINTS</h4>
+                <h4 style="color:var(--success)">🎯 ULTRA HIGH-YIELD</h4>
                 <ul style="padding-left:15px; font-size:0.75rem;">
                     <li>Rests = Support | Clasps = Retention | Major Connector = Rigidity</li>
-                    <li>Surveyor = Path of insertion | Distal Extension = Functional Impression</li>
+                    <li>Functional Impression used for Class I/II distal extensions.</li>
                 </ul>
             </div>
         `,
@@ -462,7 +480,7 @@
             subMenu.className = "nested-submenu";
             subMenu.id = `sub-${sub.toLowerCase().replace(/\s/g, '')}`;
             let topics = [];
-            if(sub === 'Anatomy') topics = ["Osteology", "Muscles", "TMJ", "Cranial Nerves", "Blood Supply"];
+            if(sub === 'Anatomy') topics = ["Osteology", "Muscles", "TMJ", "Cranial Nerves", "Blood Supply", "Venous Drainage", "Lymphatics", "Salivary Glands", "Fascial Spaces", "Oral Cavity", "Tongue", "Pharynx", "Clinical Correlations"];
             if(sub === 'Prosthodontics') topics = ["Complete Dentures", "RPD", "Fixed Prostho", "Implants", "Occlusion", "Materials", "Complications", "Case-Based Learning"];
             topics.forEach(t => {
                 const tLink = document.createElement('div'); tLink.className = "topic-link"; tLink.innerText = t;

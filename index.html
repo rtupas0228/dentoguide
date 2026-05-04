@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DentoGuide | Master Mastery Portal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>DentoGuide | Clinical Mastery Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
     <style>
         :root {
             --brand: #2563eb; --brand-light: #eff6ff; --bg: #f8fafc;
@@ -19,14 +22,12 @@
         /* --- LAYOUT --- */
         .app-container { display: grid; grid-template-columns: 80px 280px 1fr 340px; height: 100vh; transition: 0.3s; }
 
-        /* Mobile Header */
         .mobile-header {
             display: none; background: var(--white); padding: 10px 15px; border-bottom: 1px solid var(--border);
             justify-content: space-between; align-items: center; position: fixed; top: 0; width: 100%; z-index: 2000;
         }
         .m-btn { background: var(--brand-light); border: none; color: var(--brand); padding: 8px 12px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; display: flex; align-items: center; gap: 5px; cursor: pointer; }
 
-        /* Navigation Sidebars */
         .phase-rail { background: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; border-right: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
         .phase-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: 0.3s; font-size: 1.2rem; position: relative; }
         .phase-icon.active { background: var(--brand); box-shadow: 0 0 20px var(--brand); }
@@ -34,64 +35,56 @@
 
         .sidebar { background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; z-index: 1500; }
         .sidebar-title { font-size: 0.6rem; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        
         .sub-link { padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.82rem; font-weight: 600; color: var(--text-light); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
         .sub-link.active { background: var(--brand-light); color: var(--brand); }
 
         .nested-submenu { margin-top: 5px; padding-left: 10px; border-left: 2px solid var(--border); display: none; }
         .nested-submenu.active { display: block; }
-        .topic-link { padding: 10px; font-size: 0.75rem; font-weight: 700; color: var(--text-light); cursor: pointer; border-radius: 6px; display: block; }
-        .topic-link.active-topic { color: var(--brand); background: var(--brand-light); }
+        .topic-link { padding: 10px; font-size: 0.75rem; font-weight: 700; color: var(--text-light); cursor: pointer; border-radius: 6px; display: block; margin-bottom: 2px; }
+        .topic-link:hover, .topic-link.active-topic { color: var(--brand); background: var(--brand-light); }
 
-        /* Main Viewer */
         main.viewer { padding: 40px; overflow-y: auto; display: flex; justify-content: center; width: 100%; }
         .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); width: 100%; max-width: 900px; border: 1px solid var(--border); height: fit-content; min-height: 80%; }
 
-        /* Utility Panel (AI/Notes) - FIXED FOR MOBILE */
         .utility { background: white; border-left: 1px solid var(--border); display: flex; flex-direction: column; z-index: 1600; }
         .ai-header { padding: 15px; font-weight: 800; font-size: 0.75rem; border-bottom: 1px solid #eee; color: var(--brand); display: flex; align-items: center; gap: 8px; background: #fff; }
         #ai-chat-window { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; font-size: 0.75rem; }
         .msg { padding: 10px; border-radius: 10px; max-width: 85%; line-height: 1.4; }
         .msg.bot { background: white; border: 1px solid var(--border); align-self: flex-start; }
         .msg.user { background: var(--brand); color: white; align-self: flex-end; }
-        
         #notes { height: 180px; border: none; border-top: 1px solid #eee; padding: 15px; font-size: 0.85rem; background: #fffdf5; outline: none; resize: none; }
 
-        /* Helpers */
+        /* UI Helpers */
         .image-container { position: relative; width: 100%; margin: 15px 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); cursor: zoom-in; background: #fff; }
         .image-container img { width: 100%; display: block; }
         .clinical-box { background: #f8fafc; padding: 15px; border-radius: 12px; border-left: 4px solid var(--brand); margin: 10px 0; font-size: 0.85rem; }
+        .clinical-box b { color: var(--brand); display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.75rem; }
         .mnemonic-box { background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 10px; margin: 10px 0; color: #92400e; font-size: 0.8rem; font-weight: 600; }
         
-        #zoom-modal { display: none; position: fixed; z-index: 5000; inset: 0; background: rgba(15, 23, 42, 0.95); align-items: center; justify-content: center; }
+        .tag { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; margin-right: 5px; text-transform: uppercase; }
+        .t-red { background: #fee2e2; color: #ef4444; }
+        .t-blue { background: #eff6ff; color: #2563eb; }
+        .t-green { background: #dcfce7; color: #16a34a; }
+
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem; }
+        th { background: #f1f5f9; text-align: left; padding: 12px; border: 1px solid var(--border); text-transform: uppercase; font-size: 0.7rem; }
+        td { padding: 12px; border: 1px solid var(--border); }
+
+        #zoom-modal { display: none; position: fixed; z-index: 10000; inset: 0; background: rgba(15, 23, 42, 0.95); align-items: center; justify-content: center; }
         #modal-img { max-width: 95%; max-height: 85%; border-radius: 10px; }
         .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1400; }
 
         /* --- MOBILE MEDIA QUERIES --- */
-        @media (max-width: 1024px) {
-            .app-container { grid-template-columns: 80px 240px 1fr; }
-            .utility { display: none; }
-        }
-
+        @media (max-width: 1024px) { .app-container { grid-template-columns: 80px 240px 1fr; } .utility { display: none; } }
         @media (max-width: 768px) {
-            body { overflow: auto; }
             .app-container { grid-template-columns: 1fr; display: block; padding-top: 60px; padding-bottom: 80px; }
             .mobile-header { display: flex; }
             .phase-rail { flex-direction: row; width: 100%; height: 70px; position: fixed; bottom: 0; padding: 0; justify-content: space-around; border-top: 1px solid #334155; }
-            .phase-icon span { display: none; }
-            
             .sidebar { position: fixed; left: -100%; top: 60px; bottom: 70px; width: 85%; transition: 0.3s; background: #fff; }
             .sidebar.active { left: 0; }
-            
-            .utility { 
-                display: flex !important; 
-                position: fixed; right: -100%; top: 60px; bottom: 70px; width: 90%; transition: 0.3s; 
-                box-shadow: -10px 0 30px rgba(0,0,0,0.2); 
-            }
+            .utility { display: flex !important; position: fixed; right: -100%; top: 60px; bottom: 70px; width: 90%; transition: 0.3s; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
             .utility.active { right: 0; }
-
             main.viewer { padding: 15px; width: 100%; }
-            .card { padding: 20px; border-radius: 15px; min-height: auto; }
             .overlay.active { display: block; }
         }
     </style>
@@ -102,8 +95,8 @@
 
 <div class="mobile-header">
     <button class="m-btn" onclick="toggleMenu('sidebar')"><i class="fa-solid fa-list-ul"></i> TOPICS</button>
-    <b>DentoGuide</b>
-    <button class="m-btn" onclick="toggleMenu('utility')"><i class="fa-solid fa-robot"></i> AI & NOTES</button>
+    <b style="letter-spacing: -1px;">DentoGuide</b>
+    <button class="m-btn" onclick="toggleMenu('utility')"><i class="fa-solid fa-message-dots"></i> AI & NOTES</button>
 </div>
 
 <div id="zoom-modal" onclick="this.style.display='none'">
@@ -131,19 +124,17 @@
     <aside class="utility" id="utility">
         <div class="ai-header"><i class="fa-solid fa-robot"></i> DentoAI ASSISTANT</div>
         <div id="ai-chat-window">
-            <div class="msg bot">Hello! I'm DentoAI. Ask me about IAN Blocks, Kennedy Classes, or Skull bones!</div>
+            <div class="msg bot">Hello! I'm DentoAI. I've updated my knowledge with your RPD Master Guide! Ask me about Kennedy Classes or surveying!</div>
         </div>
         <div style="padding:10px; background:white; display:flex; gap:5px; border-top:1px solid #eee;">
-            <input type="text" id="ai-input" placeholder="Type here..." style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd; outline:none; font-size:0.75rem;" onkeypress="if(event.key==='Enter') askDentoAI()">
+            <input type="text" id="ai-input" placeholder="Type a question..." style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd; outline:none; font-size:0.75rem;" onkeypress="if(event.key==='Enter') askDentoAI()">
             <button onclick="askDentoAI()" style="background:var(--brand); color:white; border:none; width:40px; border-radius:8px;"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
-        <div style="padding:10px; font-weight:800; font-size:0.6rem; color:#94a3b8; border-top:1px solid #eee; background:white;">PERSISTENT NOTES</div>
-        <textarea id="notes" placeholder="Notes auto-save per topic..."></textarea>
+        <textarea id="notes" placeholder="Persistent notes auto-save..."></textarea>
     </aside>
 </div>
 
 <script>
-    // --- DATABASES ---
     const anatomyContent = {
         "Osteology": `<h3>🦴 OSTEOLOGY: SKULL & MANDIBLE (MASTER PACK)</h3>
             
@@ -362,95 +353,141 @@
         "TMJ": `<h3>🧠 TMJ MASTER GUIDE</h3><div class="image-container" onclick="openZoom('https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder')"><img src="https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder"></div>`,
         "Cranial Nerves": `<h3>⚡ CRANIAL NERVES</h3><div class="image-container" onclick="openZoom('https://static.wixstatic.com/media/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png/v1/fill/w_980,h_541,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png')"><img src="https://static.wixstatic.com/media/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png"></div>`,
         "TMJ": `<h3>🧠 TMJ MASTER GUIDE</h3><div class="image-container" onclick="openZoom('https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder')"><img src="https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder"></div>`,
-        "Cranial Nerves": `<h3>⚡ CRANIAL NERVES</h3><div class="image-container" onclick="openZoom('https://static.wixstatic.com/media/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png/v1/fill/w_980,h_541,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png')"><img src="https://static.wixstatic.com/media/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png"></div>`
+        "Cranial Nerves": `<h3>⚡ CRANIAL NERVES</h3><div class="image-container" onclick="openZoom('https://static.wixstatic.com/media/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png/v1/fill/w_980,h_541,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png')"><img src="https://static.wixstatic.com/media/527197_e3bb11cf986f47f0bde4e541998a37d8~mv2.png"></div>`,
+        "TMJ": `<h3>🧠 TMJ MASTER GUIDE</h3><div class="image-container" onclick="openZoom('https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder')"><img src="https://my.clevelandclinic.org/-/scassets/Images/org/health/articles/15066-tmj-disorder"></div>`
     };
 
     const prosthoContent = {
-        "Complete Dentures": `<h3>🔹 COMPLETE DENTURES</h3><div class="clinical-box"><b>Steps:</b> Prep Impression -> Final -> Jaw Relation -> Try-in -> Insert.</div>`,
-        "RPD": `<h3>🔹 REMOVABLE PARTIAL DENTURES</h3><div class="clinical-box"><b>Kennedy:</b> Class I (Bilateral), Class II (Unilateral).</div>`
+        "RPD": `
+            <h3>🦷 REMOVABLE PARTIAL DENTURE (RPD)</h3>
+            <div class="clinical-box"><b>🧠 1. DEFINITION:</b> A prosthesis that replaces missing teeth in a partially edentulous arch; patient-removable.</div>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <div class="clinical-box"><b>📌 2. INDICATIONS:</b> Distal extensions, span length, cost factor, interim needs.</div>
+                <div class="clinical-box" style="border-color:var(--danger)"><b>🚫 3. CONTRAINDICATIONS:</b> Poor hygiene, high caries risk, uncooperative.</div>
+            </div>
+
+            <h4>🛠️ 4. CLINICAL WORKFLOW</h4>
+            <p style="font-size:0.8rem; line-height:1.6;">Dx -> Prelim Impression -> <b>Surveying</b> -> Mouth Prep -> Final Impression -> Framework -> Try-in -> Jaw Relation -> Setup -> Insertion.</p>
+
+            <div class="clinical-box" style="border-color:var(--warning)">
+                <b>🧩 7. COMPONENTS OF RPD</b>
+                <ul>
+                    <li><b>Major Connector:</b> Cross-arch rigidity (Lingual Bar, Palatal Strap).</li>
+                    <li><b>Minor Connector:</b> Connects components to major.</li>
+                    <li><b>Rests:</b> Provide <b>SUPPORT</b> (Vertical stops).</li>
+                    <li><b>Clasps:</b> Provide <b>RETENTION</b> (Retentive vs Reciprocal arms).</li>
+                </ul>
+            </div>
+            <div class="mnemonic-box">👉 Clasp Part Mnemonic: “R-R-R” (Retentive, Reciprocal, Rest)</div>
+
+            <h4>📌 8. KENNEDY CLASSIFICATION</h4>
+            <div class="mnemonic-box">👉 “B-U-T-A” (Bilateral, Unilateral, Tooth-bounded, Anterior)</div>
+            <ul>
+                <li><b>Class I:</b> Bilateral distal extension.</li>
+                <li><b>Class II:</b> Unilateral distal extension.</li>
+                <li><b>Class III:</b> Tooth-bounded space.</li>
+                <li><b>Class IV:</b> Anterior space crossing midline.</li>
+            </ul>
+
+            <div class="clinical-box">
+                <b>📌 9. SURVEYING (P-U-M):</b> Path of Insertion, Undercuts, Marking. Determines clasp placement.
+            </div>
+
+            <div class="mnemonic-box" style="background:var(--text); color:white; border:none;">
+                <h4 style="color:var(--success)">🎯 ULTRA HIGH-YIELD EXAM POINTS</h4>
+                <ul style="padding-left:15px; font-size:0.75rem;">
+                    <li>Rests = Support | Clasps = Retention | Major Connector = Rigidity</li>
+                    <li>Surveyor = Path of insertion | Distal Extension = Functional Impression</li>
+                </ul>
+            </div>
+        `,
+        "Complete Dentures": `<h3>🔹 CD</h3><p>Content loading...</p>`,
+        "Fixed Prostho": `<h3>🔹 FIXED</h3><p>Content loading...</p>`,
+        "Implants": `<h3>🔹 IMPLANTS</h3><p>Content loading...</p>`,
+        "Occlusion": `<h3>🔹 OCCLUSION</h3><p>Content loading...</p>`,
+        "Materials": `<h3>🔹 MATERIALS</h3><p>Content loading...</p>`,
+        "Complications": `<h3>🔹 COMPLICATIONS</h3><p>Content loading...</p>`,
+        "Case-Based Learning": `<h3>🔹 CASES</h3><p>Content loading...</p>`
     };
 
-    const aiDB = [
-        { k: ["ian", "foramen"], a: "Target for IAN block on medial ramus." },
-        { k: ["open", "jaw"], a: "Lateral Pterygoid is the only opener." },
-        { k: ["kennedy"], a: "Class I: Bilateral distal extension." }
+    const aiKnowledge = [
+        { keys: ["ian", "mandibular", "foramen"], ans: "The Mandibular Foramen transmits the IAN. Target for block." },
+        { keys: ["kennedy", "classification"], ans: "Class I (Bilateral Distal), II (Unilateral Distal), III (Tooth-bounded), IV (Anterior crossing midline)." },
+        { keys: ["rrd", "rrr", "rpd"], ans: "RRR stands for Retentive arm, Reciprocal arm, and Rest (Support/Retention components)." },
+        { keys: ["support", "retention", "rests"], ans: "In RPD design, RESTS provide Support, while CLASPS provide Retention." },
+        { keys: ["opener", "muscle"], ans: "Lateral Pterygoid is the only opener." }
     ];
+
+    function askDentoAI() {
+        const input = document.getElementById('ai-input');
+        const chat = document.getElementById('ai-chat-window');
+        const query = input.value.toLowerCase();
+        if(!query) return;
+        chat.innerHTML += `<div class="msg user">${input.value}</div>`;
+        input.value = "";
+        setTimeout(() => {
+            let res = "Check your master guides for details! I know about RPD classes, TMJ, and Skull bones.";
+            for(let i of aiKnowledge) { if(i.keys.some(k => query.includes(k))) { res = i.ans; break; } }
+            chat.innerHTML += `<div class="msg bot">${res}</div>`;
+            chat.scrollTop = chat.scrollHeight;
+        }, 400);
+    }
+
+    function toggleMenu(type) { document.getElementById(type).classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
+    function closeAll() { document.getElementById('sidebar').classList.remove('active'); document.getElementById('utility').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); }
+    function openZoom(src) { document.getElementById('modal-img').src = src; document.getElementById('zoom-modal').style.display = 'flex'; }
 
     const curriculum = {
         phase1: { name: "Foundations", subjects: ["Anatomy", "Physiology", "Biochemistry", "Histology", "Microbiology", "Pathology"] },
         phase2: { name: "Dental Sciences", subjects: ["Dental Anatomy", "Oral Histology", "Oral Pathology", "Dental Materials", "Pharmacology"] },
-        phase3: { name: "Clinical Subjects", subjects: ["Operative", "Prosthodontics", "Endodontics", "Oral Surgery", "Orthodontics", "Pediatrics"] },
-        phase4: { name: "Thinking", subjects: ["Chief complaint", "History", "Examination", "Diagnosis", "Treatment plan"] },
+        phase3: { name: "Clinical Subjects", subjects: ["Operative Dentistry", "Prosthodontics", "Endodontics", "Oral Surgery", "Orthodontics", "Pediatrics"] },
+        phase4: { name: "Frameworks", subjects: ["Chief complaint", "History", "Examination", "Diagnosis", "Treatment plan"] },
         phase5: { name: "Active Recall", subjects: ["MCQs", "Flashcards", "Blurting", "Quizzes"] }
     };
-
-    // --- LOGIC ---
-    function toggleMenu(type) { document.getElementById(type).classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
-    function closeAll() { document.getElementById('sidebar').classList.remove('active'); document.getElementById('utility').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); }
 
     function loadPhase(num) {
         const phase = curriculum['phase' + num];
         document.getElementById('phase-title').innerText = phase.name;
         const list = document.getElementById('subject-list');
         list.innerHTML = "";
-        
         phase.subjects.forEach(sub => {
+            const container = document.createElement('div');
             const link = document.createElement('div');
             link.className = "sub-link";
             link.innerHTML = `<span>${sub}</span>` + (['Anatomy', 'Prosthodontics'].includes(sub) ? `<i class="fa-solid fa-chevron-down"></i>` : "");
-            link.onclick = () => { 
-                if(['Anatomy', 'Prosthodontics'].includes(sub)) toggleNested(sub);
-                else { renderSubject(sub); if(window.innerWidth < 768) closeAll(); }
-            };
-            list.appendChild(link);
-
+            link.onclick = () => { if(['Anatomy', 'Prosthodontics'].includes(sub)) toggleNested(sub); else { renderSubject(sub); if(window.innerWidth < 768) closeAll(); } };
+            container.appendChild(link);
             const subMenu = document.createElement('div');
             subMenu.className = "nested-submenu";
-            subMenu.id = `sub-${sub.toLowerCase()}`;
-            
+            subMenu.id = `sub-${sub.toLowerCase().replace(/\s/g, '')}`;
             let topics = [];
-            if(sub === 'Anatomy') topics = ["Osteology", "Muscles", "TMJ", "Cranial Nerves", "Blood Supply", "Venous Drainage", "Lymphatics", "Salivary Glands", "Fascial Spaces", "Oral Cavity", "Tongue", "Pharynx", "Clinical Correlations"];
+            if(sub === 'Anatomy') topics = ["Osteology", "Muscles", "TMJ", "Cranial Nerves", "Blood Supply"];
             if(sub === 'Prosthodontics') topics = ["Complete Dentures", "RPD", "Fixed Prostho", "Implants", "Occlusion", "Materials", "Complications", "Case-Based Learning"];
-            
             topics.forEach(t => {
                 const tLink = document.createElement('div'); tLink.className = "topic-link"; tLink.innerText = t;
                 tLink.onclick = (e) => { e.stopPropagation(); renderNested(sub, t); if(window.innerWidth < 768) closeAll(); };
                 subMenu.appendChild(tLink);
             });
-            list.appendChild(subMenu);
+            container.appendChild(subMenu);
+            list.appendChild(container);
         });
         document.querySelectorAll('.phase-icon').forEach((icon, i) => icon.classList.toggle('active', (i+1) === num));
         renderSubject(phase.subjects[0]);
     }
 
-    function toggleNested(sub) { document.getElementById(`sub-${sub.toLowerCase()}`).classList.toggle('active'); }
-    function openZoom(src) { document.getElementById('modal-img').src = src; document.getElementById('zoom-modal').style.display = 'flex'; }
+    function toggleNested(sub) { document.getElementById(`sub-${sub.toLowerCase().replace(/\s/g, '')}`).classList.toggle('active'); }
 
     function renderNested(type, topic) {
         const target = document.getElementById('render-target');
         const content = (type === 'Anatomy') ? anatomyContent[topic] : prosthoContent[topic];
-        target.innerHTML = content || `<h3>${topic}</h3><p>Detailed master notes loading...</p>`;
+        target.innerHTML = content || `<h3>${topic}</h3><p>Clinical guide is loading...</p>`;
         document.getElementById('notes').value = localStorage.getItem(`note_${topic}`) || "";
     }
 
     function renderSubject(sub) {
         document.getElementById('render-target').innerHTML = `<h1>${sub}</h1><p>Mastery module is ready.</p>`;
         document.getElementById('notes').value = localStorage.getItem(`note_${sub}`) || "";
-    }
-
-    function askDentoAI() {
-        const input = document.getElementById('ai-input');
-        const win = document.getElementById('ai-chat-window');
-        if(!input.value) return;
-        win.innerHTML += `<div class="msg user">${input.value}</div>`;
-        const q = input.value.toLowerCase();
-        input.value = "";
-        setTimeout(() => {
-            let res = "Study the high-yield summaries for more! Try 'Kennedy' or 'IAN'.";
-            for(let i of aiDB) { if(i.k.some(key => q.includes(key))) { res = i.a; break; } }
-            win.innerHTML += `<div class="msg bot">${res}</div>`;
-            win.scrollTop = win.scrollHeight;
-        }, 400);
     }
 
     document.getElementById('notes').oninput = (e) => {
